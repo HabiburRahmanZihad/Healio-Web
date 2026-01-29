@@ -67,10 +67,6 @@ const Navbar = ({
   menu = [
     { title: "Home", url: "/" },
     {
-      title: "Blogs",
-      url: "/blogs",
-    },
-    {
       title: "About Us",
       url: "/about",
     },
@@ -90,84 +86,89 @@ const Navbar = ({
   className,
 }: Navbar1Props) => {
   return (
-    <section className={cn("py-4 bg-red-500", className)}>
-      <div className="container">
+    <section className={cn("sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md", className)}>
+      <div className="container mx-auto px-4">
         {/* Desktop Menu */}
-        <nav className="hidden items-center justify-between lg:flex">
-          <div className="flex items-center gap-6">
+        <nav className="hidden items-center justify-between lg:flex h-16">
+          <div className="flex items-center gap-8">
             {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
-              <img
-                src={logo.src}
-                className="max-h-8 dark:invert"
-                alt={logo.alt}
-              />
-              <span className="text-lg font-semibold tracking-tighter">
-                {logo.title}
+            <Link href="/" className="flex items-center gap-2">
+              <div className="bg-primary p-1.5 rounded-lg">
+                <img
+                  src={logo.src}
+                  className="size-6 invert"
+                  alt={logo.alt}
+                />
+              </div>
+              <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                Healio
               </span>
-            </a>
+            </Link>
             <div className="flex items-center">
               <NavigationMenu>
-                <NavigationMenuList>
+                <NavigationMenuList className="gap-2">
                   {menu.map((item) => renderMenuItem(item))}
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             <ModeToggle />
-            <Button asChild variant="outline" size="sm">
+            <Button asChild variant="ghost" size="sm">
               <Link href={auth.login.url}>{auth.login.title}</Link>
             </Button>
-            <Button asChild size="sm">
+            <Button asChild size="sm" className="bg-primary hover:bg-primary/90">
               <Link href={auth.signup.url}>{auth.signup.title}</Link>
             </Button>
           </div>
         </nav>
 
         {/* Mobile Menu */}
-        <div className="block lg:hidden">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <a href={logo.url} className="flex items-center gap-2">
+        <div className="flex items-center justify-between lg:hidden h-14">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2">
+            <div className="bg-primary p-1.5 rounded-lg">
               <img
                 src={logo.src}
-                className="max-h-8 dark:invert"
+                className="size-5 invert"
                 alt={logo.alt}
               />
-            </a>
+            </div>
+            <span className="text-lg font-bold tracking-tight">Healio</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <ModeToggle />
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-4" />
+                <Button variant="ghost" size="icon" className="size-9">
+                  <Menu className="size-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
-                <SheetHeader>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <SheetHeader className="text-left">
                   <SheetTitle>
-                    <a href={logo.url} className="flex items-center gap-2">
-                      <img
-                        src={logo.src}
-                        className="max-h-8 dark:invert"
-                        alt={logo.alt}
-                      />
-                    </a>
+                    <Link href="/" className="flex items-center gap-2">
+                      <div className="bg-primary p-1.5 rounded-lg">
+                        <img
+                          src={logo.src}
+                          className="size-5 invert"
+                          alt={logo.alt}
+                        />
+                      </div>
+                      <span className="text-lg font-bold">Healio</span>
+                    </Link>
                   </SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col gap-6 p-4">
-                  <Accordion
-                    type="single"
-                    collapsible
-                    className="flex w-full flex-col gap-4"
-                  >
+                <div className="flex flex-col gap-6 mt-8">
+                  <nav className="flex flex-col gap-4">
                     {menu.map((item) => renderMobileMenuItem(item))}
-                  </Accordion>
+                  </nav>
 
-                  <div className="flex flex-col gap-3">
-                    <Button asChild variant="outline">
+                  <div className="flex flex-col gap-3 pt-6 border-t font-sans">
+                    <Button asChild variant="outline" className="w-full">
                       <Link href={auth.login.url}>{auth.login.title}</Link>
                     </Button>
-                    <Button asChild>
+                    <Button asChild className="w-full">
                       <Link href={auth.signup.url}>{auth.signup.title}</Link>
                     </Button>
                   </div>
