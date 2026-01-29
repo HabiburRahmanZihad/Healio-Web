@@ -44,4 +44,23 @@ export const userService = {
             body: userData,
         });
     },
+
+    // Admin: Get all users
+    getAllUsers: async (options?: FetchOptions) => {
+        return apiFetch<User[]>("/api/admin/users", options);
+    },
+
+    // Admin: Update user block status
+    updateUserStatus: async (id: string, isBlocked: boolean, options?: FetchOptions) => {
+        return apiFetch<User>(`/api/admin/users/${id}`, {
+            ...options,
+            method: "PATCH",
+            body: { isBlocked },
+        });
+    },
+
+    // Admin: Get dashboard stats
+    getAdminStats: async (options?: FetchOptions) => {
+        return apiFetch<any>("/api/admin/stats", options);
+    },
 };

@@ -7,4 +7,21 @@ export const categoryService = {
     getCategories: async (options?: FetchOptions) => {
         return apiFetch<Category[]>("/api/categories", options);
     },
+
+    // Admin: Create a new category
+    createCategory: async (name: string, options?: FetchOptions) => {
+        return apiFetch<Category>("/api/categories", {
+            ...options,
+            method: "POST",
+            body: { name },
+        });
+    },
+
+    // Admin: Delete a category
+    deleteCategory: async (id: string, options?: FetchOptions) => {
+        return apiFetch<void>(`/api/categories/${id}`, {
+            ...options,
+            method: "DELETE",
+        });
+    },
 };
