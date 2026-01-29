@@ -1,4 +1,6 @@
 import { createAuthClient } from "better-auth/react"
+
+// Call the Render backend directly to avoid proxy timeout issues
 export const authClient = createAuthClient({
-    baseURL: process.env.NODE_ENV === "development" ? "http://localhost:3000/api/auth" : process.env.NEXT_PUBLIC_AUTH_URL
+    baseURL: "https://healio-web-backend.onrender.com/api/auth"
 })

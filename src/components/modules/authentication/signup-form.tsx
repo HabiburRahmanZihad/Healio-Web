@@ -45,24 +45,45 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
       const toastId = toast.loading("Creating your account...");
       try {
         const { name, email, password } = value;
-        const { error } = await authClient.signUp.email({
+        const response = await authClient.signUp.email({
           name,
           email,
           password,
-          callbackURL: "/login" // Redirect to login after signup verification
+          callbackURL: "/login"
         });
 
-        if (error) {
-          toast.error(error.message, { id: toastId });
+        console.log("Signup response:", response);
+
+        // Check if there's an error in the response
+        if (response?.error) {
+          const errorMessage = response.error.message ||
+            response.error.code === "USER_ALREADY_EXISTS"
+            ? "An account with this email already exists"
+            : "Failed to create account";
+          toast.error(errorMessage, { id: toastId });
+          setIsLoading(false);
           return;
         }
 
-        toast.success("Account created successfully! Please check your email to verify your account.", { id: toastId });
-        router.push("/login");
-      } catch (error) {
+        // If we have user data in response, it's a success
+        if (response?.data?.user || (response as any)?.user) {
+          toast.success("Account created successfully! Please check your email to verify your account.", { id: toastId });
+          setTimeout(() => {
+            router.push("/login");
+          }, 1500);
+          return;
+        }
+
+        // If no error and no user data, assume success anyway
+        toast.success("Account created! Please check your email to verify your account.", { id: toastId });
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
+
+      } catch (error: unknown) {
         console.error("Signup error:", error);
-        toast.error("An unexpected error occurred. Please try again later.", { id: toastId });
-      } finally {
+        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+        toast.error(errorMessage, { id: toastId });
         setIsLoading(false);
       }
     },
