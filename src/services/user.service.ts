@@ -1,34 +1,39 @@
-import { env } from "@/env";
-import { cookies } from "next/headers";
+// User service - uses reusable API client
+import { apiFetch, API_URL } from "@/lib/api-client";
 
-const AUTH_URL = env.AUTH_URL;
+interface User {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    emailVerified: boolean;
+}
+
+interface Session {
+    user: User;
+    session: {
+        id: string;
+        expiresAt: string;
+    };
+}
 
 export const userService = {
-    getSession: async function () {
+    // Get current user session
+    getSession: async () => {
         try {
-            const cookieStore = await cookies();
-
-            console.log(cookieStore.toString());
-
-            const res = await fetch(`${AUTH_URL}/get-session`, {
-                headers: {
-                    Cookie: cookieStore.toString(),
-                },
-                cache: "no-store",
-            })
-
-            const session = await res.json();
-
-            console.log(session);
-
-            if (!session || !session.user) {
-                return { data: null, error: "No active session" };
-            }
-
-            return { data: session, error: null };
+            const res = await fetch(`${API_URL}/api/auth/get-session`, {
+                credentials: "include",
+            });
+            const data = await res.json();
+            return { data: data as Session | null, error: null };
         } catch (error) {
-            console.log("Error fetching session:", error);
-            return { data: null, error: "Failed to fetch session" };
+            console.error("Session error:", error);
+            return { data: null, error: "Failed to get session" };
         }
+    },
+
+    // Get user profile
+    getProfile: async () => {
+        return apiFetch<User>("/api/users/profile");
     },
 };
