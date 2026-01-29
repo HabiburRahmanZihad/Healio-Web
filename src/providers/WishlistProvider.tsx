@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { Medicine } from "@/types/medicine.type";
+import { authClient } from "@/lib/auth-client";
 
 interface WishlistContextType {
     wishlist: Medicine[];
@@ -17,26 +18,46 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [wishlist, setWishlist] = useState<Medicine[]>([]);
     const [isInitialized, setIsInitialized] = useState(false);
+    const { data: session } = authClient.useSession();
+    const prevUserIdRef = useRef<string | undefined>(undefined);
 
-    // Load wishlist from localStorage on mount
+    const getWishlistKey = () => (session?.user?.id ? `wishlist_${session.user.id}` : null);
+
+    // Initial load and session change handling
     useEffect(() => {
-        const savedWishlist = localStorage.getItem("wishlist");
-        if (savedWishlist) {
-            try {
-                setWishlist(JSON.parse(savedWishlist));
-            } catch (error) {
-                console.error("Failed to parse wishlist from localStorage", error);
+        const currentUserId = session?.user?.id;
+
+        if (currentUserId !== prevUserIdRef.current) {
+            const key = getWishlistKey();
+            if (key) {
+                const savedWishlist = localStorage.getItem(key);
+                if (savedWishlist) {
+                    try {
+                        setWishlist(JSON.parse(savedWishlist));
+                    } catch (error) {
+                        console.error("Failed to parse wishlist from localStorage", error);
+                        setWishlist([]);
+                    }
+                } else {
+                    setWishlist([]);
+                }
+            } else {
+                setWishlist([]);
             }
+            prevUserIdRef.current = currentUserId;
         }
         setIsInitialized(true);
-    }, []);
+    }, [session]);
 
     // Save wishlist to localStorage whenever it changes
     useEffect(() => {
         if (isInitialized) {
-            localStorage.setItem("wishlist", JSON.stringify(wishlist));
+            const key = getWishlistKey();
+            if (key) {
+                localStorage.setItem(key, JSON.stringify(wishlist));
+            }
         }
-    }, [wishlist, isInitialized]);
+    }, [wishlist, isInitialized, session]);
 
     const addToWishlist = (medicine: Medicine) => {
         setWishlist((prev) => {

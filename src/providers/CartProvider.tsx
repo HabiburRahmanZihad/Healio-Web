@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { Medicine } from "@/types/medicine.type";
+import { authClient } from "@/lib/auth-client";
 
 export interface CartItem extends Medicine {
     quantity: number;
@@ -22,26 +23,51 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [isInitialized, setIsInitialized] = useState(false);
+    const { data: session } = authClient.useSession();
+    const prevUserIdRef = useRef<string | undefined>(undefined);
 
-    // Load cart from localStorage on mount
+    const getCartKey = () => (session?.user?.id ? `cart_${session.user.id}` : null);
+
+    // Initial load and session change handling
     useEffect(() => {
-        const savedCart = localStorage.getItem("cart");
-        if (savedCart) {
-            try {
-                setCart(JSON.parse(savedCart));
-            } catch (error) {
-                console.error("Failed to parse cart from localStorage", error);
+        const currentUserId = session?.user?.id;
+
+        // If user changed (login/logout/switch)
+        if (currentUserId !== prevUserIdRef.current) {
+            const key = getCartKey();
+            if (key) {
+                const savedCart = localStorage.getItem(key);
+                if (savedCart) {
+                    try {
+                        setCart(JSON.parse(savedCart));
+                    } catch (error) {
+                        console.error("Failed to parse cart from localStorage", error);
+                        setCart([]);
+                    }
+                } else {
+                    setCart([]);
+                }
+            } else {
+                // Not logged in, clear cart state
+                setCart([]);
             }
+            prevUserIdRef.current = currentUserId;
         }
         setIsInitialized(true);
-    }, []);
+    }, [session]);
 
     // Save cart to localStorage whenever it changes
     useEffect(() => {
         if (isInitialized) {
-            localStorage.setItem("cart", JSON.stringify(cart));
+            const key = getCartKey();
+            if (key) {
+                localStorage.setItem(key, JSON.stringify(cart));
+            } else if (prevUserIdRef.current) {
+                // If we had a key but now don't (logout), don't touch localStorage
+                // but the state is already cleared by the previous effect
+            }
         }
-    }, [cart, isInitialized]);
+    }, [cart, isInitialized, session]);
 
     const addToCart = (medicine: Medicine) => {
         setCart((prevCart) => {
