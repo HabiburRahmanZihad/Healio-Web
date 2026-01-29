@@ -11,13 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, User as UserIcon, Store as StoreIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters long"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
   confirmPassword: z.string().min(8, "Confirm Password must be at least 8 characters long"),
+  role: z.enum(["CUSTOMER", "SELLER"]),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -35,6 +37,7 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
       email: "",
       password: "",
       confirmPassword: "",
+      role: "CUSTOMER" as "CUSTOMER" | "SELLER",
     },
     validators: {
       onSubmit: formSchema,
@@ -44,11 +47,12 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
       setIsLoading(true);
       const toastId = toast.loading("Creating your account...");
       try {
-        const { name, email, password } = value;
-        const response = await authClient.signUp.email({
+        const { name, email, password, role } = value;
+        const response = await (authClient.signUp.email as any)({
           name,
           email,
           password,
+          role, // Pass the role to better-auth
           callbackURL: "/login"
         });
 
@@ -109,6 +113,43 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
             }}
             className="space-y-4"
           >
+            <form.Field
+              name="role"
+              children={(field) => (
+                <div className="space-y-3">
+                  <Label>Join as</Label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      onClick={() => field.handleChange("CUSTOMER")}
+                      className={cn(
+                        "flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all",
+                        field.state.value === "CUSTOMER"
+                          ? "border-primary bg-primary/5 text-primary"
+                          : "border-border/50 hover:bg-muted/50 text-muted-foreground"
+                      )}
+                    >
+                      <UserIcon className="size-6" />
+                      <span className="text-sm font-semibold">Customer</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => field.handleChange("SELLER")}
+                      className={cn(
+                        "flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all",
+                        field.state.value === "SELLER"
+                          ? "border-primary bg-primary/5 text-primary"
+                          : "border-border/50 hover:bg-muted/50 text-muted-foreground"
+                      )}
+                    >
+                      <StoreIcon className="size-6" />
+                      <span className="text-sm font-semibold">Seller</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            />
+
             <form.Field
               name="name"
               children={(field) => (

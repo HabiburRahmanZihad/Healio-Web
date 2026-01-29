@@ -55,4 +55,18 @@ export const orderService = {
     getOrderById: async (id: string, options?: FetchOptions) => {
         return apiFetch<Order>(`/api/orders/${id}`, options);
     },
+
+    // Seller: Get incoming orders
+    getSellerOrders: async (options?: FetchOptions) => {
+        return apiFetch<Order[]>("/api/seller/orders", options);
+    },
+
+    // Seller: Update order status
+    updateOrderStatus: async (id: string, status: string, options?: FetchOptions) => {
+        return apiFetch<Order>(`/api/seller/orders/${id}/status`, {
+            ...options,
+            method: "PATCH",
+            body: { status },
+        });
+    },
 };

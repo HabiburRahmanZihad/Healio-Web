@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { Medicine } from "@/types/medicine.type";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 export interface CartItem extends Medicine {
     quantity: number;
@@ -70,6 +71,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [cart, isInitialized, session]);
 
     const addToCart = (medicine: Medicine) => {
+        if ((session?.user as any)?.role === "SELLER") {
+            toast.error("Sellers cannot add items to cart");
+            return;
+        }
+
         setCart((prevCart) => {
             const existingItem = prevCart.find((item) => item.id === medicine.id);
             if (existingItem) {

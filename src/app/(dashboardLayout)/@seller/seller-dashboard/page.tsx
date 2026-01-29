@@ -1,20 +1,65 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { medicineService } from "@/services/medicine.service";
+import { orderService, Order } from "@/services/order.service";
+import { Medicine } from "@/types/medicine.type";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Pill, ShoppingCart, BarChart3, PlusCircle, ArrowRight, Package, TrendingUp } from "lucide-react";
+import { Pill, ShoppingCart, BarChart3, PlusCircle, ArrowRight, Package, TrendingUp, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function SellerDashboard() {
     const { data: session } = authClient.useSession();
+    const [medicines, setMedicines] = useState<Medicine[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            const [medRes, orderRes] = await Promise.all([
+                medicineService.getSellerMedicines(),
+                orderService.getSellerOrders()
+            ]);
+
+            if (!medRes.error && medRes.data) setMedicines(medRes.data);
+            if (!orderRes.error && orderRes.data) setOrders(orderRes.data);
+
+            setIsLoading(false);
+        };
+
+        fetchData();
+    }, []);
+
+    const activeOrdersCount = orders.filter(o => o.status !== "DELIVERED" && o.status !== "CANCELLED").length;
+    const totalSales = orders
+        .filter(o => o.status === "DELIVERED")
+        .reduce((sum, o) => sum + o.totalPrice, 0);
 
     const stats = [
-        { title: "My Medicines", value: "24", icon: Pill, color: "text-blue-500", bg: "bg-blue-500/10" },
-        { title: "Active Orders", value: "8", icon: ShoppingCart, color: "text-orange-500", bg: "bg-orange-500/10" },
-        { title: "Total Sales", value: "$4,240", icon: TrendingUp, color: "text-green-500", bg: "bg-green-500/10" },
-        { title: "Store Rating", value: "4.8", icon: BarChart3, color: "text-purple-500", bg: "bg-purple-500/10" },
+        { title: "My Medicines", value: medicines.length.toString(), icon: Pill, color: "text-blue-500", bg: "bg-blue-500/10" },
+        { title: "Active Orders", value: activeOrdersCount.toString(), icon: ShoppingCart, color: "text-orange-500", bg: "bg-orange-500/10" },
+        { title: "Total Sales", value: `$${totalSales.toLocaleString()}`, icon: TrendingUp, color: "text-green-500", bg: "bg-green-500/10" },
+        { title: "Inventory Status", value: medicines.filter(m => m.stock < 10).length.toString() + " Low", icon: BarChart3, color: "text-purple-500", bg: "bg-purple-500/10" },
     ];
+
+    const lowStockMedicines = medicines
+        .filter(m => m.stock < 15)
+        .sort((a, b) => a.stock - b.stock)
+        .slice(0, 5);
+
+    const recentOrders = orders.slice(0, 5);
+
+    if (isLoading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <Loader2 className="size-8 animate-spin text-primary" />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -64,23 +109,34 @@ export default function SellerDashboard() {
                     </CardHeader>
                     <CardContent className="p-0">
                         <div className="divide-y divide-white/5">
-                            {[1, 2, 3].map((_, i) => (
-                                <div key={i} className="p-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
-                                    <div className="flex items-center gap-4">
-                                        <div className="size-12 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 group-hover:scale-105 transition-transform">
-                                            <Package className="size-6" />
+                            {recentOrders.length > 0 ? (
+                                recentOrders.map((order) => (
+                                    <div key={order.id} className="p-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
+                                        <div className="flex items-center gap-4">
+                                            <div className="size-12 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 group-hover:scale-105 transition-transform">
+                                                <Package className="size-6" />
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-white">Order #{order.id?.slice(-8).toUpperCase() || "UNKNOWN"}</p>
+                                                <p className="text-xs text-muted-foreground">{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : "Unknown date"} • {order.items?.length || 0} items</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="font-semibold text-white">Order #ORD-5521{i}</p>
-                                            <p className="text-xs text-muted-foreground">Today • 3 items</p>
+                                        <div className="text-right flex flex-col items-end gap-2">
+                                            <p className="font-bold text-white">${order.totalPrice?.toFixed(2) || "0.00"}</p>
+                                            <span className={cn(
+                                                "text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border",
+                                                order.status === "DELIVERED" ? "bg-green-500/10 text-green-500 border-green-500/20" :
+                                                    order.status === "CANCELLED" ? "bg-red-500/10 text-red-500 border-red-500/20" :
+                                                        "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                                            )}>{order.status || "UNKNOWN"}</span>
                                         </div>
                                     </div>
-                                    <div className="text-right flex flex-col items-end gap-2">
-                                        <p className="font-bold text-white">$89.50</p>
-                                        <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20">Processing</span>
-                                    </div>
+                                ))
+                            ) : (
+                                <div className="p-12 text-center text-muted-foreground">
+                                    No incoming orders yet.
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </CardContent>
                 </Card>
@@ -91,23 +147,26 @@ export default function SellerDashboard() {
                     </CardHeader>
                     <CardContent className="p-0">
                         <div className="divide-y divide-white/5">
-                            {[
-                                { name: "Paracetamol 500mg", stock: 5, status: "Critical" },
-                                { name: "Amoxicillin Caps", stock: 12, status: "Low" },
-                                { name: "Vitamin C Syrup", stock: 8, status: "Low" },
-                                { name: "Ibuprofen 400mg", stock: 3, status: "Critical" },
-                            ].map((item, i) => (
-                                <div key={i} className="p-6 flex items-start gap-4 hover:bg-white/[0.01] transition-colors group">
-                                    <div className={`p-2 rounded-xl shrink-0 group-hover:scale-110 transition-transform ${item.status === 'Critical' ? 'bg-red-500/10 text-red-500' : 'bg-orange-500/10 text-orange-500'}`}>
-                                        <Pill className="size-4" />
+                            {lowStockMedicines.length > 0 ? (
+                                lowStockMedicines.map((item, i) => (
+                                    <div key={i} className="p-6 flex items-start gap-4 hover:bg-white/[0.01] transition-colors group">
+                                        <div className={`p-2 rounded-xl shrink-0 group-hover:scale-110 transition-transform ${item.stock < 5 ? 'bg-red-500/10 text-red-500' : 'bg-orange-500/10 text-orange-500'}`}>
+                                            <Pill className="size-4" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-bold text-white truncate">{item.name}</p>
+                                            <p className="text-xs text-muted-foreground">{item.stock} left in stock</p>
+                                        </div>
+                                        <span className={`text-[10px] font-bold uppercase ${item.stock < 5 ? 'text-red-500' : 'text-orange-500'}`}>
+                                            {item.stock < 5 ? 'Critical' : 'Low'}
+                                        </span>
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-bold text-white truncate">{item.name}</p>
-                                        <p className="text-xs text-muted-foreground">{item.stock} left in stock</p>
-                                    </div>
-                                    <span className={`text-[10px] font-bold uppercase ${item.status === 'Critical' ? 'text-red-500' : 'text-orange-500'}`}>{item.status}</span>
+                                ))
+                            ) : (
+                                <div className="p-12 text-center text-muted-foreground">
+                                    Inventory is healthy.
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </CardContent>
                 </Card>

@@ -5,16 +5,21 @@ import Link from "next/link";
 import { Medicine } from "@/types/medicine.type";
 import { useCart } from "@/providers/CartProvider";
 import { useWishlist } from "@/providers/WishlistProvider";
+import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Info } from "lucide-react";
 
 interface MedicineDetailsClientProps {
     medicine: Medicine;
 }
 
 export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) {
+    const { data: session } = authClient.useSession();
     const { addToCart } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
+
+    const isSeller = (session?.user as any)?.role === "SELLER";
     const { id, name, description, price, stock, image, manufacturer, category, requiresPrescription } = medicine;
     const isOutOfStock = stock === 0;
 
@@ -98,16 +103,23 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
 
                         {/* Actions */}
                         <div className="flex gap-4 pt-4">
-                            <button
-                                onClick={handleAddToCart}
-                                disabled={isOutOfStock}
-                                className={`flex-1 py-4 px-6 rounded-xl font-semibold transition-all ${isOutOfStock
-                                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                                    : "bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-90"
-                                    }`}
-                            >
-                                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-                            </button>
+                            {!isSeller ? (
+                                <button
+                                    onClick={handleAddToCart}
+                                    disabled={isOutOfStock}
+                                    className={`flex-1 py-4 px-6 rounded-xl font-semibold transition-all ${isOutOfStock
+                                        ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                                        : "bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:opacity-90"
+                                        }`}
+                                >
+                                    {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+                                </button>
+                            ) : (
+                                <div className="flex-1 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center gap-3 text-sm font-medium">
+                                    <Info className="size-5 shrink-0" />
+                                    <span>Sellers cannot purchase products. Please use a customer account to buy.</span>
+                                </div>
+                            )}
                             <button
                                 onClick={handleToggleWishlist}
                                 className={cn(
