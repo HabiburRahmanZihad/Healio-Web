@@ -25,7 +25,7 @@ const medicineSchema = z.object({
     image: z.string().url("Must be a valid URL"),
     manufacturer: z.string().min(2, "Manufacturer is required"),
     categoryId: z.string().min(1, "Category is required"),
-    requiresPrescription: z.boolean().default(false),
+    requiresPrescription: z.boolean(),
 });
 
 export default function AddMedicinePage() {
@@ -124,8 +124,10 @@ export default function AddMedicinePage() {
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
                                         />
-                                        {field.state.meta.errors ? (
-                                            <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
+                                        {field.state.meta.errors.length > 0 ? (
+                                            <p className="text-xs text-red-500">
+                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                            </p>
                                         ) : null}
                                     </div>
                                 )}
@@ -145,8 +147,10 @@ export default function AddMedicinePage() {
                                             onChange={(e) => field.handleChange(e.target.value)}
                                             className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
                                         />
-                                        {field.state.meta.errors ? (
-                                            <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
+                                        {field.state.meta.errors.length > 0 ? (
+                                            <p className="text-xs text-red-500">
+                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                            </p>
                                         ) : null}
                                     </div>
                                 )}
@@ -171,8 +175,10 @@ export default function AddMedicinePage() {
                                                 className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20 pl-8"
                                             />
                                         </div>
-                                        {field.state.meta.errors ? (
-                                            <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
+                                        {field.state.meta.errors.length > 0 ? (
+                                            <p className="text-xs text-red-500">
+                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                            </p>
                                         ) : null}
                                     </div>
                                 )}
@@ -193,8 +199,10 @@ export default function AddMedicinePage() {
                                             onChange={(e) => field.handleChange(Number(e.target.value))}
                                             className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
                                         />
-                                        {field.state.meta.errors ? (
-                                            <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
+                                        {field.state.meta.errors.length > 0 ? (
+                                            <p className="text-xs text-red-500">
+                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                            </p>
                                         ) : null}
                                     </div>
                                 )}
@@ -220,8 +228,10 @@ export default function AddMedicinePage() {
                                                 </option>
                                             ))}
                                         </select>
-                                        {field.state.meta.errors ? (
-                                            <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
+                                        {field.state.meta.errors.length > 0 ? (
+                                            <p className="text-xs text-red-500">
+                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                            </p>
                                         ) : null}
                                     </div>
                                 )}
@@ -259,8 +269,10 @@ export default function AddMedicinePage() {
                                         className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
                                     />
                                     <p className="text-[10px] text-muted-foreground">Provide a link to a high-quality product image.</p>
-                                    {field.state.meta.errors ? (
-                                        <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
+                                    {field.state.meta.errors.length > 0 ? (
+                                        <p className="text-xs text-red-500">
+                                            {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                        </p>
                                     ) : null}
                                 </div>
                             )}
@@ -279,8 +291,10 @@ export default function AddMedicinePage() {
                                         onChange={(e) => field.handleChange(e.target.value)}
                                         className="bg-white/5 border-white/10 rounded-xl focus:ring-primary/20 resize-none"
                                     />
-                                    {field.state.meta.errors ? (
-                                        <p className="text-xs text-red-500">{field.state.meta.errors.join(", ")}</p>
+                                    {field.state.meta.errors.length > 0 ? (
+                                        <p className="text-xs text-red-500">
+                                            {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                        </p>
                                     ) : null}
                                 </div>
                             )}
