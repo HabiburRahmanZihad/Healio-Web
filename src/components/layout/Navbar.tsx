@@ -115,6 +115,12 @@ const Navbar = ({
     return "/dashboard";
   };
 
+  const getProfileUrl = () => {
+    if (isAdmin) return "/admin-dashboard/profile";
+    if (isSeller) return "/seller-dashboard/profile";
+    return "/dashboard/profile";
+  };
+
   const navigationMenu = [
     ...menu,
     ...(session ? [
@@ -154,14 +160,17 @@ const Navbar = ({
 
           {/* Right: Actions */}
           <div className="flex items-center gap-4 flex-shrink-0">
-            <Link href="/cart" className="relative p-2 hover:bg-muted/50 rounded-full transition-colors group">
-              <ShoppingCart className="size-6 text-muted-foreground group-hover:text-primary transition-colors" />
-              {itemCount > 0 && (
-                <span className="absolute top-0 right-0 size-5 bg-primary text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-background animate-in zoom-in duration-300">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
+            {/* Cart: Only for customers */}
+            {!isSeller && !isAdmin && (
+              <Link href="/cart" className="relative p-2 hover:bg-muted/50 rounded-full transition-colors group">
+                <ShoppingCart className="size-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                {itemCount > 0 && (
+                  <span className="absolute top-0 right-0 size-5 bg-primary text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-background animate-in zoom-in duration-300">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+            )}
             <ModeToggle />
 
             {!session ? (
@@ -186,11 +195,11 @@ const Navbar = ({
                   <LogOut className="size-4" />
                   Logout
                 </Button>
-                <div className="flex items-center gap-2 pl-2">
-                  <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20">
+                <Link href={getProfileUrl()} className="flex items-center gap-2 pl-2 group">
+                  <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">
                     {session.user.name?.charAt(0).toUpperCase()}
                   </div>
-                </div>
+                </Link>
               </>
             )}
           </div>
@@ -210,14 +219,17 @@ const Navbar = ({
             <span className="text-xl font-bold tracking-tight">Healio</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/cart" className="relative p-2 group">
-              <ShoppingCart className="size-6 text-muted-foreground group-hover:text-primary transition-colors" />
-              {itemCount > 0 && (
-                <span className="absolute top-0 right-0 size-4 bg-primary text-white text-[9px] font-bold flex items-center justify-center rounded-full animate-in zoom-in duration-300">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
+            {/* Mobile Cart: Only for customers */}
+            {!isSeller && !isAdmin && (
+              <Link href="/cart" className="relative p-2 group">
+                <ShoppingCart className="size-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                {itemCount > 0 && (
+                  <span className="absolute top-0 right-0 size-4 bg-primary text-white text-[9px] font-bold flex items-center justify-center rounded-full animate-in zoom-in duration-300">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+            )}
             <ModeToggle />
             <Sheet>
               <SheetTrigger asChild>
@@ -257,15 +269,15 @@ const Navbar = ({
                       </>
                     ) : (
                       <>
-                        <div className="flex items-center justify-center gap-2 pb-4">
-                          <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20 text-lg">
+                        <Link href={getProfileUrl()} className="flex items-center justify-center gap-2 pb-4 group">
+                          <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20 text-lg group-hover:bg-primary group-hover:text-white transition-all">
                             {session.user.name?.charAt(0).toUpperCase()}
                           </div>
                           <div className="flex flex-col text-left">
-                            <span className="font-semibold text-sm">{session.user.name}</span>
+                            <span className="font-semibold text-sm group-hover:text-primary transition-colors">{session.user.name}</span>
                             <span className="text-xs text-muted-foreground">{session.user.email}</span>
                           </div>
-                        </div>
+                        </Link>
                         <Button
                           variant="destructive"
                           className="w-full h-11 text-base gap-2"
