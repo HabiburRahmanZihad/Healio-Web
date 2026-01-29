@@ -31,6 +31,9 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [verificationUrl, setVerificationUrl] = useState<string | null>(null);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
+
   const form = useForm({
     defaultValues: {
       name: "",
@@ -48,45 +51,80 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
       const toastId = toast.loading("Creating your account...");
       try {
         const { name, email, password, role } = value;
-        const response = await (authClient.signUp.email as any)({
-          name,
-          email,
-          password,
-          role, // Pass the role to better-auth
-          callbackURL: "/login"
+        // Use custom registration endpoint to avoid proxy issues and get verificationUrl back
+        const res = await fetch("/api/auth-registration", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            role,
+            callbackURL: "/login"
+          }),
         });
 
-        console.log("Signup response:", response);
+        // Safely parse JSON
+        let response;
+        const text = await res.text();
+        console.log("Raw server response:", text);
+
+        try {
+          response = JSON.parse(text);
+        } catch (e) {
+          console.error("Failed to parse response JSON. Raw text:", text);
+          // If it's not JSON, show the text itself if it's short, otherwise a generic error
+          const displayErr = text.length < 100 ? text : "Server returned an invalid format. Please try again or check logs.";
+          toast.error(displayErr, { id: toastId });
+          setIsLoading(false);
+          return;
+        }
+
+        console.log("Parsed signup response:", response);
 
         // Check if there's an error in the response
         if (response?.error) {
-          const errorMessage = response.error.message ||
-            response.error.code === "USER_ALREADY_EXISTS"
-            ? "An account with this email already exists"
-            : "Failed to create account";
+          const errorMessage = typeof response.error === 'string'
+            ? response.error
+            : (response.error.message || "Failed to create account");
+
           toast.error(errorMessage, { id: toastId });
           setIsLoading(false);
           return;
         }
 
-        // If we have user data in response, it's a success
-        if (response?.data?.user || (response as any)?.user) {
-          toast.success("Account created successfully! Please check your email to verify your account.", { id: toastId });
-          setTimeout(() => {
-            router.push("/login");
-          }, 1500);
+        // Direct access to data (response might be flat or nested)
+        const data = response;
+
+        // Check for fallback verification link (if SMTP failed or we want to show it)
+        if (data?.verificationUrl) {
+          setVerificationUrl(data.verificationUrl);
+          setShowVerifyModal(true);
+          toast.success("Account created! Please verify your email.", { id: toastId });
+          setIsLoading(false);
           return;
         }
 
-        // If no error and no user data, assume success anyway
-        toast.success("Account created! Please check your email to verify your account.", { id: toastId });
+        // If we have user data in response, it's a success
+        if (data?.user) {
+          toast.success("Account created successfully! Please check your email.", { id: toastId });
+          setTimeout(() => {
+            router.push("/login");
+          }, 2000);
+          return;
+        }
+
+        // Default success fallback
+        toast.success("Account created! Please check your email to verify.", { id: toastId });
         setTimeout(() => {
           router.push("/login");
-        }, 1500);
+        }, 2000);
 
       } catch (error: unknown) {
-        console.error("Signup error:", error);
-        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+        console.error("Signup catch block error:", error);
+        const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred during signup";
         toast.error(errorMessage, { id: toastId });
         setIsLoading(false);
       }
@@ -304,6 +342,48 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
         </Link>
         .
       </div>
+
+      {/* Verification Fallback Modal */}
+      {showVerifyModal && verificationUrl && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-300">
+          <Card className="w-full max-w-md border-primary/20 shadow-2xl animate-in zoom-in-95 duration-300">
+            <CardHeader className="text-center pb-2">
+              <div className="mx-auto size-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 mb-4">
+                <StoreIcon className="size-6" />
+              </div>
+              <CardTitle className="text-xl font-bold">One last step!</CardTitle>
+              <CardDescription>
+                We&apos;ve sent a verification email, but you can also verify your account instantly using the link below.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+              <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 text-primary text-sm">
+                <p className="font-semibold mb-1 text-foreground">Verification Link:</p>
+                <p className="break-all font-mono text-[10px] opacity-80 mb-3">{verificationUrl}</p>
+                <Button
+                  asChild
+                  className="w-full bg-primary hover:bg-primary/90 text-white font-bold"
+                  onClick={() => {
+                    setTimeout(() => router.push("/login"), 500);
+                  }}
+                >
+                  <a href={verificationUrl} target="_blank" rel="noopener noreferrer">
+                    Verify Account Now
+                  </a>
+                </Button>
+              </div>
+              <p className="text-[10px] text-center text-muted-foreground">
+                Click the button above to verify your account in a new tab. Once verified, you can sign in.
+              </p>
+            </CardContent>
+            <CardFooter>
+              <Button variant="ghost" className="w-full" onClick={() => router.push("/login")}>
+                Go to Login
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
