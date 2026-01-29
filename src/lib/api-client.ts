@@ -45,9 +45,9 @@ async function apiFetch<T>(
         const res = await fetch(url, config);
         const json = await res.json();
 
-        if (!json.success) {
-            console.error(`API Request Failed (${endpoint}):`, json);
-            return { data: null, error: json.message || "Request failed" };
+        if (!res.ok || (json && json.success === false)) {
+            console.error(`API Request Failed (${endpoint}) [Status: ${res.status}]:`, json);
+            return { data: null, error: json?.message || `Request failed (${res.status})` };
         }
 
         return { data: json.data as T, error: null };
