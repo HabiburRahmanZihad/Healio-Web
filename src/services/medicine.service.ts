@@ -16,12 +16,12 @@ export const medicineService = {
 
     // Seller: Get all medicines for current seller
     getSellerMedicines: async (options?: FetchOptions) => {
-        return apiFetch<Medicine[]>("/api/seller/medicines", options);
+        return apiFetch<Medicine[]>("/api/medicines/seller/all", options);
     },
 
     // Seller: Create a new medicine
     createMedicine: async (data: any, options?: FetchOptions) => {
-        return apiFetch<Medicine>("/api/seller/medicines", {
+        return apiFetch<Medicine>("/api/medicines", {
             ...options,
             method: "POST",
             body: data,
@@ -30,7 +30,7 @@ export const medicineService = {
 
     // Seller: Update medicine
     updateMedicine: async (id: string, data: any, options?: FetchOptions) => {
-        return apiFetch<Medicine>(`/api/seller/medicines/${id}`, {
+        return apiFetch<Medicine>(`/api/medicines/${id}`, {
             ...options,
             method: "PATCH",
             body: data,
@@ -39,7 +39,7 @@ export const medicineService = {
 
     // Seller: Delete medicine
     deleteMedicine: async (id: string, options?: FetchOptions) => {
-        return apiFetch<void>(`/api/seller/medicines/${id}`, {
+        return apiFetch<void>(`/api/medicines/${id}`, {
             ...options,
             method: "DELETE",
         });
