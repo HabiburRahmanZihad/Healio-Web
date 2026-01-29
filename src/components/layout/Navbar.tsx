@@ -59,6 +59,10 @@ interface Navbar1Props {
 
 import { authClient } from "@/lib/auth-client";
 
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { LogOut } from "lucide-react";
+
 const Navbar = ({
   logo = {
     url: "https://www.shadcnblocks.com",
@@ -84,6 +88,18 @@ const Navbar = ({
   className,
 }: Navbar1Props) => {
   const { data: session } = authClient.useSession();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Logged out successfully");
+          router.push("/login");
+        },
+      },
+    });
+  };
 
   // Create a dynamic menu that includes Dashboard if logged in
   const navigationMenu = [
@@ -136,15 +152,23 @@ const Navbar = ({
                 </Button>
               </>
             ) : (
-              <div className="h-8 w-[1px] bg-border mx-2" />
-            )}
-
-            {/* Show User Profile or Welcome if needed (Optional for now as not requested explicitly but good practice) */}
-            {session && (
-              <div className="flex items-center gap-2">
-                {/* Placeholder for user avatar or initials */}
-                <span className="text-sm font-medium">Hi, {session.user.name}</span>
-              </div>
+              <>
+                <div className="h-8 w-[1px] bg-border mx-2" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="font-semibold text-muted-foreground hover:text-destructive gap-2"
+                >
+                  <LogOut className="size-4" />
+                  Logout
+                </Button>
+                <div className="flex items-center gap-2 pl-2">
+                  <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20">
+                    {session.user.name?.charAt(0).toUpperCase()}
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </nav>
@@ -201,7 +225,25 @@ const Navbar = ({
                         </Button>
                       </>
                     ) : (
-                      <div className="text-center text-sm text-muted-foreground">Logged in as {session.user.email}</div>
+                      <>
+                        <div className="flex items-center justify-center gap-2 pb-4">
+                          <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20 text-lg">
+                            {session.user.name?.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="flex flex-col text-left">
+                            <span className="font-semibold text-sm">{session.user.name}</span>
+                            <span className="text-xs text-muted-foreground">{session.user.email}</span>
+                          </div>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          className="w-full h-11 text-base gap-2"
+                          onClick={handleLogout}
+                        >
+                          <LogOut className="size-4" />
+                          Logout
+                        </Button>
+                      </>
                     )}
                   </div>
                 </div>
