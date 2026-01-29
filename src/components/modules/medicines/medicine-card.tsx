@@ -3,14 +3,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Medicine } from "@/types/medicine.type";
+import { useCart } from "@/providers/CartProvider";
+import { toast } from "sonner";
+import { ShoppingCart } from "lucide-react";
 
 interface MedicineCardProps {
     medicine: Medicine;
 }
 
 export function MedicineCard({ medicine }: MedicineCardProps) {
+    const { addToCart } = useCart();
     const { id, name, price, image, manufacturer, stock, category } = medicine;
     const isOutOfStock = stock === 0;
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addToCart(medicine);
+        toast.success(`${name} added to cart`);
+    };
 
     return (
         <Link href={`/medicines/${id}`} className="group">
@@ -35,6 +46,17 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
                             {category.name}
                         </span>
                     )}
+
+                    {/* Add to Cart Overlay Button */}
+                    {!isOutOfStock && (
+                        <button
+                            onClick={handleAddToCart}
+                            className="absolute bottom-3 right-3 p-2 bg-purple-600 text-white rounded-xl shadow-lg opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-purple-500"
+                            title="Add to Cart"
+                        >
+                            <ShoppingCart className="size-5" />
+                        </button>
+                    )}
                 </div>
 
                 {/* Content */}
@@ -48,8 +70,8 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
                             ${price.toFixed(2)}
                         </span>
                         <span className={`text-xs px-2 py-1 rounded-full ${isOutOfStock
-                                ? "bg-red-500/20 text-red-400"
-                                : "bg-green-500/20 text-green-400"
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-green-500/20 text-green-400"
                             }`}>
                             {isOutOfStock ? "Out of Stock" : `${stock} in stock`}
                         </span>
