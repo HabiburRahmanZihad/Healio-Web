@@ -29,6 +29,11 @@ export const adminRoutes = [
                 url: "/admin-dashboard/users",
                 icon: Users
             },
+            {
+                title: "Categories",
+                url: "/admin-dashboard/categories",
+                icon: ShieldCheck
+            },
         ],
     },
     {

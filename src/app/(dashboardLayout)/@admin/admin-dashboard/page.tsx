@@ -1,19 +1,69 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { userService } from "@/services/user.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Pill, ShoppingCart, BarChart3, TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
+import { Users, Pill, ShoppingCart, BarChart3, TrendingUp, TrendingDown, DollarSign, Activity, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { orderService, Order } from "@/services/order.service";
+import { User } from "@/types";
+
+interface DashboardStats {
+    users: number;
+    medicines: number;
+    orders: number;
+    revenue: number;
+}
 
 export default function AdminDashboard() {
     const { data: session } = authClient.useSession();
+    const [stats, setStats] = useState<DashboardStats | null>(null);
+    const [recentOrders, setRecentOrders] = useState<Order[]>([]);
+    const [recentUsers, setRecentUsers] = useState<User[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const stats = [
-        { title: "Total Revenue", value: "$45,231.89", trend: "+20.1%", trendUp: true, icon: DollarSign, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-        { title: "Active Users", value: "2,350", trend: "+180.1%", trendUp: true, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
-        { title: "Total Sales", value: "+12,234", trend: "+19%", trendUp: true, icon: ShoppingCart, color: "text-purple-500", bg: "bg-purple-500/10" },
-        { title: "Stock Status", value: "Low: 45", trend: "-4%", trendUp: false, icon: Pill, color: "text-orange-500", bg: "bg-orange-500/10" },
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            setIsLoading(true);
+            try {
+                const [statsRes, ordersRes, usersRes] = await Promise.all([
+                    userService.getAdminStats(),
+                    orderService.getSellerOrders(),
+                    userService.getAllUsers()
+                ]);
+
+                if (!statsRes.error && statsRes.data) {
+                    setStats(statsRes.data);
+                }
+                if (!ordersRes.error && ordersRes.data) {
+                    setRecentOrders(ordersRes.data.slice(0, 5));
+                }
+                if (!usersRes.error && usersRes.data) {
+                    setRecentUsers(usersRes.data.slice(0, 5));
+                }
+            } catch (error) {
+                console.error("Dashboard error:", error);
+            }
+            setIsLoading(false);
+        };
+        fetchDashboardData();
+    }, []);
+
+    const statCards = [
+        { title: "Total Revenue", value: `$${stats?.revenue.toLocaleString() || "0"}`, trend: "+20.1%", trendUp: true, icon: DollarSign, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+        { title: "Registered Users", value: stats?.users.toString() || "0", trend: "+180.1%", trendUp: true, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
+        { title: "Total Orders", value: stats?.orders.toString() || "0", trend: "+19%", trendUp: true, icon: ShoppingCart, color: "text-purple-500", bg: "bg-purple-500/10" },
+        { title: "Medicine Inventory", value: stats?.medicines.toString() || "0", trend: "-4%", trendUp: false, icon: Pill, color: "text-orange-500", bg: "bg-orange-500/10" },
     ];
+
+    if (isLoading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <Loader2 className="size-8 animate-spin text-primary" />
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -29,7 +79,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {stats.map((stat, i) => (
+                {statCards.map((stat, i) => (
                     <Card key={i} className="bg-white/5 border-white/10 overflow-hidden relative group hover:border-primary/40 transition-all">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-widest">{stat.title}</CardTitle>
@@ -87,22 +137,44 @@ export default function AdminDashboard() {
                     <CardContent className="p-0">
                         <div className="divide-y divide-white/5">
                             {[
-                                { user: "Sarah Johnson", action: "placed an order", time: "2 min ago", icon: ShoppingCart, bg: "bg-purple-500/10", color: "text-purple-500" },
-                                { user: "New User Registered", action: "via Google Auth", time: "15 min ago", icon: Users, bg: "bg-blue-500/10", color: "text-blue-500" },
-                                { user: "Medicine Update", action: "Amoxicillin stock update", time: "45 min ago", icon: Pill, bg: "bg-orange-500/10", color: "text-orange-500" },
-                                { user: "System Backup", action: "Cloud sync completed", time: "1 hour ago", icon: BarChart3, bg: "bg-emerald-500/10", color: "text-emerald-500" },
-                            ].map((item, i) => (
-                                <div key={i} className="p-6 flex items-start gap-4 hover:bg-white/[0.01] transition-colors group">
-                                    <div className={`${item.bg} ${item.color} p-2 rounded-xl shrink-0 group-hover:scale-110 transition-transform`}>
-                                        <item.icon className="size-4" />
+                                ...recentOrders.map(order => ({
+                                    label: `Order ${order.id.slice(-6).toUpperCase()}`,
+                                    value: `$${order.totalPrice.toFixed(2)}`,
+                                    time: new Date(order.createdAt).toLocaleDateString(),
+                                    icon: ShoppingCart,
+                                    bg: "bg-purple-500/10",
+                                    color: "text-purple-500",
+                                    timestamp: new Date(order.createdAt).getTime()
+                                })),
+                                ...recentUsers.map(user => ({
+                                    label: user.name,
+                                    value: "New Registration",
+                                    time: new Date(user.createdAt || Date.now()).toLocaleDateString(),
+                                    icon: Users,
+                                    bg: "bg-blue-500/10",
+                                    color: "text-blue-500",
+                                    timestamp: user.createdAt ? new Date(user.createdAt).getTime() : 0
+                                }))
+                            ]
+                                .sort((a, b) => b.timestamp - a.timestamp)
+                                .slice(0, 6)
+                                .map((item, i) => (
+                                    <div key={i} className="p-6 flex items-start gap-4 hover:bg-white/[0.01] transition-colors group">
+                                        <div className={`${item.bg} ${item.color} p-2 rounded-xl shrink-0 group-hover:scale-110 transition-transform`}>
+                                            <item.icon className="size-4" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-sm font-bold text-white truncate">{item.label}</p>
+                                            <p className="text-xs text-muted-foreground">{item.value}</p>
+                                        </div>
+                                        <span className="text-[10px] text-muted-foreground whitespace-nowrap">{item.time}</span>
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-bold text-white truncate">{item.user}</p>
-                                        <p className="text-xs text-muted-foreground">{item.action}</p>
-                                    </div>
-                                    <span className="text-[10px] text-muted-foreground whitespace-nowrap">{item.time}</span>
+                                ))}
+                            {recentOrders.length === 0 && recentUsers.length === 0 && (
+                                <div className="p-12 text-center text-muted-foreground italic">
+                                    No recent activity found.
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </CardContent>
                 </Card>

@@ -1,4 +1,4 @@
-import { Pill, ShoppingCart, BarChart3, PlusCircle, LayoutDashboard } from "lucide-react";
+import { Pill, ShoppingCart, BarChart3, PlusCircle, LayoutDashboard, User as UserIcon } from "lucide-react";
 
 export const sellerRoutes = [
     {
@@ -38,6 +38,16 @@ export const sellerRoutes = [
                 title: "Seller Orders",
                 url: "/seller-dashboard/orders",
                 icon: ShoppingCart
+            },
+        ],
+    },
+    {
+        title: "Account",
+        items: [
+            {
+                title: "Profile Settings",
+                url: "/seller-dashboard/profile",
+                icon: UserIcon
             },
         ],
     },

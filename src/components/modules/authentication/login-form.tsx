@@ -41,7 +41,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           email: value.email,
           password: value.password,
           fetchOptions: {
-            onSuccess: () => {
+            onSuccess: async (ctx) => {
+              const user = ctx.data.user;
+              if (user && (user as any).isBlocked) {
+                await authClient.signOut();
+                toast.error("Your account has been blocked. Please contact the administrator for assistance.", {
+                  duration: 5000,
+                });
+                return;
+              }
               toast.success("Welcome back!");
               router.push("/");
             },

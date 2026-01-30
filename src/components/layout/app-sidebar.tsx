@@ -68,6 +68,17 @@ export function AppSidebar({
     });
   };
 
+  const getProfileUrl = () => {
+    switch (user.role) {
+      case "ADMIN":
+        return "/admin-dashboard/profile";
+      case "SELLER":
+        return "/seller-dashboard/profile";
+      default:
+        return "/dashboard/profile";
+    }
+  };
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader className="h-16 flex items-center px-6 border-b border-sidebar-border">
@@ -141,7 +152,7 @@ export function AppSidebar({
                 align="end"
               >
                 <DropdownMenuItem asChild className="rounded-lg cursor-pointer">
-                  <Link href="/dashboard/profile" className="flex items-center gap-2 py-2">
+                  <Link href={getProfileUrl()} className="flex items-center gap-2 py-2">
                     <UserIcon className="size-4" />
                     <span>Profile Settings</span>
                   </Link>

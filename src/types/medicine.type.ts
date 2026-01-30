@@ -1,4 +1,5 @@
 // Types for Medicine module
+import { User } from "./user.type";
 
 export interface Category {
     id: string;
@@ -20,6 +21,7 @@ export interface Medicine {
     categoryId: string;
     category?: Category;
     sellerId: string;
+    seller?: User;
     createdAt: string;
     updatedAt: string;
 }

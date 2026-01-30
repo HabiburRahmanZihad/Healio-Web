@@ -1,13 +1,6 @@
 // User service - uses reusable API client
-import { apiFetch, API_URL } from "@/lib/api-client";
-
-interface User {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-    emailVerified: boolean;
-}
+import { apiFetch, API_URL, FetchOptions } from "@/lib/api-client";
+import { User } from "@/types/user.type";
 
 interface Session {
     user: User;
