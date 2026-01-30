@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Eye, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
@@ -16,7 +16,7 @@ const medicines = [
         rating: 4.8,
         reviews: 124,
         category: "Pain Relief",
-        image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=1430&auto=format&fit=crop",
+        image: "https://res.cloudinary.com/dzokxtodh/image/upload/v1769777569/ChatGPT_Image_Jan_30_2026_06_45_25_PM_beyija.png",
         isRecommended: true
     },
     {
@@ -28,7 +28,7 @@ const medicines = [
         rating: 4.9,
         reviews: 89,
         category: "Vitamins",
-        image: "https://images.unsplash.com/photo-1471864190281-ad5fe9ca1a1d?q=80&w=2070&auto=format&fit=crop",
+        image: "https://res.cloudinary.com/dzokxtodh/image/upload/v1769776864/ChatGPT_Image_Jan_30_2026_06_39_28_PM_bzi4qy.png",
         isRecommended: false
     },
     {
@@ -40,7 +40,7 @@ const medicines = [
         rating: 4.7,
         reviews: 210,
         category: "First Aid",
-        image: "https://images.unsplash.com/photo-1583459183353-29ecf6775791?q=80&w=2070&auto=format&fit=crop",
+        image: "https://res.cloudinary.com/dzokxtodh/image/upload/v1769776863/ChatGPT_Image_Jan_30_2026_06_39_11_PM_slfdyo.png",
         isRecommended: true
     },
     {
@@ -52,7 +52,7 @@ const medicines = [
         rating: 4.5,
         reviews: 56,
         category: "Cough & Cold",
-        image: "https://images.unsplash.com/photo-1550572017-ed200f5e6343?q=80&w=2070&auto=format&fit=crop",
+        image: "https://res.cloudinary.com/dzokxtodh/image/upload/v1769776863/ChatGPT_Image_Jan_30_2026_06_38_51_PM_jpqsfu.png",
         isRecommended: false
     },
 ];
@@ -80,7 +80,7 @@ const LatestMedicines = () => {
                             initial={{ opacity: 0, y: 15 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="group bg-white/[0.02] border border-white/5 rounded-3xl overflow-hidden hover:border-primary/20 transition-all duration-500"
+                            className="group bg-white/2 border border-white/5 rounded-3xl overflow-hidden hover:border-primary/20 transition-all duration-500"
                         >
                             {/* Image Container */}
                             <div className="relative aspect-square overflow-hidden bg-white/5">
@@ -100,17 +100,7 @@ const LatestMedicines = () => {
                                     )}
                                 </div>
 
-                                {/* Hover Actions */}
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                    <Button size="icon" variant="secondary" className="rounded-xl shadow-xl hover:scale-110 transition-transform" asChild>
-                                        <Link href={`/medicines/${item.id}`}>
-                                            <Eye className="size-4" />
-                                        </Link>
-                                    </Button>
-                                    <Button size="icon" className="rounded-xl shadow-xl bg-primary hover:bg-primary/90 hover:scale-110 transition-transform text-white">
-                                        <ShoppingCart className="size-4" />
-                                    </Button>
-                                </div>
+
                             </div>
 
                             {/* Content */}
@@ -138,10 +128,7 @@ const LatestMedicines = () => {
                                     )}
                                 </div>
 
-                                <Button className="w-full h-10 rounded-xl gap-2 bg-white/5 border border-white/10 hover:bg-primary hover:text-white hover:border-primary text-[10px] font-black uppercase tracking-widest transition-all active:scale-95" variant="outline">
-                                    <ShoppingCart className="size-3" />
-                                    Add to Cart
-                                </Button>
+
                             </div>
                         </motion.div>
                     ))}
