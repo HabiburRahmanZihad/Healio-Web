@@ -12,19 +12,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Save, X, Pill, DollarSign, Package, Factory, List } from "lucide-react";
+import { ArrowLeft, Loader2, Save, X, Pill, DollarSign, Package, Factory, List, ShieldCheck, Activity, Terminal, Sparkles, FileText, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const medicineSchema = z.object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
-    description: z.string().min(10, "Description must be at least 10 characters"),
-    price: z.number().positive("Price must be positive"),
-    stock: z.number().int().min(0, "Stock cannot be negative"),
-    image: z.string().url("Must be a valid URL"),
-    manufacturer: z.string().min(2, "Manufacturer is required"),
-    categoryId: z.string().min(1, "Category is required"),
+    name: z.string().min(2, "Asset name must be at least 2 characters"),
+    description: z.string().min(10, "Technical description must be at least 10 characters"),
+    price: z.number().positive("Valuation must be a positive integer"),
+    stock: z.number().int().min(0, "Deployment units cannot be negative"),
+    image: z.string().url("Visual manifest URL must be a valid link"),
+    manufacturer: z.string().min(2, "Production facility identification is required"),
+    categoryId: z.string().min(1, "Protocol classification is required"),
     requiresPrescription: z.boolean(),
 });
 
@@ -59,270 +60,386 @@ export default function AddMedicinePage() {
         },
         onSubmit: async ({ value }) => {
             setIsLoading(true);
-            const toastId = toast.loading("Adding medicine...");
+            const toastId = toast.loading("Initializing registration protocol...");
             const res = await medicineService.createMedicine(value);
 
             if (!res.error) {
-                toast.success("Medicine added successfully", { id: toastId });
+                toast.success("Asset successfully registered to Identity Nexus", { id: toastId });
                 router.push("/seller-dashboard/medicines");
             } else {
-                toast.error(res.error || "Failed to add medicine", { id: toastId });
+                toast.error(res.error || "Registration protocol failed", { id: toastId });
                 setIsLoading(false);
             }
         },
     });
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
-            <div className="flex items-center justify-between">
-                <Button variant="ghost" asChild className="text-muted-foreground hover:text-white transition-colors">
-                    <Link href="/seller-dashboard/medicines" className="flex items-center gap-2">
-                        <ArrowLeft className="size-4" />
-                        Back to Inventory
+        <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-24">
+            {/* Breadcrumb / Navigation */}
+            <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="flex items-center justify-between"
+            >
+                <Button variant="ghost" asChild className="group text-gray-400 hover:text-primary transition-all rounded-xl px-4 hover:bg-primary/5">
+                    <Link href="/seller-dashboard/medicines" className="flex items-center gap-3">
+                        <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Abort Registration</span>
                     </Link>
                 </Button>
+
+                <div className="flex items-center gap-2 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
+                    <span>Ledger</span>
+                    <div className="size-1 rounded-full bg-gray-800" />
+                    <span className="text-primary/70">Registration Protocol</span>
+                </div>
+            </motion.div>
+
+            {/* Header Section */}
+            <div className="space-y-4 text-center md:text-left">
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-[0.2em]"
+                >
+                    <Terminal className="size-3 animate-pulse" />
+                    <span>System Node: 127.0.0.1 // Admin Uplink</span>
+                </motion.div>
+                <motion.h1
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none"
+                >
+                    Asset <span className="text-primary italic">Registration</span>
+                </motion.h1>
+                <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-sm text-muted-foreground font-medium max-w-xl mx-auto md:mx-0"
+                >
+                    Initialize the deployment of new pharmaceutical assets into the <span className="text-white font-bold">Identity Nexus</span> logistics grid.
+                </motion.p>
             </div>
 
-            <div className="flex flex-col gap-1">
-                <h1 className="text-3xl font-bold text-white tracking-tight">Add New Medicine</h1>
-                <p className="text-muted-foreground">Fill in the details to list a new product in your store.</p>
-            </div>
+            <Card className="bg-white/[0.03] border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-md shadow-2xl relative border-t-primary/20">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
-            <Card className="bg-white/5 border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm shadow-xl">
-                <CardHeader className="p-8 border-b border-white/5 bg-white/[0.02]">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                            <Pill className="size-5" />
+                <CardHeader className="p-8 md:p-12 border-b border-white/5 bg-white/[0.01]">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div className="flex items-center gap-5">
+                            <div className="relative size-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary overflow-hidden group">
+                                <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <Pill className="size-8 relative z-10" />
+                            </div>
+                            <div>
+                                <CardTitle className="text-2xl font-black text-white tracking-tight uppercase">Metadata Terminal</CardTitle>
+                                <CardDescription className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mt-1">Classification and Validation Protocols</CardDescription>
+                            </div>
                         </div>
-                        <div>
-                            <CardTitle className="text-xl text-white">Medicine Information</CardTitle>
-                            <CardDescription>Basic details about the medicine you're listing.</CardDescription>
+                        <div className="flex items-center gap-3 bg-zinc-950/40 px-5 py-2.5 rounded-2xl border border-white/5">
+                            <Activity className="size-4 text-primary animate-pulse" />
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Uplink Status: Secure</span>
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="p-8">
+
+                <CardContent className="p-8 md:p-12">
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             form.handleSubmit();
                         }}
-                        className="space-y-8"
+                        className="space-y-12"
                     >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <form.Field
-                                name="name"
-                                children={(field) => (
-                                    <div className="space-y-2">
-                                        <Label htmlFor="name" className="text-muted-foreground flex items-center gap-2">
-                                            <Pill className="size-3" /> Medicine Name
-                                        </Label>
-                                        <Input
-                                            id="name"
-                                            placeholder="e.g. Paracetamol 500mg"
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
-                                        />
-                                        {field.state.meta.errors.length > 0 ? (
-                                            <p className="text-xs text-red-500">
-                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
-                                            </p>
-                                        ) : null}
-                                    </div>
-                                )}
-                            />
+                        {/* Grid Section 1: Basic Info */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-3">
+                                <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
+                                <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Fundamental Identification</h3>
+                            </div>
 
-                            <form.Field
-                                name="manufacturer"
-                                children={(field) => (
-                                    <div className="space-y-2">
-                                        <Label htmlFor="manufacturer" className="text-muted-foreground flex items-center gap-2">
-                                            <Factory className="size-3" /> Manufacturer
-                                        </Label>
-                                        <Input
-                                            id="manufacturer"
-                                            placeholder="e.g. PharmaCorp Inc."
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
-                                        />
-                                        {field.state.meta.errors.length > 0 ? (
-                                            <p className="text-xs text-red-500">
-                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
-                                            </p>
-                                        ) : null}
-                                    </div>
-                                )}
-                            />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <form.Field
+                                    name="name"
+                                    children={(field) => (
+                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="space-y-3 group">
+                                            <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
+                                                <Terminal className="size-3" /> Asset Designation
+                                            </Label>
+                                            <div className="relative">
+                                                <div className="absolute -inset-1 bg-primary/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                                                <Input
+                                                    id="name"
+                                                    placeholder="IDENT_RX_ALPHA"
+                                                    value={field.state.value}
+                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                    className="relative bg-zinc-950/50 border-white/5 h-14 rounded-xl focus:border-primary/50 focus:ring-primary/10 transition-all font-bold text-white placeholder:text-gray-800"
+                                                />
+                                            </div>
+                                            {field.state.meta.errors.length > 0 && (
+                                                <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest pl-1">
+                                                    Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                                </p>
+                                            )}
+                                        </motion.div>
+                                    )}
+                                />
 
-                            <form.Field
-                                name="price"
-                                children={(field) => (
-                                    <div className="space-y-2">
-                                        <Label htmlFor="price" className="text-muted-foreground flex items-center gap-2">
-                                            <DollarSign className="size-3" /> Price
-                                        </Label>
-                                        <div className="relative">
-                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                                            <Input
-                                                id="price"
-                                                type="number"
-                                                step="0.01"
-                                                placeholder="0.00"
-                                                value={field.state.value}
-                                                onChange={(e) => field.handleChange(Number(e.target.value))}
-                                                className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20 pl-8"
-                                            />
-                                        </div>
-                                        {field.state.meta.errors.length > 0 ? (
-                                            <p className="text-xs text-red-500">
-                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
-                                            </p>
-                                        ) : null}
-                                    </div>
-                                )}
-                            />
+                                <form.Field
+                                    name="manufacturer"
+                                    children={(field) => (
+                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="space-y-3 group">
+                                            <Label htmlFor="manufacturer" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
+                                                <Factory className="size-3" /> Production Facility
+                                            </Label>
+                                            <div className="relative">
+                                                <div className="absolute -inset-1 bg-primary/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                                                <Input
+                                                    id="manufacturer"
+                                                    placeholder="NEXUS_BIO_LABS"
+                                                    value={field.state.value}
+                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                    className="relative bg-zinc-950/50 border-white/5 h-14 rounded-xl focus:border-primary/50 focus:ring-primary/10 transition-all font-bold text-white placeholder:text-gray-800"
+                                                />
+                                            </div>
+                                            {field.state.meta.errors.length > 0 && (
+                                                <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest pl-1">
+                                                    Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                                </p>
+                                            )}
+                                        </motion.div>
+                                    )}
+                                />
+                            </div>
+                        </div>
 
-                            <form.Field
-                                name="stock"
-                                children={(field) => (
-                                    <div className="space-y-2">
-                                        <Label htmlFor="stock" className="text-muted-foreground flex items-center gap-2">
-                                            <Package className="size-3" /> Initial Stock
-                                        </Label>
-                                        <Input
-                                            id="stock"
-                                            type="number"
-                                            placeholder="0"
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(Number(e.target.value))}
-                                            className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
-                                        />
-                                        {field.state.meta.errors.length > 0 ? (
-                                            <p className="text-xs text-red-500">
-                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
-                                            </p>
-                                        ) : null}
-                                    </div>
-                                )}
-                            />
+                        {/* Grid Section 2: Financials & Stock */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-3">
+                                <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
+                                <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Logistics & Valuation</h3>
+                            </div>
 
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <form.Field
+                                    name="price"
+                                    children={(field) => (
+                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="space-y-3 group">
+                                            <Label htmlFor="price" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
+                                                <DollarSign className="size-3" /> Market Valuation (৳)
+                                            </Label>
+                                            <div className="relative">
+                                                <div className="absolute -inset-1 bg-primary/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                                                <Input
+                                                    id="price"
+                                                    type="number"
+                                                    step="0.01"
+                                                    placeholder="0.00"
+                                                    value={field.state.value}
+                                                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                                                    className="relative bg-zinc-950/50 border-white/5 h-14 rounded-xl focus:border-primary/50 focus:ring-primary/10 transition-all font-bold text-white placeholder:text-gray-800"
+                                                />
+                                            </div>
+                                            {field.state.meta.errors.length > 0 && (
+                                                <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest pl-1">
+                                                    Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                                </p>
+                                            )}
+                                        </motion.div>
+                                    )}
+                                />
+
+                                <form.Field
+                                    name="stock"
+                                    children={(field) => (
+                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="space-y-3 group">
+                                            <Label htmlFor="stock" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
+                                                <Package className="size-3" /> Initial Deployment Units
+                                            </Label>
+                                            <div className="relative">
+                                                <div className="absolute -inset-1 bg-primary/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                                                <Input
+                                                    id="stock"
+                                                    type="number"
+                                                    placeholder="0"
+                                                    value={field.state.value}
+                                                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                                                    className="relative bg-zinc-950/50 border-white/5 h-14 rounded-xl focus:border-primary/50 focus:ring-primary/10 transition-all font-bold text-white placeholder:text-gray-800"
+                                                />
+                                            </div>
+                                            {field.state.meta.errors.length > 0 && (
+                                                <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest pl-1">
+                                                    Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                                </p>
+                                            )}
+                                        </motion.div>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Category & Prescription */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <form.Field
                                 name="categoryId"
                                 children={(field) => (
-                                    <div className="space-y-2">
-                                        <Label htmlFor="categoryId" className="text-muted-foreground flex items-center gap-2">
-                                            <List className="size-3" /> Category
+                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }} className="space-y-3 group">
+                                        <Label htmlFor="categoryId" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
+                                            <List className="size-3" /> Classification Protocol
                                         </Label>
-                                        <select
-                                            id="categoryId"
-                                            value={field.state.value}
-                                            onChange={(e) => field.handleChange(e.target.value)}
-                                            className="w-full bg-white/5 border border-white/10 h-12 rounded-xl focus:ring-2 focus:ring-primary/20 px-4 text-white appearance-none outline-none"
-                                        >
-                                            <option value="" disabled className="bg-zinc-900">Select a category</option>
-                                            {categories.map((category) => (
-                                                <option key={category.id} value={category.id} className="bg-zinc-900">
-                                                    {category.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {field.state.meta.errors.length > 0 ? (
-                                            <p className="text-xs text-red-500">
-                                                {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                        <div className="relative">
+                                            <div className="absolute -inset-1 bg-primary/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                                            <select
+                                                id="categoryId"
+                                                value={field.state.value}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                                className="relative w-full bg-zinc-950/50 border border-white/5 h-14 rounded-xl focus:border-primary/50 focus:ring-primary/10 transition-all font-bold text-white appearance-none outline-none px-4 scroll-smooth"
+                                            >
+                                                <option value="" disabled className="bg-zinc-900 font-bold">Select Active Protocol</option>
+                                                {categories.map((category) => (
+                                                    <option key={category.id} value={category.id} className="bg-zinc-900 font-medium">
+                                                        {category.name.toUpperCase()}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        {field.state.meta.errors.length > 0 && (
+                                            <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest pl-1">
+                                                Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                             </p>
-                                        ) : null}
-                                    </div>
+                                        )}
+                                    </motion.div>
                                 )}
                             />
 
                             <form.Field
                                 name="requiresPrescription"
                                 children={(field) => (
-                                    <div className="flex items-center justify-between p-4 rounded-xl border border-white/5 bg-white/[0.02] h-12 self-end">
-                                        <Label htmlFor="requiresPrescription" className="text-sm font-medium text-white cursor-pointer">
-                                            Requires Prescription?
-                                        </Label>
+                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }} className="flex items-center justify-between px-6 py-4 rounded-xl border border-white/10 bg-white/[0.02] h-14 self-end group hover:border-primary/30 transition-all cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <ShieldCheck className={cn("size-5 transition-colors", field.state.value ? "text-primary" : "text-gray-600")} />
+                                            <Label htmlFor="requiresPrescription" className="text-[10px] font-black text-gray-400 uppercase tracking-widest cursor-pointer group-hover:text-white">
+                                                Prescription Protocol?
+                                            </Label>
+                                        </div>
+                                        <div
+                                            onClick={() => field.handleChange(!field.state.value)}
+                                            className={cn(
+                                                "w-10 h-5 rounded-full relative transition-all duration-300 cursor-pointer",
+                                                field.state.value ? "bg-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)]" : "bg-zinc-800"
+                                            )}
+                                        >
+                                            <div className={cn(
+                                                "absolute top-1 left-1 size-3 rounded-full bg-white transition-all duration-300",
+                                                field.state.value ? "translate-x-5" : "translate-x-0"
+                                            )} />
+                                        </div>
                                         <input
                                             id="requiresPrescription"
                                             type="checkbox"
                                             checked={field.state.value}
                                             onChange={(e) => field.handleChange(e.target.checked)}
-                                            className="size-5 rounded border-white/10 bg-white/5 text-primary focus:ring-primary/20 cursor-pointer"
+                                            className="hidden"
                                         />
-                                    </div>
+                                    </motion.div>
                                 )}
                             />
                         </div>
 
+                        {/* Image URL Section */}
                         <form.Field
                             name="image"
                             children={(field) => (
-                                <div className="space-y-2">
-                                    <Label htmlFor="image" className="text-muted-foreground">Product Image URL</Label>
-                                    <Input
-                                        id="image"
-                                        placeholder="https://example.com/image.jpg"
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        className="bg-white/5 border-white/10 h-12 rounded-xl focus:ring-primary/20"
-                                    />
-                                    <p className="text-[10px] text-muted-foreground">Provide a link to a high-quality product image.</p>
-                                    {field.state.meta.errors.length > 0 ? (
-                                        <p className="text-xs text-red-500">
-                                            {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }} className="space-y-3 group">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
+                                        <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Visual Manifest</h3>
+                                    </div>
+                                    <Label htmlFor="image" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
+                                        <Sparkles className="size-3" /> Deployment Signature URL
+                                    </Label>
+                                    <div className="relative">
+                                        <div className="absolute -inset-1 bg-primary/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                                        <Input
+                                            id="image"
+                                            placeholder="https://nexus_manifest_storage.cdn/asset_signature.jpg"
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            className="relative bg-zinc-950/50 border-white/5 h-14 rounded-xl focus:border-primary/50 focus:ring-primary/10 transition-all font-bold text-white placeholder:text-gray-800"
+                                        />
+                                    </div>
+                                    <p className="text-[9px] font-bold text-gray-600 uppercase tracking-widest pl-1">Provide high-fidelity uplink for visual verification.</p>
+                                    {field.state.meta.errors.length > 0 && (
+                                        <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest pl-1">
+                                            Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                         </p>
-                                    ) : null}
-                                </div>
+                                    )}
+                                </motion.div>
                             )}
                         />
 
+                        {/* Technical Description */}
                         <form.Field
                             name="description"
                             children={(field) => (
-                                <div className="space-y-2">
-                                    <Label htmlFor="description" className="text-muted-foreground">Description</Label>
-                                    <Textarea
-                                        id="description"
-                                        placeholder="Tell customers about this medicine, its usage, and precautions..."
-                                        rows={4}
-                                        value={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        className="bg-white/5 border-white/10 rounded-xl focus:ring-primary/20 resize-none"
-                                    />
-                                    {field.state.meta.errors.length > 0 ? (
-                                        <p className="text-xs text-red-500">
-                                            {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
+                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }} className="space-y-3 group">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
+                                        <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Technical Directive</h3>
+                                    </div>
+                                    <Label htmlFor="description" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
+                                        <FileText className="size-3" /> Deployment Log & Usage Protocols
+                                    </Label>
+                                    <div className="relative">
+                                        <div className="absolute -inset-1 bg-primary/10 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                                        <Textarea
+                                            id="description"
+                                            placeholder="Initialize asset deployment manual, safety countermeasures, and dosage directives..."
+                                            rows={6}
+                                            value={field.state.value}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            className="relative bg-zinc-950/50 border-white/5 rounded-2xl focus:border-primary/50 focus:ring-primary/10 transition-all font-medium text-white placeholder:text-gray-800 p-6 resize-none"
+                                        />
+                                    </div>
+                                    {field.state.meta.errors.length > 0 && (
+                                        <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest pl-1">
+                                            Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                         </p>
-                                    ) : null}
-                                </div>
+                                    )}
+                                </motion.div>
                             )}
                         />
 
-                        <div className="flex items-center justify-end gap-4 pt-4 border-t border-white/5">
+                        {/* Final Actions */}
+                        <div className="flex flex-col md:flex-row items-center justify-end gap-6 pt-10 border-t border-white/5">
                             <Button
                                 type="button"
                                 variant="ghost"
                                 onClick={() => router.back()}
-                                className="h-12 px-6 rounded-xl hover:bg-white/5"
+                                className="w-full md:w-auto h-16 px-10 rounded-[1.5rem] hover:bg-white/5 text-gray-400 font-black uppercase tracking-[0.2em] text-[10px] transition-all"
                             >
-                                Cancel
+                                <X className="size-4 mr-2" />
+                                Purge Changes
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={isLoading}
-                                className="bg-primary hover:bg-primary/90 h-12 px-8 rounded-xl shadow-lg shadow-primary/20 min-w-[140px]"
+                                className="w-full md:w-auto bg-primary hover:bg-primary/90 h-16 px-12 rounded-[1.5rem] shadow-2xl shadow-primary/20 text-white font-black uppercase tracking-[0.3em] text-[10px] transition-all active:scale-95 disabled:opacity-50 group border-none"
                             >
                                 {isLoading ? (
                                     <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Creating...
+                                        <Loader2 className="mr-3 size-5 animate-spin" />
+                                        Syncing Nexus...
                                     </>
                                 ) : (
                                     <>
-                                        <Save className="mr-2 h-4 w-4" />
-                                        Save Medicine
+                                        <CheckCircle2 className="mr-3 size-5 group-hover:scale-110 transition-transform" />
+                                        Finalize Registration
                                     </>
                                 )}
                             </Button>
@@ -330,6 +447,19 @@ export default function AddMedicinePage() {
                     </form>
                 </CardContent>
             </Card>
+
+            {/* Support Message */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5 }}
+                className="text-center"
+            >
+                <div className="inline-flex items-center gap-2 text-[9px] font-bold text-gray-700 uppercase tracking-[0.4em]">
+                    <ShieldCheck className="size-3" />
+                    Secure Data Transmission Environment
+                </div>
+            </motion.div>
         </div>
     );
 }
