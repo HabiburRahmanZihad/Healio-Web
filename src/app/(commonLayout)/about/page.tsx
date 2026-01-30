@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Github, Linkedin, Globe, Code2, Rocket, Heart, Database, Layout, Lock, Cpu, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -13,7 +13,7 @@ const techStack = [
     { name: "MongoDB", icon: Database, desc: "Scalable data management" }
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
@@ -24,7 +24,7 @@ const containerVariants = {
     }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
         y: 0,
@@ -181,8 +181,8 @@ export default function AboutPage() {
                             variants={containerVariants}
                             className="text-center mb-24"
                         >
-                            <motion.h2 variants={itemVariants} className="text-4xl md:text-7xl font-black mb-6 tracking-tight">THE TECHNICAL <span className="text-primary italic">BACKBONE</span></h2 >
-                            <motion.p variants={itemVariants} className="text-xl text-muted-foreground">Premium technologies powered by modern development standards.</p>
+                            <motion.h2 variants={itemVariants} className="text-4xl md:text-7xl font-black mb-6 tracking-tight">THE TECHNICAL <span className="text-primary italic">BACKBONE</span></motion.h2>
+                            <motion.p variants={itemVariants} className="text-xl text-muted-foreground">Premium technologies powered by modern development standards.</motion.p>
                         </motion.div>
 
                         <motion.div
