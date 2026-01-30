@@ -77,7 +77,7 @@ const Hero = () => {
                         <div className="relative z-10 w-full aspect-square max-w-[460px] mx-auto overflow-hidden rounded-[2.5rem] border border-white/10 p-2 bg-white/5 shadow-2xl group">
                             <div className="relative w-full h-full rounded-[2rem] overflow-hidden">
                                 <img
-                                    src="https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?q=80&w=2069&auto=format&fit=crop"
+                                    src="https://res.cloudinary.com/dzokxtodh/image/upload/v1769774199/ChatGPT_Image_Jan_30_2026_05_53_18_PM_czlerh.png"
                                     alt="Health and Wellness"
                                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                 />
