@@ -40,18 +40,14 @@ const Footer = () => {
                 >
                     {/* Brand Section */}
                     <motion.div variants={itemVariants} className="space-y-2">
-                        <Link href="/" className="inline-flex items-center gap-2 group">
-                            <div className=" p-2 rounded-xl transition-all">
-                                <Link href="/" className="inline-block mb-4">
-                                    <Image
-                                        src="/Healio_logo_png.png"
-                                        alt="Healio Logo"
-                                        width={120}
-                                        height={120}
-                                        className="mx-auto"
-                                    />
-                                </Link>
-                            </div>
+                        <Link href="/" className="inline-block mb-4">
+                            <Image
+                                src="/Healio_logo_png.png"
+                                alt="Healio Logo"
+                                width={120}
+                                height={120}
+                                className="mx-auto"
+                            />
                         </Link>
 
                         <p className="text-sm text-gray-400 leading-relaxed font-medium">
