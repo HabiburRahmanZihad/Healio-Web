@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { userService } from "@/services/user.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Pill, ShoppingCart, BarChart3, TrendingUp, TrendingDown, DollarSign, Activity, Loader2 } from "lucide-react";
+import { Users, Pill, ShoppingCart, BarChart3, TrendingUp, TrendingDown, Activity, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { orderService, Order } from "@/services/order.service";
 import { User } from "@/types";
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
     }, []);
 
     const statCards = [
-        { title: "Total Revenue", value: `$${stats?.revenue.toLocaleString() || "0"}`, trend: "+20.1%", trendUp: true, icon: DollarSign, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+        { title: "Total Revenue", value: `৳${stats?.revenue.toLocaleString() || "0"}`, trend: "+20.1%", trendUp: true, icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-500/10" },
         { title: "Registered Users", value: stats?.users.toString() || "0", trend: "+180.1%", trendUp: true, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
         { title: "Total Orders", value: stats?.orders.toString() || "0", trend: "+19%", trendUp: true, icon: ShoppingCart, color: "text-purple-500", bg: "bg-purple-500/10" },
         { title: "Medicine Inventory", value: stats?.medicines.toString() || "0", trend: "-4%", trendUp: false, icon: Pill, color: "text-orange-500", bg: "bg-orange-500/10" },
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
                                     style={{ height: `${height}%` }}
                                 >
                                     <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-black text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                        ${height}k
+                                        ৳{height}k
                                     </div>
                                 </div>
                                 <span className="text-[10px] text-muted-foreground group-hover:text-white transition-colors">M{i + 1}</span>
@@ -139,7 +139,7 @@ export default function AdminDashboard() {
                             {[
                                 ...recentOrders.map(order => ({
                                     label: `Order ${order.id.slice(-6).toUpperCase()}`,
-                                    value: `$${order.totalPrice.toFixed(2)}`,
+                                    value: `৳${order.totalPrice.toFixed(2)}`,
                                     time: new Date(order.createdAt).toLocaleDateString(),
                                     icon: ShoppingCart,
                                     bg: "bg-purple-500/10",

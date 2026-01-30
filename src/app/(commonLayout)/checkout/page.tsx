@@ -186,7 +186,7 @@ export default function CheckoutPage() {
                                         <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                                     </div>
                                     <div className="text-sm font-semibold text-white">
-                                        ${(item.price * item.quantity).toFixed(2)}
+                                        ৳{(item.price * item.quantity).toFixed(2)}
                                     </div>
                                 </div>
                             ))}
@@ -197,7 +197,7 @@ export default function CheckoutPage() {
                         <div className="space-y-3">
                             <div className="flex justify-between text-sm text-gray-400">
                                 <span>Subtotal</span>
-                                <span>${totalPrice.toFixed(2)}</span>
+                                <span>৳{totalPrice.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between text-sm text-gray-400">
                                 <span>Estimated Shipping</span>
@@ -205,7 +205,7 @@ export default function CheckoutPage() {
                             </div>
                             <div className="flex justify-between text-lg font-bold text-white pt-2">
                                 <span>Total</span>
-                                <span className="text-purple-400">${totalPrice.toFixed(2)}</span>
+                                <span className="text-purple-400">৳{totalPrice.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>

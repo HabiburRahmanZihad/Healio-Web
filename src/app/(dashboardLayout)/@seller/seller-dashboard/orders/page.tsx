@@ -105,7 +105,7 @@ export default function SellerOrdersPage() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-2xl font-bold text-white">${order.totalPrice.toFixed(2)}</div>
+                                    <div className="text-2xl font-bold text-white">৳{order.totalPrice.toFixed(2)}</div>
                                     <p className="text-xs text-muted-foreground">{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</p>
                                 </div>
                             </CardHeader>

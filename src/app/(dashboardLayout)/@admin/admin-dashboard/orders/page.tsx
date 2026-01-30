@@ -151,7 +151,7 @@ export default function AdminOrderManagement() {
                                         </td>
                                         <td className="p-6 text-right font-bold text-emerald-500">
                                             <div className="flex items-center justify-end gap-1">
-                                                <DollarSign className="size-3" />
+                                                <span className="text-xs">৳</span>
                                                 <span>{order.totalPrice.toFixed(2)}</span>
                                             </div>
                                         </td>

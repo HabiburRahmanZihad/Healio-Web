@@ -118,7 +118,7 @@ export default function OrdersPage() {
                             <div className="flex items-center justify-between md:justify-end gap-12">
                                 <div className="text-right">
                                     <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Total Price</p>
-                                    <p className="text-xl font-bold text-white">${order.totalPrice.toFixed(2)}</p>
+                                    <p className="text-xl font-bold text-white">৳{order.totalPrice.toFixed(2)}</p>
                                 </div>
                                 <Button asChild variant="ghost" className="rounded-xl group/btn hover:bg-primary/10 hover:text-primary transition-all">
                                     <Link href={`/dashboard/orders/${order.id}`} className="flex items-center gap-2">

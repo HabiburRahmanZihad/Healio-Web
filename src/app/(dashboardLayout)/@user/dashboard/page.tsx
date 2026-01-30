@@ -37,7 +37,7 @@ export default function UserDashboard() {
         { title: "Total Orders", value: orders.length.toString(), icon: ShoppingBag, color: "text-blue-500", bg: "bg-blue-500/10" },
         { title: "Loyalty Points", value: "0", icon: Star, color: "text-yellow-500", bg: "bg-yellow-500/10" },
         { title: "Wishlist", value: wishlistCount.toString(), icon: Heart, color: "text-pink-500", bg: "bg-pink-500/10" },
-        { title: "Total Spent", value: `$${totalSpent.toLocaleString()}`, icon: CreditCard, color: "text-green-500", bg: "bg-green-500/10" },
+        { title: "Total Spent", value: `৳${totalSpent.toLocaleString()}`, icon: CreditCard, color: "text-green-500", bg: "bg-green-500/10" },
     ];
 
     if (isLoading) {
@@ -108,7 +108,7 @@ export default function UserDashboard() {
                                             </div>
                                         </div>
                                         <div className="text-right flex flex-col items-end gap-2">
-                                            <p className="font-bold text-white">${order.totalPrice.toLocaleString()}</p>
+                                            <p className="font-bold text-white">৳{order.totalPrice.toLocaleString()}</p>
                                             <span className={cn(
                                                 "text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border",
                                                 order.status === "DELIVERED" ? "bg-green-500/10 text-green-500 border-green-500/20" :

@@ -67,7 +67,7 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
                     <p className="text-sm text-gray-400">{manufacturer}</p>
                     <div className="flex items-center justify-between pt-2">
                         <span className="text-lg font-bold text-purple-400">
-                            ${price.toFixed(2)}
+                            ৳{price.toFixed(2)}
                         </span>
                         <span className={`text-xs px-2 py-1 rounded-full ${isOutOfStock
                             ? "bg-red-500/20 text-red-400"

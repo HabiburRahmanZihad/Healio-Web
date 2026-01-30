@@ -85,7 +85,7 @@ export default function CartPage() {
                                         </button>
                                     </div>
                                     <span className="text-lg font-bold text-white">
-                                        ${(item.price * item.quantity).toFixed(2)}
+                                        ৳{(item.price * item.quantity).toFixed(2)}
                                     </span>
                                 </div>
                             </div>
@@ -101,7 +101,7 @@ export default function CartPage() {
                         <div className="space-y-4 text-sm">
                             <div className="flex justify-between text-gray-400">
                                 <span>Subtotal ({itemCount} items)</span>
-                                <span>${totalPrice.toFixed(2)}</span>
+                                <span>৳{totalPrice.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between text-gray-400">
                                 <span>Shipping</span>
@@ -110,7 +110,7 @@ export default function CartPage() {
                             <div className="h-px bg-white/10 my-4" />
                             <div className="flex justify-between text-lg font-bold text-white">
                                 <span>Total</span>
-                                <span className="text-purple-400">${totalPrice.toFixed(2)}</span>
+                                <span className="text-purple-400">৳{totalPrice.toFixed(2)}</span>
                             </div>
                         </div>
 

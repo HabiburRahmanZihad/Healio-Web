@@ -133,7 +133,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                                         </div>
                                         <div className="flex flex-col items-end gap-2">
                                             <div className="text-lg font-bold text-white">
-                                                ${(order.totalPrice / order.items.length).toFixed(2)}
+                                                ৳{(order.totalPrice / order.items.length).toFixed(2)}
                                             </div>
                                             {order.status === "DELIVERED" && (
                                                 <button
@@ -160,7 +160,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                         <div className="h-px bg-white/10 my-4" />
                         <div className="flex justify-between items-center text-xl font-bold text-white px-2">
                             <span className="text-muted-foreground">Total Paid</span>
-                            <span className="text-primary">${order.totalPrice.toFixed(2)}</span>
+                            <span className="text-primary">৳{order.totalPrice.toFixed(2)}</span>
                         </div>
                     </div>
 

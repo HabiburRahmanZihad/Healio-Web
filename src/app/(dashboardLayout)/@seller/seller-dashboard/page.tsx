@@ -42,7 +42,7 @@ export default function SellerDashboard() {
     const stats = [
         { title: "My Medicines", value: medicines.length.toString(), icon: Pill, color: "text-blue-500", bg: "bg-blue-500/10" },
         { title: "Active Orders", value: activeOrdersCount.toString(), icon: ShoppingCart, color: "text-orange-500", bg: "bg-orange-500/10" },
-        { title: "Total Sales", value: `$${totalSales.toLocaleString()}`, icon: TrendingUp, color: "text-green-500", bg: "bg-green-500/10" },
+        { title: "Total Sales", value: `৳${totalSales.toLocaleString()}`, icon: TrendingUp, color: "text-green-500", bg: "bg-green-500/10" },
         { title: "Inventory Status", value: medicines.filter(m => m.stock < 10).length.toString() + " Low", icon: BarChart3, color: "text-purple-500", bg: "bg-purple-500/10" },
     ];
 
@@ -122,7 +122,7 @@ export default function SellerDashboard() {
                                             </div>
                                         </div>
                                         <div className="text-right flex flex-col items-end gap-2">
-                                            <p className="font-bold text-white">${order.totalPrice?.toFixed(2) || "0.00"}</p>
+                                            <p className="font-bold text-white">৳{order.totalPrice?.toFixed(2) || "0.00"}</p>
                                             <span className={cn(
                                                 "text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border",
                                                 order.status === "DELIVERED" ? "bg-green-500/10 text-green-500 border-green-500/20" :

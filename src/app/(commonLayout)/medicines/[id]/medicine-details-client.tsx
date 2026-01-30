@@ -79,7 +79,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                         </div>
 
                         <div className="text-4xl font-bold text-purple-400">
-                            ${price.toFixed(2)}
+                            ৳{price.toFixed(2)}
                         </div>
 
                         <p className="text-gray-300 leading-relaxed">
