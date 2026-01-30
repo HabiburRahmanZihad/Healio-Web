@@ -8,6 +8,9 @@ interface MedicineFiltersProps {
     onFilterChange: (filters: MedicineFilters) => void;
 }
 
+import { Search, Filter, Layers, Factory, CircleDollarSign, Trash2, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+
 export function MedicineFiltersPanel({ filters, categories, onFilterChange }: MedicineFiltersProps) {
 
     // DRY: Single handler for all filter updates
@@ -16,67 +19,93 @@ export function MedicineFiltersPanel({ filters, categories, onFilterChange }: Me
     };
 
     return (
-        <div className="space-y-6 p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-            <h3 className="text-lg font-semibold text-white">Filters</h3>
+        <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="space-y-8 p-8 rounded-[2rem] bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-2xl"
+        >
+            <div className="flex items-center gap-3 pb-4 border-b border-white/5">
+                <div className="p-2 bg-primary/20 rounded-xl text-primary">
+                    <Filter className="size-5" />
+                </div>
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter">Refine Results</h3>
+            </div>
 
             {/* Search */}
-            <div className="space-y-2">
-                <label className="text-sm text-gray-400">Search</label>
+            <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <Search className="size-3" />
+                    <span>Search Archive</span>
+                </div>
                 <input
                     type="text"
-                    placeholder="Search medicines..."
+                    placeholder="E.g. Paracetamol..."
                     value={filters.search || ""}
                     onChange={(e) => updateFilter("search", e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                 />
             </div>
 
             {/* Category */}
-            <div className="space-y-2">
-                <label className="text-sm text-gray-400">Category</label>
-                <select
-                    value={filters.category || ""}
-                    onChange={(e) => updateFilter("category", e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500 transition-colors"
-                >
-                    <option value="" className="bg-gray-900">All Categories</option>
-                    {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id} className="bg-gray-900">
-                            {cat.name}
-                        </option>
-                    ))}
-                </select>
+            <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <Layers className="size-3" />
+                    <span>Classification</span>
+                </div>
+                <div className="relative group">
+                    <select
+                        value={filters.category || ""}
+                        onChange={(e) => updateFilter("category", e.target.value)}
+                        className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white appearance-none focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300 cursor-pointer"
+                    >
+                        <option value="" className="bg-zinc-900">All Classifications</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id} className="bg-zinc-900">
+                                {cat.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 group-hover:text-primary transition-colors">
+                        <ArrowRight className="size-4 rotate-90" />
+                    </div>
+                </div>
             </div>
 
             {/* Manufacturer */}
-            <div className="space-y-2">
-                <label className="text-sm text-gray-400">Manufacturer</label>
+            <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <Factory className="size-3" />
+                    <span>Manufacturer</span>
+                </div>
                 <input
                     type="text"
-                    placeholder="Filter by manufacturer..."
+                    placeholder="E.g. Square Pharma..."
                     value={filters.manufacturer || ""}
                     onChange={(e) => updateFilter("manufacturer", e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                 />
             </div>
 
             {/* Price Range */}
-            <div className="space-y-2">
-                <label className="text-sm text-gray-400">Price Range</label>
-                <div className="flex gap-2">
+            <div className="space-y-3">
+                <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    <CircleDollarSign className="size-3" />
+                    <span>Price Threshold</span>
+                </div>
+                <div className="flex gap-3">
                     <input
                         type="number"
                         placeholder="Min"
                         value={filters.minPrice || ""}
                         onChange={(e) => updateFilter("minPrice", e.target.value ? Number(e.target.value) : undefined)}
-                        className="w-1/2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+                        className="w-1/2 px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                     />
                     <input
                         type="number"
                         placeholder="Max"
                         value={filters.maxPrice || ""}
                         onChange={(e) => updateFilter("maxPrice", e.target.value ? Number(e.target.value) : undefined)}
-                        className="w-1/2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
+                        className="w-1/2 px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                     />
                 </div>
             </div>
@@ -84,10 +113,11 @@ export function MedicineFiltersPanel({ filters, categories, onFilterChange }: Me
             {/* Clear Filters */}
             <button
                 onClick={() => onFilterChange({})}
-                className="w-full py-2.5 rounded-lg border border-white/20 text-gray-300 hover:bg-white/5 transition-colors"
+                className="w-full group flex items-center justify-center gap-2 py-4 rounded-2xl border border-white/10 text-gray-400 font-bold uppercase tracking-widest hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-500 transition-all duration-300 active:scale-95"
             >
-                Clear Filters
+                <Trash2 className="size-4 group-hover:animate-bounce" />
+                <span>Reset Filters</span>
             </button>
-        </div>
+        </motion.div>
     );
 }
