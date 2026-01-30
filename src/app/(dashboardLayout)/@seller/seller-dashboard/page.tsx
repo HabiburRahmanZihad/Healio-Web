@@ -77,10 +77,10 @@ export default function SellerDashboard() {
                     </p>
                 </div>
                 <Button asChild className="h-14 bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-[11px] px-8 rounded-2xl shadow-[0_15px_40px_rgba(var(--primary-rgb),0.3)] transition-all active:scale-95 group overflow-hidden relative border-none">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                     <Link href="/seller-dashboard/medicines/add" className="flex items-center gap-3 relative z-10">
-                        <PlusCircle className="size-5" />
-                        <span>Register New Asset</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                        <PlusCircle className="size-5 relative z-10" />
+                        <span className="relative z-10">Register New Asset</span>
                     </Link>
                 </Button>
             </div>
