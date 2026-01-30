@@ -5,10 +5,6 @@ import { orderService, Order } from "@/services/order.service";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-    Clock,
-    Truck,
-    CheckCircle,
-    AlertCircle,
     Search,
     Activity,
     Package,
@@ -18,30 +14,12 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { motion } from "framer-motion";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.1 }
-    }
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5 }
-    }
-};
 
 export default function AdminOrderManagement() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -96,12 +74,7 @@ export default function AdminOrderManagement() {
     }
 
     return (
-        <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="space-y-10 pb-12"
-        >
+        <div className="space-y-10 pb-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
                 <div className="absolute -bottom-[1px] left-0 w-48 h-[1px] bg-primary" />
                 <div className="space-y-4">
@@ -113,7 +86,7 @@ export default function AdminOrderManagement() {
                         Nexus Order <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 italic">Ledger</span>
                     </h1>
                     <p className="text-[11px] text-gray-500 font-bold uppercase tracking-[0.1em] max-w-xl">
-                        Universal monitoring of all pharmaceutical transmissions across the <span className="text-white">Healio Network</span>.
+                        Universal oversight of all pharmaceutical transmissions across the <span className="text-white">Healio Network</span>.
                     </p>
                 </div>
                 <div className="flex flex-col items-end gap-3">
@@ -147,10 +120,9 @@ export default function AdminOrderManagement() {
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {filteredOrders.length > 0 ? (
-                                filteredOrders.map((order, i) => (
-                                    <motion.tr
+                                filteredOrders.map((order) => (
+                                    <tr
                                         key={order.id}
-                                        variants={itemVariants}
                                         className="hover:bg-white/[0.03] transition-all duration-500 group relative"
                                     >
                                         <td className="p-8">
@@ -212,7 +184,7 @@ export default function AdminOrderManagement() {
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </td>
-                                    </motion.tr>
+                                    </tr>
                                 ))
                             ) : (
                                 <tr>
@@ -228,6 +200,6 @@ export default function AdminOrderManagement() {
                     </table>
                 </div>
             </Card>
-        </motion.div>
+        </div>
     );
 }

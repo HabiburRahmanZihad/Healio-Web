@@ -14,37 +14,14 @@ import {
     Lock,
     Globe,
     MapPin,
-    Info,
-    Monitor,
-    Database,
-    HardDrive,
-    AlertTriangle,
-    RefreshCcw,
-    Save
+    Info
 } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-import { motion } from "framer-motion";
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.1 }
-    }
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5 }
-    }
-};
 
 export default function SettingsPage() {
     const { data: session } = authClient.useSession();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isLoading, setIsLoading] = useState(false);
 
     const handleUpdateProfile = () => {
@@ -54,12 +31,7 @@ export default function SettingsPage() {
     if (!session) return null;
 
     return (
-        <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="space-y-10 pb-12"
-        >
+        <div className="space-y-10 pb-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
                 <div className="absolute -bottom-[1px] left-0 w-48 h-[1px] bg-primary" />
                 <div className="space-y-4">
@@ -77,7 +49,7 @@ export default function SettingsPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <motion.div variants={itemVariants} className="lg:col-span-2">
+                <div className="lg:col-span-2">
                     <Card className="bg-white/[0.02] border-white/5 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl relative border-l border-t border-white/10 p-10">
                         <div className="flex items-center gap-6 mb-12">
                             <div className="size-24 rounded-[2rem] bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-[0_0_30px_rgba(var(--primary-rgb),0.1)] relative group">
@@ -139,9 +111,9 @@ export default function SettingsPage() {
                             </Button>
                         </div>
                     </Card>
-                </motion.div>
+                </div>
 
-                <motion.div variants={itemVariants}>
+                <div>
                     <Card className="bg-white/[0.02] border-white/5 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl relative border-l border-t border-white/10 p-10 h-full">
                         <h3 className="text-xl font-black text-white uppercase tracking-tight mb-8">Session Metrics</h3>
 
@@ -194,8 +166,8 @@ export default function SettingsPage() {
                             </div>
                         </div>
                     </Card>
-                </motion.div>
+                </div>
             </div>
-        </motion.div>
+        </div>
     );
 }

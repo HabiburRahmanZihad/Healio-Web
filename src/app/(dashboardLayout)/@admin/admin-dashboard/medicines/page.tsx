@@ -3,32 +3,13 @@
 import { useEffect, useState } from "react";
 import { medicineService } from "@/services/medicine.service";
 import { Medicine } from "@/types/medicine.type";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Pill, Search, User, Tag, DollarSign, Package, ExternalLink, Filter, Activity } from "lucide-react";
+import { Pill, Search, Tag, ExternalLink, Filter, Activity, Package } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-
-import { motion } from "framer-motion";
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.1 }
-    }
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5 }
-    }
-};
 
 export default function AdminMedicineManagement() {
     const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -69,12 +50,7 @@ export default function AdminMedicineManagement() {
     }
 
     return (
-        <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="space-y-10 pb-12"
-        >
+        <div className="space-y-10 pb-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
                 <div className="absolute -bottom-[1px] left-0 w-48 h-[1px] bg-primary" />
                 <div className="space-y-4">
@@ -121,10 +97,9 @@ export default function AdminMedicineManagement() {
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {filteredMedicines.length > 0 ? (
-                                filteredMedicines.map((med, i) => (
-                                    <motion.tr
+                                filteredMedicines.map((med) => (
+                                    <tr
                                         key={med.id}
-                                        variants={itemVariants}
                                         className="hover:bg-white/[0.03] transition-all duration-500 group relative"
                                     >
                                         <td className="p-8">
@@ -188,7 +163,7 @@ export default function AdminMedicineManagement() {
                                                 </Button>
                                             </Link>
                                         </td>
-                                    </motion.tr>
+                                    </tr>
                                 ))
                             ) : (
                                 <tr>
@@ -204,6 +179,6 @@ export default function AdminMedicineManagement() {
                     </table>
                 </div>
             </Card>
-        </motion.div>
+        </div>
     );
 }

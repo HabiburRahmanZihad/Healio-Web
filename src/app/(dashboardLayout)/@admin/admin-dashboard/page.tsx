@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { userService } from "@/services/user.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Pill, ShoppingCart, BarChart3, TrendingUp, TrendingDown, Activity, Loader2 } from "lucide-react";
+import { Users, Pill, ShoppingCart, TrendingUp, TrendingDown, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { orderService, Order } from "@/services/order.service";
 import { User } from "@/types";
@@ -16,27 +16,6 @@ interface DashboardStats {
     orders: number;
     revenue: number;
 }
-
-import { motion } from "framer-motion";
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1
-        }
-    }
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5 }
-    }
-};
 
 export default function AdminDashboard() {
     const { data: session } = authClient.useSession();
@@ -94,23 +73,14 @@ export default function AdminDashboard() {
     }
 
     return (
-        <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="space-y-12 pb-12"
-        >
+        <div className="space-y-12 pb-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
                 <div className="absolute -bottom-[1px] left-0 w-32 h-[1px] bg-primary" />
                 <div className="space-y-4">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[9px] font-black uppercase tracking-[0.2em]"
-                    >
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[9px] font-black uppercase tracking-[0.2em]">
                         <Activity className="size-3 animate-pulse" />
                         <span>System Core: Operational</span>
-                    </motion.div>
+                    </div>
                     <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none">
                         Command <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 italic">Center</span>
                     </h1>
@@ -130,7 +100,7 @@ export default function AdminDashboard() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((stat, i) => (
-                    <motion.div key={i} variants={itemVariants}>
+                    <div key={i}>
                         <Card className="bg-white/[0.02] border-white/5 overflow-hidden group hover:border-primary/20 transition-all duration-500 backdrop-blur-xl relative rounded-[2rem]">
                             <div className="p-6 space-y-4">
                                 <div className="flex items-center justify-between">
@@ -157,21 +127,16 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
                                 <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white/5 overflow-hidden">
-                                    <motion.div
-                                        initial={{ x: "-100%" }}
-                                        animate={{ x: "100%" }}
-                                        transition={{ repeat: Infinity, duration: 3, ease: "linear", delay: i * 0.5 }}
-                                        className="w-1/2 h-full bg-gradient-to-r from-transparent via-primary/50 to-transparent"
-                                    />
+                                    <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-primary/50 to-transparent animate-infinite-scroll" />
                                 </div>
                             </div>
                         </Card>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
 
             <div className="grid xl:grid-cols-3 gap-10">
-                <motion.div variants={itemVariants} className="xl:col-span-2">
+                <div className="xl:col-span-2">
                     <Card className="bg-white/[0.02] border-white/5 rounded-[3rem] overflow-hidden backdrop-blur-md shadow-2xl relative border-l border-t border-white/10">
                         <CardHeader className="p-10 pb-6">
                             <div className="flex items-center justify-between">
@@ -196,14 +161,12 @@ export default function AdminDashboard() {
                             {[60, 45, 75, 50, 90, 65, 80, 55, 95, 70, 85, 100].map((height, i) => (
                                 <div key={i} className="flex-1 flex flex-col items-center gap-4 group cursor-help">
                                     <div className="w-full flex items-end justify-center relative h-full">
-                                        <motion.div
-                                            initial={{ height: 0 }}
-                                            animate={{ height: `${height}%` }}
-                                            transition={{ duration: 1.5, delay: i * 0.1, ease: "circOut" }}
+                                        <div
+                                            style={{ height: `${height}%` }}
                                             className="w-full bg-gradient-to-t from-primary/5 to-primary/40 rounded-2xl relative border border-primary/20 group-hover:from-primary/20 group-hover:to-primary/60 transition-all duration-300 shadow-[0_0_20px_rgba(var(--primary-rgb),0.05)]"
                                         >
                                             <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[2px] h-4 bg-white/20 rounded-full" />
-                                        </motion.div>
+                                        </div>
                                         <div className="absolute -top-14 left-1/2 -translate-x-1/2 bg-zinc-950 border border-primary/30 text-primary text-[9px] font-black px-3 py-1.5 rounded-xl opacity-0 scale-90 group-hover:opacity-100 group-hover:translate-y-2 group-hover:scale-100 transition-all duration-300 backdrop-blur-md shadow-2xl z-10 whitespace-nowrap">
                                             SYNC_VAL: ৳{height}K
                                         </div>
@@ -213,9 +176,9 @@ export default function AdminDashboard() {
                             ))}
                         </CardContent>
                     </Card>
-                </motion.div>
+                </div>
 
-                <motion.div variants={itemVariants}>
+                <div>
                     <Card className="bg-white/[0.02] border-white/5 rounded-[3rem] overflow-hidden backdrop-blur-md shadow-2xl border-r border-b border-white/10 h-full flex flex-col">
                         <CardHeader className="p-10 pb-6 border-b border-white/5">
                             <div className="space-y-2">
@@ -276,8 +239,8 @@ export default function AdminDashboard() {
                             </div>
                         </CardContent>
                     </Card>
-                </motion.div>
+                </div>
             </div>
-        </motion.div>
+        </div>
     );
 }

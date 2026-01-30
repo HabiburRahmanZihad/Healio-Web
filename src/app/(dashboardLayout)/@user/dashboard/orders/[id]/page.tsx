@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useEffect, useState, use } from "react";
 import { orderService, Order } from "@/services/order.service";
 import { medicineService } from "@/services/medicine.service";
@@ -74,11 +73,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
 
     if (sessionPending || isLoading) {
         return (
-            <div className="min-h-[60vh] flex items-center justify-center bg-background">
-                <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="size-10 animate-spin text-primary" />
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground animate-pulse">Syncing Protocol Data...</p>
-                </div>
+            <div className="min-h-[60vh] flex flex-col items-center justify-center bg-background">
+                <Loader2 className="size-10 animate-spin text-primary mb-4" />
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground animate-pulse">Syncing Protocol Data...</p>
             </div>
         );
     }
@@ -131,7 +128,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
     return (
         <div className="max-w-6xl mx-auto py-6 space-y-12 pb-20">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-in fade-in slide-in-from-to-4 duration-700">
                 <div className="space-y-4">
                     <Link href="/dashboard/orders" className="inline-flex items-center gap-2 text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:opacity-70 transition-opacity">
                         <ArrowLeft className="size-3" />
@@ -184,11 +181,11 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                                     </div>
                                     {idx < steps.length - 1 && (
                                         <div className="hidden md:block absolute top-7 left-[calc(100%-120px)] w-24 h-[2px] bg-white/5">
-                                            <motion.div
-                                                className="h-full bg-primary"
-                                                initial={{ width: 0 }}
-                                                animate={{ width: isCompleted && currentStep > idx ? "100%" : 0 }}
-                                                transition={{ duration: 1 }}
+                                            <div
+                                                className={cn(
+                                                    "h-full bg-primary transition-all duration-1000",
+                                                    isCompleted && currentStep > idx ? "w-full" : "w-0"
+                                                )}
                                             />
                                         </div>
                                     )}
@@ -229,11 +226,8 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                             {order.items.map((item, idx) => {
                                 const mData = item.medicine || medicines[item.medicineId];
                                 return (
-                                    <motion.div
+                                    <div
                                         key={idx}
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ delay: idx * 0.1 }}
                                         className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-primary/20 transition-all group/item"
                                     >
                                         <div className="flex flex-wrap md:flex-nowrap gap-6 items-center">
@@ -276,7 +270,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                                                 />
                                             </div>
                                         )}
-                                    </motion.div>
+                                    </div>
                                 );
                             })}
                         </div>

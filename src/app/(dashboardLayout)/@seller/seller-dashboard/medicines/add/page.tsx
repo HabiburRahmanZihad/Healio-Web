@@ -12,11 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Save, X, Pill, DollarSign, Package, Factory, List, ShieldCheck, Activity, Terminal, Sparkles, FileText, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Loader2, X, Pill, DollarSign, Package, Factory, List, ShieldCheck, Activity, Terminal, Sparkles, FileText, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 
 const medicineSchema = z.object({
     name: z.string().min(2, "Asset name must be at least 2 characters"),
@@ -74,14 +73,9 @@ export default function AddMedicinePage() {
     });
 
     return (
-        <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-24">
+        <div className="max-w-5xl mx-auto space-y-12 pb-24">
             {/* Breadcrumb / Navigation */}
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-                className="flex items-center justify-between"
-            >
+            <div className="flex items-center justify-between">
                 <Button variant="ghost" asChild className="group text-gray-400 hover:text-primary transition-all rounded-xl px-4 hover:bg-primary/5">
                     <Link href="/seller-dashboard/medicines" className="flex items-center gap-3">
                         <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
@@ -94,35 +88,20 @@ export default function AddMedicinePage() {
                     <div className="size-1 rounded-full bg-gray-800" />
                     <span className="text-primary/70">Registration Protocol</span>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Header Section */}
             <div className="space-y-4 text-center md:text-left">
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-[0.2em]"
-                >
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-[0.2em]">
                     <Terminal className="size-3 animate-pulse" />
                     <span>System Node: 127.0.0.1 // Admin Uplink</span>
-                </motion.div>
-                <motion.h1
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none"
-                >
+                </div>
+                <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none">
                     Asset <span className="text-primary italic">Registration</span>
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-sm text-muted-foreground font-medium max-w-xl mx-auto md:mx-0"
-                >
-                    Initialize the deployment of new pharmaceutical assets into the <span className="text-white font-bold">Identity Nexus</span> logistics grid.
-                </motion.p>
+                </h1>
+                <p className="text-sm text-muted-foreground font-medium max-w-xl mx-auto md:mx-0">
+                    Initialize the deployment of new pharmaceutical assets into the <span className="text-white font-bold">Healio Nexus</span> logistics grid.
+                </p>
             </div>
 
             <Card className="bg-white/[0.03] border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-md shadow-2xl relative border-t-primary/20">
@@ -167,7 +146,7 @@ export default function AddMedicinePage() {
                                 <form.Field
                                     name="name"
                                     children={(field) => (
-                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="space-y-3 group">
+                                        <div className="space-y-3 group">
                                             <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
                                                 <Terminal className="size-3" /> Asset Designation
                                             </Label>
@@ -186,14 +165,14 @@ export default function AddMedicinePage() {
                                                     Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                                 </p>
                                             )}
-                                        </motion.div>
+                                        </div>
                                     )}
                                 />
 
                                 <form.Field
                                     name="manufacturer"
                                     children={(field) => (
-                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="space-y-3 group">
+                                        <div className="space-y-3 group">
                                             <Label htmlFor="manufacturer" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
                                                 <Factory className="size-3" /> Production Facility
                                             </Label>
@@ -212,7 +191,7 @@ export default function AddMedicinePage() {
                                                     Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                                 </p>
                                             )}
-                                        </motion.div>
+                                        </div>
                                     )}
                                 />
                             </div>
@@ -229,7 +208,7 @@ export default function AddMedicinePage() {
                                 <form.Field
                                     name="price"
                                     children={(field) => (
-                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="space-y-3 group">
+                                        <div className="space-y-3 group">
                                             <Label htmlFor="price" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
                                                 <DollarSign className="size-3" /> Market Valuation (৳)
                                             </Label>
@@ -250,14 +229,14 @@ export default function AddMedicinePage() {
                                                     Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                                 </p>
                                             )}
-                                        </motion.div>
+                                        </div>
                                     )}
                                 />
 
                                 <form.Field
                                     name="stock"
                                     children={(field) => (
-                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="space-y-3 group">
+                                        <div className="space-y-3 group">
                                             <Label htmlFor="stock" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
                                                 <Package className="size-3" /> Initial Deployment Units
                                             </Label>
@@ -277,7 +256,7 @@ export default function AddMedicinePage() {
                                                     Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                                 </p>
                                             )}
-                                        </motion.div>
+                                        </div>
                                     )}
                                 />
                             </div>
@@ -288,7 +267,7 @@ export default function AddMedicinePage() {
                             <form.Field
                                 name="categoryId"
                                 children={(field) => (
-                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }} className="space-y-3 group">
+                                    <div className="space-y-3 group">
                                         <Label htmlFor="categoryId" className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 group-focus-within:text-primary transition-colors flex items-center gap-2">
                                             <List className="size-3" /> Classification Protocol
                                         </Label>
@@ -313,14 +292,14 @@ export default function AddMedicinePage() {
                                                 Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                             </p>
                                         )}
-                                    </motion.div>
+                                    </div>
                                 )}
                             />
 
                             <form.Field
                                 name="requiresPrescription"
                                 children={(field) => (
-                                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }} className="flex items-center justify-between px-6 py-4 rounded-xl border border-white/10 bg-white/[0.02] h-14 self-end group hover:border-primary/30 transition-all cursor-pointer">
+                                    <div className="flex items-center justify-between px-6 py-4 rounded-xl border border-white/10 bg-white/[0.02] h-14 self-end group hover:border-primary/30 transition-all cursor-pointer">
                                         <div className="flex items-center gap-3">
                                             <ShieldCheck className={cn("size-5 transition-colors", field.state.value ? "text-primary" : "text-gray-600")} />
                                             <Label htmlFor="requiresPrescription" className="text-[10px] font-black text-gray-400 uppercase tracking-widest cursor-pointer group-hover:text-white">
@@ -346,7 +325,7 @@ export default function AddMedicinePage() {
                                             onChange={(e) => field.handleChange(e.target.checked)}
                                             className="hidden"
                                         />
-                                    </motion.div>
+                                    </div>
                                 )}
                             />
                         </div>
@@ -355,7 +334,7 @@ export default function AddMedicinePage() {
                         <form.Field
                             name="image"
                             children={(field) => (
-                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }} className="space-y-3 group">
+                                <div className="space-y-3 group">
                                     <div className="flex items-center gap-3 mb-2">
                                         <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
                                         <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Visual Manifest</h3>
@@ -379,7 +358,7 @@ export default function AddMedicinePage() {
                                             Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                         </p>
                                     )}
-                                </motion.div>
+                                </div>
                             )}
                         />
 
@@ -387,7 +366,7 @@ export default function AddMedicinePage() {
                         <form.Field
                             name="description"
                             children={(field) => (
-                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }} className="space-y-3 group">
+                                <div className="space-y-3 group">
                                     <div className="flex items-center gap-3 mb-2">
                                         <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
                                         <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Technical Directive</h3>
@@ -411,7 +390,7 @@ export default function AddMedicinePage() {
                                             Error: {field.state.meta.errors.map((error: any) => error?.message || error).join(", ")}
                                         </p>
                                     )}
-                                </motion.div>
+                                </div>
                             )}
                         />
 
@@ -449,17 +428,12 @@ export default function AddMedicinePage() {
             </Card>
 
             {/* Support Message */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
-                className="text-center"
-            >
+            <div className="text-center">
                 <div className="inline-flex items-center gap-2 text-[9px] font-bold text-gray-700 uppercase tracking-[0.4em]">
                     <ShieldCheck className="size-3" />
                     Secure Data Transmission Environment
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 }

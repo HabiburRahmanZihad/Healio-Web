@@ -9,7 +9,6 @@ import {
     Tag,
     Plus,
     Search,
-    Loader2,
     ExternalLink,
     Database,
     Activity,
@@ -25,25 +24,7 @@ import {
     SheetFooter,
     SheetClose,
 } from "@/components/ui/sheet";
-import { motion } from "framer-motion";
 import { toast } from "sonner";
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.1 }
-    }
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: { duration: 0.5 }
-    }
-};
 
 export default function CategoryManagementPage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -117,12 +98,7 @@ export default function CategoryManagementPage() {
     }
 
     return (
-        <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="space-y-10 pb-12"
-        >
+        <div className="space-y-10 pb-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
                 <div className="absolute -bottom-[1px] left-0 w-48 h-[1px] bg-primary" />
                 <div className="space-y-4">
@@ -160,10 +136,7 @@ export default function CategoryManagementPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredCategories.length > 0 ? (
                     filteredCategories.map((category) => (
-                        <motion.div
-                            key={category.id}
-                            variants={itemVariants}
-                        >
+                        <div key={category.id}>
                             <Card className="group bg-white/[0.02] border-white/5 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl relative border-l border-t border-white/10 hover:border-primary/30 transition-all duration-500 hover:bg-white/[0.04]">
                                 <CardContent className="p-8 space-y-6">
                                     <div className="flex items-start justify-between">
@@ -194,7 +167,7 @@ export default function CategoryManagementPage() {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </motion.div>
+                        </div>
                     ))
                 ) : (
                     <div className="col-span-full p-32 text-center border-2 border-dashed border-white/5 rounded-[3rem]">
@@ -248,6 +221,6 @@ export default function CategoryManagementPage() {
                     </form>
                 </SheetContent>
             </Sheet>
-        </motion.div>
+        </div>
     );
 }

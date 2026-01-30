@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { orderService, Order } from "@/services/order.service";
 import { medicineService } from "@/services/medicine.service";
@@ -122,11 +121,7 @@ export default function OrdersPage() {
 
     return (
         <div className="space-y-12 py-6 max-w-6xl mx-auto">
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col md:flex-row md:items-end justify-between gap-8"
-            >
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div className="space-y-3">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-[0.2em]">
                         <Activity className="size-3" />
@@ -151,15 +146,12 @@ export default function OrdersPage() {
                         <p className="text-xl font-black text-emerald-500 leading-none">Healthy</p>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             <div className="space-y-6">
-                {orders.map((order, index) => (
-                    <motion.div
+                {orders.map((order) => (
+                    <div
                         key={order.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
                         className="p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 transition-all duration-500 hover:border-primary/40 group overflow-hidden relative"
                     >
                         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/5 to-transparent skew-x-12 translate-x-1/2 -z-10 group-hover:from-primary/10 transition-colors" />
@@ -228,7 +220,7 @@ export default function OrdersPage() {
                                 );
                             })}
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </div>

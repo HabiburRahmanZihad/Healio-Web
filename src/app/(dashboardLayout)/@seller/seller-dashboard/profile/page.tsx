@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { userService } from "@/services/user.service";
 import { authClient } from "@/lib/auth-client";
@@ -80,11 +79,7 @@ export default function ProfilePage() {
 
     return (
         <div className="max-w-5xl mx-auto space-y-10 py-6">
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col md:flex-row md:items-end justify-between gap-6"
-            >
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-2">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-[0.2em]">
                         <Shield className="size-3" />
@@ -107,7 +102,7 @@ export default function ProfilePage() {
                         <p className="text-sm font-bold text-white leading-none capitalize">{profile.role.toLowerCase()} Node</p>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* Profile Card */}

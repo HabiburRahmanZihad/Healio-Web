@@ -21,7 +21,6 @@ import { userRoutes } from "@/routes/userRoutes"
 import { sellerRoutes } from "@/routes/sellerRoutes"
 import { RouteItem } from "@/types/route.type"
 import { LogOut, User as UserIcon, Home, ChevronUp } from "lucide-react"
-import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
@@ -126,8 +125,7 @@ export function AppSidebar({
                           )}
                           <span className="tracking-tight">{item.title}</span>
                           {isActive && (
-                            <motion.div
-                              layoutId="active-indicator"
+                            <div
                               className="absolute right-2 size-1.5 bg-primary rounded-full shadow-[0_0_10px_#22c55e]"
                             />
                           )}

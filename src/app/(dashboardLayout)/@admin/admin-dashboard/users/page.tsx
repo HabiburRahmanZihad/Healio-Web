@@ -2,33 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { userService } from "@/services/user.service";
-import { User } from "@/types"; // Import User type from "@/types"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { User } from "@/types";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Mail, Shield, Ban, CheckCircle, Search, AlertCircle, User as UserIcon, Activity } from "lucide-react"; // Alias lucide-react User as UserIcon
+import { Mail, Shield, Ban, CheckCircle, Search, AlertCircle, User as UserIcon, Activity } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-
-
-import { motion } from "framer-motion";
-
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { staggerChildren: 0.1 }
-    }
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5 }
-    }
-};
 
 export default function UserManagementPage() {
     const [users, setUsers] = useState<User[]>([]);
@@ -82,12 +62,7 @@ export default function UserManagementPage() {
     }
 
     return (
-        <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="space-y-10 pb-12"
-        >
+        <div className="space-y-10 pb-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
                 <div className="absolute -bottom-[1px] left-0 w-48 h-[1px] bg-primary" />
                 <div className="space-y-4">
@@ -127,10 +102,9 @@ export default function UserManagementPage() {
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {filteredUsers.length > 0 ? (
-                                filteredUsers.map((user, i) => (
-                                    <motion.tr
+                                filteredUsers.map((user) => (
+                                    <tr
                                         key={user.id}
-                                        variants={itemVariants}
                                         className="hover:bg-white/[0.03] transition-all duration-500 group relative"
                                     >
                                         <td className="p-8">
@@ -209,7 +183,7 @@ export default function UserManagementPage() {
                                                 </Button>
                                             )}
                                         </td>
-                                    </motion.tr>
+                                    </tr>
                                 ))
                             ) : (
                                 <tr>
@@ -225,6 +199,6 @@ export default function UserManagementPage() {
                     </table>
                 </div>
             </Card>
-        </motion.div>
+        </div>
     );
 }

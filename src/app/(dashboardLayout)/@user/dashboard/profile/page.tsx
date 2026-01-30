@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { userService } from "@/services/user.service";
 import { authClient } from "@/lib/auth-client";
@@ -8,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, User, Mail, Phone, Shield, Save } from "lucide-react";
 import { toast } from "sonner";
 
@@ -81,12 +79,7 @@ export default function ProfilePage() {
     return (
         <div className="max-w-6xl mx-auto space-y-12 pb-24">
             {/* Header Section: Neural Identity Sync */}
-            <motion.div
-                initial={{ opacity: 0, scale: 0.98, y: -20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="relative p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] bg-zinc-950/40 border border-white/5 backdrop-blur-3xl overflow-hidden group"
-            >
+            <div className="relative p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] bg-zinc-950/40 border border-white/5 backdrop-blur-3xl overflow-hidden group">
                 {/* Background Tech Mesh */}
                 <div className="absolute inset-0 opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-1000">
                     <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -117,7 +110,7 @@ export default function ProfilePage() {
                     {/* Identity Card Visualization */}
                     <div className="relative w-full lg:w-80 group/card">
                         <div className="absolute -inset-4 bg-primary/10 blur-2xl rounded-full opacity-0 group-hover/card:opacity-100 transition-opacity duration-700" />
-                        <div className="relative aspect-[1.6/1] rounded-3xl bg-zinc-900 border border-white/10 p-6 flex flex-col justify-between overflow-hidden shadow-2xl">
+                        <div className="relative aspect-[1.6/1] rounded-3xl bg-zinc-900 border border-white/10 p-6 flex flex-col justify-between overflow-hidden shadow-2xl transition-transform duration-500 group-hover/card:translate-y-[-5px]">
                             <div className="absolute top-0 right-0 p-4 opacity-10">
                                 <Shield className="size-20" />
                             </div>
@@ -141,7 +134,7 @@ export default function ProfilePage() {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </div>
 
             <div className="grid lg:grid-cols-12 gap-10">
                 {/* Main Configuration Core */}
@@ -233,31 +226,17 @@ export default function ProfilePage() {
                                     disabled={isSaving}
                                     className="w-full h-18 bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-3xl shadow-[0_20px_50px_rgba(var(--primary-rgb),0.3)] transition-all active:scale-[0.98] group relative overflow-hidden"
                                 >
-                                    <AnimatePresence mode="wait">
-                                        {isSaving ? (
-                                            <motion.div
-                                                key="saving"
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -10 }}
-                                                className="flex items-center justify-center gap-4"
-                                            >
-                                                <Loader2 className="size-5 animate-spin" />
-                                                <span>Synchronizing Core Parameters...</span>
-                                            </motion.div>
-                                        ) : (
-                                            <motion.div
-                                                key="idle"
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: -10 }}
-                                                className="flex items-center justify-center gap-4"
-                                            >
-                                                <Save className="size-5" />
-                                                <span>Initiate Sync Protocol</span>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
+                                    {isSaving ? (
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Loader2 className="size-5 animate-spin" />
+                                            <span>Synchronizing Core Parameters...</span>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Save className="size-5" />
+                                            <span>Initiate Sync Protocol</span>
+                                        </div>
+                                    )}
                                 </Button>
                             </form>
                         </div>
@@ -266,10 +245,7 @@ export default function ProfilePage() {
 
                 {/* Sidebar Protocol Metadata */}
                 <div className="lg:col-span-4 space-y-10">
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        className="p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] bg-gradient-to-br from-primary/20 to-blue-600/10 border border-primary/20 shadow-2xl space-y-6 relative overflow-hidden group"
-                    >
+                    <div className="p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] bg-gradient-to-br from-primary/20 to-blue-600/10 border border-primary/20 shadow-2xl space-y-6 relative overflow-hidden group transition-transform duration-500 hover:translate-y-[-5px]">
                         <div className="absolute top-0 right-0 p-6 opacity-10 rotate-12 transition-transform group-hover:rotate-0 duration-700">
                             <Shield className="size-24 text-white" />
                         </div>
@@ -287,7 +263,7 @@ export default function ProfilePage() {
                             <div className="size-2 bg-primary rounded-full animate-ping" />
                             <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Enforcement Level: ALPHA</span>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-zinc-950/40 space-y-8">
                         <div>
