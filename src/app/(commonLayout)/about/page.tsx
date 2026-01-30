@@ -55,7 +55,7 @@ export default function AboutPage() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 0.1, scale: 1 }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="absolute top-0 right-0 size-[600px] bg-primary rounded-full blur-[100px] -z-10 translate-y-[-20%] translate-x-[20%]"
+                    className="absolute top-0 right-0 size-150 bg-primary rounded-full blur-[100px] -z-10 translate-y-[-20%] translate-x-[20%]"
                 />
 
                 <div className="container mx-auto max-w-5xl relative z-10">
@@ -75,7 +75,7 @@ export default function AboutPage() {
 
                         <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight uppercase leading-tight">
                             REVOLUTIONIZING <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-400 to-blue-500 animate-gradient-x text-5xl md:text-7xl">DIGITAL HEALTH</span>
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary via-emerald-400 to-blue-500 animate-gradient-x text-5xl md:text-7xl">DIGITAL HEALTH</span>
                         </h1>
 
                         <motion.p
@@ -90,7 +90,7 @@ export default function AboutPage() {
             </section>
 
             {/* The Journey Section */}
-            <section className="py-20 px-4 bg-white/[0.01]">
+            <section className="py-20 px-4 bg-white/1">
                 <div className="container mx-auto max-w-5xl">
                     <div className="flex flex-col md:flex-row gap-16 items-center">
                         <motion.div
@@ -126,7 +126,7 @@ export default function AboutPage() {
                                         fill
                                         className="object-cover transition-transform duration-1000 group-hover:scale-110"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                                     <div className="absolute bottom-6 left-6 right-6">
                                         <div className="flex items-center gap-2 mb-2">
                                             <div className="size-1.5 bg-primary rounded-full" />
@@ -157,7 +157,7 @@ export default function AboutPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.1 }}
-                                className="p-6 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/30 transition-all group"
+                                className="p-6 rounded-2xl bg-white/3 border border-white/5 hover:border-primary/30 transition-all group"
                             >
                                 <v.icon className={cn("size-8 mb-4 transition-transform group-hover:scale-110", v.color)} />
                                 <h3 className="text-sm font-black uppercase mb-2 text-white">{v.title}</h3>
@@ -206,7 +206,7 @@ export default function AboutPage() {
                             </p>
                             <div className="space-y-4">
                                 {ecosystem.map((item, i) => (
-                                    <div key={i} className="flex gap-4 items-start p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-all">
+                                    <div key={i} className="flex gap-4 items-start p-4 rounded-xl bg-white/2 border border-white/5 hover:bg-white/4 transition-all">
                                         <div className="mt-1 size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                                             <item.icon className="size-4" />
                                         </div>
@@ -231,7 +231,7 @@ export default function AboutPage() {
                                     className="object-cover"
                                 />
                                 <div className="absolute inset-0 bg-primary/20 mix-blend-overlay opacity-30" />
-                                <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-linear-to-tr from-black/60 via-transparent to-transparent" />
                                 <div className="absolute bottom-6 left-6">
                                     <div className="flex items-center gap-2 mb-1">
                                         <div className="size-2 bg-emerald-500 rounded-full animate-pulse" />
