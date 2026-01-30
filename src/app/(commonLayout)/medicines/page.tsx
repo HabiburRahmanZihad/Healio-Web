@@ -42,27 +42,27 @@ export default function MedicinesPage() {
     };
 
     return (
-        <div className="min-h-screen bg-background py-20 relative overflow-hidden">
+        <div className="min-h-screen bg-background py-16 relative overflow-hidden">
             {/* Background elements */}
-            <div className="absolute top-0 right-0 size-[600px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 -z-10" />
-            <div className="absolute bottom-0 left-0 size-[500px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10" />
+            <div className="absolute top-0 right-0 size-[500px] bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 -z-10" />
+            <div className="absolute bottom-0 left-0 size-[400px] bg-blue-500/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2 -z-10" />
 
             <div className="container mx-auto px-4 relative z-10">
                 {/* Header */}
-                <div className="max-w-4xl mb-16 space-y-4">
+                <div className="max-w-3xl mb-12 space-y-3">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-black uppercase tracking-widest"
+                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-widest"
                     >
-                        <Sparkles className="size-3.5" />
+                        <Sparkles className="size-3" />
                         <span>Curated Healthcare</span>
                     </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tighter uppercase"
+                        className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight uppercase"
                     >
                         BROWSE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">MEDICINES</span>
                     </motion.h1>
@@ -70,16 +70,16 @@ export default function MedicinesPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="text-lg text-muted-foreground max-w-2xl font-medium"
+                        className="text-sm text-gray-500 max-w-xl font-medium"
                     >
                         Discover our comprehensive range of pharmaceutical and wellness products, carefully selected for your health needs.
                     </motion.p>
                 </div>
 
                 {/* Main Content */}
-                <div className="flex flex-col lg:flex-row gap-12">
+                <div className="flex flex-col lg:flex-row gap-10">
                     {/* Sidebar Filters */}
-                    <aside className="w-full lg:w-80 flex-shrink-0">
+                    <aside className="w-full lg:w-72 flex-shrink-0">
                         <div className="sticky top-24">
                             <MedicineFiltersPanel
                                 filters={filters}
@@ -94,9 +94,9 @@ export default function MedicinesPage() {
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="mb-8 p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm flex items-center justify-between"
+                            className="mb-8 p-3 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm flex items-center justify-between"
                         >
-                            <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                                 {loading ? "Scanning archive..." : `${medicines.length} products found`}
                             </p>
                         </motion.div>

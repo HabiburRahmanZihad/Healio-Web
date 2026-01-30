@@ -55,35 +55,35 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
     };
 
     return (
-        <div className="min-h-screen bg-background relative overflow-hidden pb-20">
+        <div className="min-h-screen bg-background relative overflow-hidden pb-12">
             {/* Background Atmosphere */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/10 blur-[120px] -z-10" />
-            <div className="absolute bottom-0 right-0 size-[600px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 translate-x-1/2 -z-10" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-primary/10 blur-[100px] -z-10" />
+            <div className="absolute bottom-0 right-0 size-[500px] bg-blue-500/5 rounded-full blur-[80px] translate-y-1/2 translate-x-1/2 -z-10" />
 
-            <div className="container mx-auto px-4 pt-32 relative z-10">
+            <div className="container mx-auto px-4 pt-20 relative z-10">
                 {/* Top Actions */}
-                <div className="flex items-center justify-between mb-12">
+                <div className="flex items-center justify-between mb-8">
                     <Link
                         href="/medicines"
-                        className="group flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
+                        className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
                     >
-                        <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-                        <span className="text-xs font-black uppercase tracking-widest">Back to Archive</span>
+                        <ArrowLeft className="size-3.5 group-hover:-translate-x-1 transition-transform" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">Back to Archive</span>
                     </Link>
 
                     <div className="flex items-center gap-4">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="hidden md:flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-500"
+                            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-500"
                         >
-                            <ShieldCheck className="size-4" />
-                            <span className="text-[10px] font-black uppercase tracking-widest">Authenticated Product</span>
+                            <ShieldCheck className="size-3.5" />
+                            <span className="text-[9px] font-black uppercase tracking-widest">Authenticated Product</span>
                         </motion.div>
                     </div>
                 </div>
 
-                <div className="grid lg:grid-cols-2 gap-16 items-start">
+                <div className="grid lg:grid-cols-2 gap-10 items-start">
                     {/* Left: Interactive Media Viewer */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
@@ -91,8 +91,8 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                         transition={{ duration: 0.6 }}
                         className="relative group"
                     >
-                        <div className="relative aspect-[4/4.5] rounded-[3rem] overflow-hidden bg-white/[0.03] backdrop-blur-xl border border-white/10 p-4 shadow-2xl transition-all duration-700 group-hover:border-primary/30">
-                            <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden">
+                        <div className="relative aspect-[4/4.5] rounded-[2rem] overflow-hidden bg-white/[0.03] backdrop-blur-xl border border-white/10 p-3 shadow-2xl transition-all duration-700 group-hover:border-primary/20">
+                            <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden">
                                 <Image
                                     src={image || "/placeholder-medicine.png"}
                                     alt={name}
@@ -106,21 +106,21 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
 
                             {/* Category Badge */}
                             {category && (
-                                <div className="absolute top-8 left-8">
-                                    <span className="px-5 py-2 text-[10px] font-black uppercase tracking-[0.2em] bg-primary/80 backdrop-blur-xl text-white rounded-full border border-white/10">
+                                <div className="absolute top-6 left-6">
+                                    <span className="px-4 py-1.5 text-[9px] font-black uppercase tracking-widest bg-primary/80 backdrop-blur-md text-white rounded-full border border-white/10">
                                         {category.name}
                                     </span>
                                 </div>
                             )}
 
                             {/* Stock Indicator Bubble */}
-                            <div className="absolute bottom-8 right-8">
+                            <div className="absolute bottom-6 right-6">
                                 <div className={cn(
-                                    "px-6 py-3 rounded-2xl backdrop-blur-md border border-white/10 flex flex-col items-center",
+                                    "px-4 py-2 rounded-xl backdrop-blur-md border border-white/10 flex flex-col items-center",
                                     isOutOfStock ? "bg-red-500/20 text-red-500" : "bg-primary/20 text-primary"
                                 )}>
-                                    <span className="text-[10px] font-black uppercase tracking-widest mb-1">Status</span>
-                                    <span className="text-sm font-black whitespace-nowrap">
+                                    <span className="text-[8px] font-black uppercase tracking-widest mb-0.5">Status</span>
+                                    <span className="text-xs font-black whitespace-nowrap">
                                         {isOutOfStock ? "Stock Deficit" : "Reserve Stable"}
                                     </span>
                                 </div>
@@ -128,16 +128,16 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                         </div>
 
                         {/* Delivery Specs */}
-                        <div className="mt-8 grid grid-cols-3 gap-4">
+                        <div className="mt-6 grid grid-cols-3 gap-3">
                             {[
                                 { icon: Truck, label: "Express", sub: "Delivery" },
                                 { icon: RotateCcw, label: "7 Days", sub: "Returns" },
                                 { icon: BadgeCheck, label: "Verified", sub: "Quality" }
                             ].map((spec, i) => (
-                                <div key={i} className="flex flex-col items-center p-4 rounded-3xl bg-white/[0.02] border border-white/5">
-                                    <spec.icon className="size-5 text-primary mb-2" />
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-white">{spec.label}</span>
-                                    <span className="text-[9px] text-gray-500 uppercase">{spec.sub}</span>
+                                <div key={i} className="flex flex-col items-center p-3 rounded-2xl bg-white/[0.02] border border-white/5">
+                                    <spec.icon className="size-4 text-primary mb-1.5" />
+                                    <span className="text-[8px] font-black uppercase tracking-widest text-white">{spec.label}</span>
+                                    <span className="text-[7px] text-gray-500 uppercase">{spec.sub}</span>
                                 </div>
                             ))}
                         </div>
@@ -148,46 +148,46 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="space-y-10"
+                        className="space-y-8"
                     >
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3 text-primary">
-                                <span className="size-2 bg-primary rounded-full animate-ping" />
-                                <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Direct Pharmaceutical Supply</span>
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2 text-primary">
+                                <span className="size-1.5 bg-primary rounded-full animate-ping" />
+                                <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Direct Pharmaceutical Supply</span>
                             </div>
-                            <h1 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase break-words">
+                            <h1 className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight uppercase break-words">
                                 {name.split(" ").map((word, i) => (
                                     <span key={i} className={cn(i % 2 !== 0 && "text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400")}>
                                         {word}{" "}
                                     </span>
                                 ))}
                             </h1>
-                            <div className="flex items-center gap-4 pt-2">
-                                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-gray-400">
-                                    <Package className="size-3.5" />
+                            <div className="flex items-center gap-3 pt-1">
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-gray-500">
+                                    <Package className="size-3" />
                                     {manufacturer}
                                 </div>
                                 {requiresPrescription && (
-                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-xs font-bold text-yellow-500">
-                                        <FileText className="size-3.5" />
+                                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs font-bold text-yellow-600">
+                                        <FileText className="size-3" />
                                         <span>MD Required</span>
                                     </div>
                                 )}
                             </div>
                         </div>
 
-                        <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-sm space-y-6">
+                        <div className="p-6 rounded-[1.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-sm space-y-5">
                             <div className="flex items-end justify-between">
-                                <div className="space-y-1">
-                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Acquisition Cost</p>
-                                    <p className="text-5xl font-black text-white">
+                                <div className="space-y-0.5">
+                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Acquisition Cost</p>
+                                    <p className="text-3xl font-black text-white leading-none">
                                         ৳{price.toFixed(2)}
                                     </p>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Stock Level</p>
+                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-0.5">Stock Level</p>
                                     <p className={cn(
-                                        "text-xl font-bold",
+                                        "text-lg font-bold",
                                         isOutOfStock ? "text-red-500" : "text-primary"
                                     )}>
                                         {stock} Units
@@ -195,52 +195,52 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                 </div>
                             </div>
 
-                            <p className="text-gray-400 leading-relaxed font-medium pt-4 border-t border-white/5">
+                            <p className="text-xs text-gray-400 leading-relaxed font-medium pt-3 border-t border-white/5 line-clamp-4">
                                 {description}
                             </p>
 
-                            <div className="grid grid-cols-2 gap-4 pt-4">
-                                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-                                    <Layers className="size-4 text-primary mb-2" />
-                                    <p className="text-[8px] text-gray-500 uppercase font-bold tracking-widest">Classification</p>
-                                    <p className="text-xs font-bold text-white truncate">{category?.name || "General"}</p>
+                            <div className="grid grid-cols-2 gap-3 pt-1">
+                                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                                    <Layers className="size-3.5 text-primary mb-1.5" />
+                                    <p className="text-[7px] text-gray-500 uppercase font-bold tracking-widest">Classification</p>
+                                    <p className="text-[10px] font-bold text-white truncate">{category?.name || "General"}</p>
                                 </div>
-                                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-                                    <ShieldCheck className="size-4 text-primary mb-2" />
-                                    <p className="text-[8px] text-gray-500 uppercase font-bold tracking-widest">Authenticity</p>
-                                    <p className="text-xs font-bold text-white truncate">100% Certified</p>
+                                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                                    <ShieldCheck className="size-3.5 text-primary mb-1.5" />
+                                    <p className="text-[7px] text-gray-500 uppercase font-bold tracking-widest">Authenticity</p>
+                                    <p className="text-[10px] font-bold text-white truncate">100% Certified</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Interactive Action Interface */}
-                        <div className="flex flex-col sm:flex-row gap-6">
+                        <div className="flex flex-col sm:flex-row gap-4">
                             {!isSeller ? (
                                 <motion.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
+                                    whileHover={{ scale: 1.01 }}
+                                    whileTap={{ scale: 0.99 }}
                                     onClick={handleAddToCart}
                                     disabled={isOutOfStock}
                                     className={cn(
-                                        "flex-[2] py-6 px-10 rounded-[2rem] font-black uppercase tracking-widest text-sm flex items-center justify-center gap-4 transition-all shadow-2xl",
+                                        "flex-[2] h-14 px-8 rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all shadow-xl",
                                         isOutOfStock
-                                            ? "bg-zinc-800 text-gray-500 cursor-not-allowed border border-white/5"
-                                            : "bg-primary text-white hover:bg-primary/90 shadow-primary/20"
+                                            ? "bg-zinc-800 text-gray-600 cursor-not-allowed border border-white/5"
+                                            : "bg-primary text-white hover:bg-primary/90 shadow-primary/10"
                                     )}
                                 >
                                     {isOutOfStock ? (
                                         "Protocol Halted - No Stock"
                                     ) : (
                                         <>
-                                            <ShoppingCart className="size-5" />
+                                            <ShoppingCart className="size-4" />
                                             <span>Add to Inventory</span>
                                         </>
                                     )}
                                 </motion.button>
                             ) : (
-                                <div className="flex items-center gap-4 p-6 rounded-[2rem] bg-primary/10 border border-primary/20 text-primary">
-                                    <Info className="size-6 shrink-0" />
-                                    <p className="text-xs font-bold uppercase tracking-widest leading-relaxed">
+                                <div className="flex items-center gap-3 p-4 rounded-xl bg-primary/10 border border-primary/20 text-primary">
+                                    <Info className="size-4 shrink-0" />
+                                    <p className="text-[9px] font-bold uppercase tracking-widest leading-relaxed">
                                         Supplier Restricted: Inventory management only available for designated customers.
                                     </p>
                                 </div>
@@ -251,21 +251,20 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleToggleWishlist}
                                 className={cn(
-                                    "flex-1 p-6 rounded-[2rem] border transition-all flex items-center justify-center gap-3",
+                                    "h-14 w-14 rounded-xl border transition-all flex items-center justify-center",
                                     isInWishlist(id)
-                                        ? "bg-pink-500/10 border-pink-500/30 text-pink-500 shadow-[0_0_30px_rgba(236,72,153,0.1)]"
+                                        ? "bg-pink-500/10 border-pink-500/30 text-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.1)]"
                                         : "bg-white/5 border-white/10 text-white hover:bg-white/10"
                                 )}
                             >
-                                <Heart className={cn("size-6 transition-all", isInWishlist(id) && "fill-current scale-110")} />
-                                <span className="sm:hidden text-xs font-black uppercase tracking-widest">Interest</span>
+                                <Heart className={cn("size-5 transition-all", isInWishlist(id) && "fill-current scale-110")} />
                             </motion.button>
                         </div>
 
                         {/* Professional Disclaimer */}
-                        <div className="pt-6 border-t border-white/5 flex items-start gap-3">
-                            <Info className="size-4 text-gray-600 mt-1 shrink-0" />
-                            <p className="text-[10px] text-gray-600 font-medium leading-relaxed uppercase tracking-tighter">
+                        <div className="pt-4 border-t border-white/5 flex items-start gap-2">
+                            <Info className="size-3.5 text-gray-600 mt-0.5 shrink-0" />
+                            <p className="text-[9px] text-gray-600 font-medium leading-relaxed uppercase tracking-tighter">
                                 Disclaimer: Pharmaceutical products should be used as directed by a healthcare professional. Ensure you have the required documentation for restricted formulas.
                             </p>
                         </div>

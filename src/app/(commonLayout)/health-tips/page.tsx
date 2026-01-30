@@ -89,27 +89,27 @@ const itemVariants: Variants = {
 
 export default function HealthTipsPage() {
     return (
-        <div className="min-h-screen bg-background py-24 px-4 overflow-hidden relative">
+        <div className="min-h-screen bg-background py-16 px-4 overflow-hidden relative">
             {/* Ambient Background Elements */}
             <motion.div
                 animate={{
                     scale: [1, 1.2, 1],
-                    opacity: [0.1, 0.2, 0.1]
+                    opacity: [0.1, 0.15, 0.1]
                 }}
                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-0 right-0 size-[800px] bg-primary rounded-full blur-[140px] -translate-y-1/2 translate-x-1/2 -z-10"
+                className="absolute top-0 right-0 size-[600px] bg-primary rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 -z-10"
             />
             <motion.div
                 animate={{
                     scale: [1, 1.3, 1],
-                    opacity: [0.05, 0.15, 0.05]
+                    opacity: [0.05, 0.1, 0.05]
                 }}
                 transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute bottom-0 left-0 size-[600px] bg-emerald-500 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 -z-10"
+                className="absolute bottom-0 left-0 size-[400px] bg-emerald-500 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2 -z-10"
             />
 
             <div className="container mx-auto relative z-10">
-                <div className="max-w-4xl mx-auto text-center mb-24">
+                <div className="max-w-4xl mx-auto text-center mb-16">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -117,16 +117,16 @@ export default function HealthTipsPage() {
                     >
                         <motion.div
                             whileHover={{ scale: 1.05 }}
-                            className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm font-black tracking-widest uppercase mb-6"
+                            className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-black tracking-widest uppercase mb-4"
                         >
-                            <Sparkles className="size-4" />
+                            <Sparkles className="size-3.5" />
                             <span>Wellness Hub</span>
                         </motion.div>
-                        <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-[0.85] tracking-tighter uppercase">
+                        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight tracking-tight uppercase">
                             YOUR PATH TO <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary">VITALITY</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary text-5xl md:text-7xl">VITALITY</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto font-medium">
+                        <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto font-medium">
                             Expert-curated health advice and daily wellness tips to help you live your best, most vibrant life.
                         </p>
                     </motion.div>
@@ -137,7 +137,7 @@ export default function HealthTipsPage() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20"
                 >
                     {healthTips.map((tip) => {
                         const Icon = tip.icon;
@@ -145,36 +145,31 @@ export default function HealthTipsPage() {
                             <motion.div
                                 key={tip.id}
                                 variants={itemVariants}
-                                whileHover={{ y: -15, rotate: 1 }}
+                                whileHover={{ y: -5 }}
                                 className="group"
                             >
-                                <Card className="h-full bg-card/40 border-white/5 backdrop-blur-2xl hover:bg-card/60 hover:border-emerald-500/30 transition-all duration-500 rounded-[3rem] overflow-hidden">
-                                    <CardHeader className="p-10 pb-0">
-                                        <motion.div
-                                            whileHover={{ rotate: 15, scale: 1.1 }}
-                                            className={`size-20 rounded-[2rem] ${tip.bg} flex items-center justify-center mb-10 shadow-inner group-hover:shadow-emerald-500/20 transition-all duration-500`}
-                                        >
-                                            <Icon className={`size-10 ${tip.color}`} />
-                                        </motion.div>
-                                        <div className="space-y-3">
-                                            <span className="text-xs font-black text-primary tracking-[0.3em] uppercase block">
+                                <Card className="h-full bg-card/40 border-white/5 backdrop-blur-xl hover:bg-card/60 hover:border-emerald-500/30 transition-all duration-500 rounded-[2rem] overflow-hidden">
+                                    <CardHeader className="p-8 pb-0">
+                                        <div className={`size-14 rounded-2xl ${tip.bg} flex items-center justify-center mb-6 shadow-inner group-hover:shadow-emerald-500/20 transition-all duration-500`}>
+                                            <Icon className={`size-7 ${tip.color}`} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <span className="text-[10px] font-black text-primary tracking-[0.2em] uppercase block">
                                                 {tip.category}
                                             </span>
-                                            <h3 className="text-3xl font-black text-white leading-none tracking-tight">
+                                            <h3 className="text-xl font-black text-white leading-tight tracking-tight uppercase">
                                                 {tip.title}
                                             </h3>
                                         </div>
                                     </CardHeader>
-                                    <CardContent className="p-10">
-                                        <p className="text-muted-foreground leading-relaxed text-lg mb-8 font-medium">
+                                    <CardContent className="p-8">
+                                        <p className="text-muted-foreground leading-relaxed text-sm mb-6 font-medium line-clamp-3">
                                             {tip.description}
                                         </p>
-                                        <motion.div whileHover={{ x: 10 }}>
-                                            <Button variant="ghost" className="p-0 h-auto text-emerald-400 hover:text-white font-black tracking-widest uppercase flex items-center gap-3 decoration-2 underline-offset-8 hover:underline italic transition-all">
-                                                KEEP READING
-                                                <ChevronRight className="size-5" />
-                                            </Button>
-                                        </motion.div>
+                                        <Button variant="ghost" className="p-0 h-auto text-emerald-400 hover:text-white font-black tracking-widest uppercase flex items-center gap-2 text-[10px] transition-all">
+                                            KEEP READING
+                                            <ChevronRight className="size-3.5" />
+                                        </Button>
                                     </CardContent>
                                 </Card>
                             </motion.div>
@@ -184,41 +179,31 @@ export default function HealthTipsPage() {
 
                 {/* Interactive Newsletter */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.96 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="relative group p-1 rounded-[4rem] bg-gradient-to-br from-white/10 to-transparent"
+                    className="relative group p-1 rounded-[2.5rem] bg-gradient-to-br from-white/10 to-transparent"
                 >
-                    <div className="bg-card/80 backdrop-blur-3xl rounded-[3.9rem] p-16 md:p-24 text-center overflow-hidden">
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                            className="absolute -top-40 -left-40 size-80 border border-emerald-500/10 rounded-full"
-                        />
-                        <motion.div
-                            animate={{ rotate: -360 }}
-                            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                            className="absolute -bottom-40 -right-40 size-96 border border-primary/10 rounded-full"
-                        />
+                    <div className="bg-card/80 backdrop-blur-2xl rounded-[2.4rem] p-12 md:p-16 text-center overflow-hidden">
+                        <div className="absolute -top-20 -left-20 size-40 border border-emerald-500/10 rounded-full" />
+                        <div className="absolute -bottom-20 -right-20 size-48 border border-primary/10 rounded-full" />
 
-                        <h2 className="text-4xl md:text-7xl font-black text-white mb-8 tracking-tighter leading-none">
+                        <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight leading-tight uppercase">
                             STAY SHARP, <br /><span className="text-emerald-400 italic">STAY HEALTHY</span>
                         </h2>
-                        <p className="text-xl text-muted-foreground mb-16 max-w-2xl mx-auto leading-relaxed font-medium">
+                        <p className="text-sm md:text-base text-muted-foreground mb-10 max-w-xl mx-auto leading-relaxed font-medium">
                             Join over 50,000+ people receiving our weekly medical briefings and wellness inspiration.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-5 w-full max-w-2xl mx-auto relative z-10">
+                        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg mx-auto relative z-10">
                             <input
                                 type="email"
                                 placeholder="name@email.com"
-                                className="h-20 px-10 rounded-[2rem] bg-white/5 border-2 border-white/5 text-white text-lg font-bold focus:outline-none focus:border-emerald-500/50 focus:bg-white/10 transition-all flex-[2]"
+                                className="h-14 px-6 rounded-2xl bg-white/5 border border-white/10 text-white text-sm font-bold focus:outline-none focus:border-emerald-500/50 focus:bg-white/10 transition-all flex-[2]"
                             />
-                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1">
-                                <Button className="w-full h-20 rounded-[2rem] bg-emerald-500 hover:bg-primary text-white font-black text-xl shadow-2xl shadow-emerald-500/20 transition-all">
-                                    JOIN LIST
-                                </Button>
-                            </motion.div>
+                            <Button className="w-full sm:flex-1 h-14 rounded-2xl bg-emerald-500 hover:bg-primary text-white font-black text-xs tracking-widest uppercase shadow-lg shadow-emerald-500/20 transition-all">
+                                JOIN LIST
+                            </Button>
                         </div>
                     </div>
                 </motion.div>

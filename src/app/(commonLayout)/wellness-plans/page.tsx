@@ -81,27 +81,27 @@ const itemVariants: Variants = {
 
 export default function WellnessPlans() {
     return (
-        <div className="min-h-screen bg-background py-24 px-4 overflow-hidden relative">
+        <div className="min-h-screen bg-background py-16 px-4 overflow-hidden relative">
             {/* Background Glows */}
-            <div className="absolute top-0 right-0 size-[800px] bg-primary/10 rounded-full blur-[140px] -translate-y-1/2 translate-x-1/2 -z-10" />
-            <div className="absolute bottom-0 left-0 size-[600px] bg-emerald-500/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 -z-10" />
+            <div className="absolute top-0 right-0 size-[600px] bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 -z-10" />
+            <div className="absolute bottom-0 left-0 size-[400px] bg-emerald-500/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2 -z-10" />
 
-            <div className="container mx-auto max-w-7xl">
-                <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
+            <div className="container mx-auto max-w-6xl">
+                <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, type: "spring" }}
                     >
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-black uppercase tracking-widest mb-6">
-                            <Sparkles className="size-3.5" />
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-widest mb-4">
+                            <Sparkles className="size-3" />
                             <span>Premium Care for Everyone</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tighter">
+                        <h1 className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight uppercase">
                             ELEVATE YOUR <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-400 to-blue-500 animate-gradient-x">HEALTH JOURNEY</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-emerald-400 to-blue-500 animate-gradient-x text-4xl md:text-6xl">HEALTH JOURNEY</span>
                         </h1>
-                        <p className="text-xl text-muted-foreground leading-relaxed">
+                        <p className="text-base text-muted-foreground leading-relaxed">
                             Choose a plan that fits your lifestyle. Our wellness plans are designed to provide you with consistent, high-quality care and exclusive benefits.
                         </p>
                     </motion.div>
@@ -111,7 +111,7 @@ export default function WellnessPlans() {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10"
                 >
                     {plans.map((plan) => {
                         const Icon = plan.icon;
@@ -119,47 +119,47 @@ export default function WellnessPlans() {
                             <motion.div
                                 key={plan.name}
                                 variants={itemVariants}
-                                whileHover={{ y: -10 }}
+                                whileHover={{ y: -5 }}
                                 className="relative group"
                             >
                                 {plan.popular && (
-                                    <div className="absolute -top-5 inset-x-0 flex justify-center z-20">
-                                        <span className="bg-primary text-white text-[10px] font-black uppercase tracking-widest px-6 py-2 rounded-full shadow-2xl shadow-primary/40 animate-pulse">
+                                    <div className="absolute -top-3 inset-x-0 flex justify-center z-20">
+                                        <span className="bg-primary text-white text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-primary/20 animate-pulse">
                                             Most Popular
                                         </span>
                                     </div>
                                 )}
-                                <Card className={`h-full bg-card/40 backdrop-blur-2xl border ${plan.border} group-hover:border-primary/50 transition-all duration-500 rounded-[3rem] overflow-hidden flex flex-col`}>
-                                    <CardHeader className="p-10 pb-6">
-                                        <div className={`size-16 rounded-2xl ${plan.bg} flex items-center justify-center mb-8 border border-white/5`}>
-                                            <Icon className={`size-8 ${plan.color}`} />
+                                <Card className={`h-full bg-card/40 backdrop-blur-xl border ${plan.border} group-hover:border-primary/50 transition-all duration-500 rounded-[2rem] overflow-hidden flex flex-col`}>
+                                    <CardHeader className="p-8 pb-4">
+                                        <div className={`size-12 rounded-xl ${plan.bg} flex items-center justify-center mb-6 border border-white/5`}>
+                                            <Icon className={`size-6 ${plan.color}`} />
                                         </div>
-                                        <CardTitle className="text-3xl font-black text-white">{plan.name}</CardTitle>
-                                        <div className="flex items-baseline gap-1 mt-4">
-                                            <span className="text-4xl font-black text-white">{plan.price}</span>
-                                            <span className="text-muted-foreground font-medium">{plan.period}</span>
+                                        <CardTitle className="text-2xl font-black text-white uppercase">{plan.name}</CardTitle>
+                                        <div className="flex items-baseline gap-1 mt-2">
+                                            <span className="text-3xl font-black text-white">{plan.price}</span>
+                                            <span className="text-xs text-muted-foreground font-medium">{plan.period}</span>
                                         </div>
-                                        <p className="text-muted-foreground mt-4 leading-relaxed font-medium text-sm">
+                                        <p className="text-muted-foreground mt-3 leading-relaxed font-medium text-xs">
                                             {plan.description}
                                         </p>
                                     </CardHeader>
-                                    <CardContent className="p-10 pt-4 flex-grow">
-                                        <div className="h-px bg-white/5 mb-8" />
-                                        <ul className="space-y-4">
+                                    <CardContent className="p-8 pt-2 flex-grow">
+                                        <div className="h-px bg-white/5 mb-6" />
+                                        <ul className="space-y-3">
                                             {plan.features.map((feature) => (
                                                 <li key={feature} className="flex items-start gap-3 group/item">
-                                                    <div className={`mt-1 size-5 rounded-full ${plan.bg} flex items-center justify-center flex-shrink-0 group-hover/item:scale-125 transition-transform`}>
-                                                        <Check className={`size-3 ${plan.color}`} />
+                                                    <div className={`mt-0.5 size-4 rounded-full ${plan.bg} flex items-center justify-center flex-shrink-0 group-hover/item:scale-110 transition-transform`}>
+                                                        <Check className={`size-2.5 ${plan.color}`} />
                                                     </div>
-                                                    <span className="text-sm text-gray-300 font-medium group-hover/item:text-white transition-colors">
+                                                    <span className="text-xs text-gray-400 font-medium group-hover/item:text-white transition-colors">
                                                         {feature}
                                                     </span>
                                                 </li>
                                             ))}
                                         </ul>
                                     </CardContent>
-                                    <CardFooter className="p-10 pt-0">
-                                        <Button className={`w-full h-14 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${plan.popular ? 'bg-primary hover:bg-emerald-500 shadow-xl shadow-primary/20' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}>
+                                    <CardFooter className="p-8 pt-0">
+                                        <Button className={`w-full h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${plan.popular ? 'bg-primary hover:bg-emerald-500 shadow-lg shadow-primary/20' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}>
                                             Choose {plan.name}
                                         </Button>
                                     </CardFooter>
@@ -171,33 +171,33 @@ export default function WellnessPlans() {
 
                 {/* FAQ or Trust Badge Section */}
                 <motion.div
-                    initial={{ opacity: 0, y: 50 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
                     viewport={{ once: true }}
-                    className="mt-32 text-center p-12 rounded-[4rem] bg-card/20 border border-white/5 backdrop-blur-3xl"
+                    className="mt-20 text-center p-8 rounded-[2.5rem] bg-card/20 border border-white/5 backdrop-blur-2xl"
                 >
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
-                        <div className="space-y-2">
-                            <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                                <Shield className="size-6 text-primary" />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        <div className="space-y-1.5">
+                            <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                                <Shield className="size-5 text-primary" />
                             </div>
-                            <h4 className="text-lg font-black text-white tracking-tight">Secure Payments</h4>
-                            <p className="text-sm text-muted-foreground font-medium">Encrypted transactions via SSL.</p>
+                            <h4 className="text-base font-black text-white tracking-tight uppercase">Secure Payments</h4>
+                            <p className="text-xs text-muted-foreground font-medium">Encrypted transactions via SSL.</p>
                         </div>
-                        <div className="space-y-2">
-                            <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                                <Zap className="size-6 text-primary" />
+                        <div className="space-y-1.5">
+                            <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                                <Zap className="size-5 text-primary" />
                             </div>
-                            <h4 className="text-lg font-black text-white tracking-tight">Instant Activation</h4>
-                            <p className="text-sm text-muted-foreground font-medium">Get benefits immediately after signup.</p>
+                            <h4 className="text-base font-black text-white tracking-tight uppercase">Instant Activation</h4>
+                            <p className="text-xs text-muted-foreground font-medium">Get benefits immediately after signup.</p>
                         </div>
-                        <div className="space-y-2">
-                            <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                                <Heart className="size-6 text-primary" />
+                        <div className="space-y-1.5">
+                            <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                                <Heart className="size-5 text-primary" />
                             </div>
-                            <h4 className="text-lg font-black text-white tracking-tight">Expert Support</h4>
-                            <p className="text-sm text-muted-foreground font-medium">24/7 access to medical professionals.</p>
+                            <h4 className="text-base font-black text-white tracking-tight uppercase">Expert Support</h4>
+                            <p className="text-xs text-muted-foreground font-medium">24/7 access to medical professionals.</p>
                         </div>
                     </div>
                 </motion.div>
