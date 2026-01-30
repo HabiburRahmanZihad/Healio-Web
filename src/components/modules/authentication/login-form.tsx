@@ -163,12 +163,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                       <Label htmlFor="password" className="text-[10px] font-black uppercase tracking-widest text-gray-400">
                         Security Phrase (Password)
                       </Label>
-                      <Link
-                        href="/forgot-password"
-                        className="text-[9px] font-black uppercase tracking-widest text-primary/70 hover:text-primary transition-colors"
-                      >
-                        Recovery Node
-                      </Link>
+
                     </div>
                     <div className="relative group">
                       <Input
