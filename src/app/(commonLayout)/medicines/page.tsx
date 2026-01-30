@@ -3,14 +3,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { MedicineGrid, MedicineFiltersPanel } from "@/components/modules/medicines";
 import { medicineService } from "@/services/medicine.service";
-import { categoryService } from "@/services/category.service";
-import { Medicine, Category, MedicineFilters } from "@/types/medicine.type";
+import { Medicine, MedicineFilters } from "@/types/medicine.type";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 
 export default function MedicinesPage() {
     const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
     const [filters, setFilters] = useState<MedicineFilters>({});
     const [loading, setLoading] = useState(true);
 
@@ -22,14 +20,6 @@ export default function MedicinesPage() {
         setLoading(false);
     }, [filters]);
 
-    // Fetch categories on mount
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const { data } = await categoryService.getCategories();
-            setCategories(data || []);
-        };
-        fetchCategories();
-    }, []);
 
     // Fetch medicines when filters change
     useEffect(() => {
@@ -83,7 +73,6 @@ export default function MedicinesPage() {
                         <div className="sticky top-24">
                             <MedicineFiltersPanel
                                 filters={filters}
-                                categories={categories}
                                 onFilterChange={handleFilterChange}
                             />
                         </div>

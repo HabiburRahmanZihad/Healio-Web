@@ -66,11 +66,6 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
 
                         {/* Status Badges */}
                         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-                            {category && (
-                                <span className="px-2 py-0.5 text-[8px] font-black uppercase tracking-widest bg-primary/80 text-white rounded-full backdrop-blur-md">
-                                    {category.name}
-                                </span>
-                            )}
                             {isOutOfStock && (
                                 <span className="px-2 py-0.5 text-[8px] font-black uppercase tracking-widest bg-red-500/80 text-white rounded-full backdrop-blur-md">
                                     Deficit

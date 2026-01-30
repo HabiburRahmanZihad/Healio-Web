@@ -4,14 +4,13 @@ import { Category, MedicineFilters } from "@/types/medicine.type";
 
 interface MedicineFiltersProps {
     filters: MedicineFilters;
-    categories: Category[];
     onFilterChange: (filters: MedicineFilters) => void;
 }
 
-import { Search, Filter, Layers, Factory, CircleDollarSign, Trash2, ArrowRight } from "lucide-react";
+import { Search, Filter, Factory, CircleDollarSign, Trash2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-export function MedicineFiltersPanel({ filters, categories, onFilterChange }: MedicineFiltersProps) {
+export function MedicineFiltersPanel({ filters, onFilterChange }: MedicineFiltersProps) {
 
     // DRY: Single handler for all filter updates
     const updateFilter = (key: keyof MedicineFilters, value: string | number | undefined) => {
@@ -46,30 +45,6 @@ export function MedicineFiltersPanel({ filters, categories, onFilterChange }: Me
                 />
             </div>
 
-            {/* Category */}
-            <div className="space-y-2">
-                <div className="flex items-center gap-2 text-[9px] font-black text-gray-500 uppercase tracking-widest">
-                    <Layers className="size-2.5" />
-                    <span>Classification</span>
-                </div>
-                <div className="relative group">
-                    <select
-                        value={filters.category || ""}
-                        onChange={(e) => updateFilter("category", e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm appearance-none focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300 cursor-pointer"
-                    >
-                        <option value="" className="bg-zinc-900">All Classifications</option>
-                        {categories.map((cat) => (
-                            <option key={cat.id} value={cat.id} className="bg-zinc-900">
-                                {cat.name}
-                            </option>
-                        ))}
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-600 group-hover:text-primary transition-colors">
-                        <ArrowRight className="size-3.5 rotate-90" />
-                    </div>
-                </div>
-            </div>
 
             {/* Manufacturer */}
             <div className="space-y-2">
