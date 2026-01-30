@@ -4,15 +4,12 @@ import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-
 } from "@/components/ui/navigation-menu";
 import {
   Sheet,
@@ -22,7 +19,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Link from "next/link";
-import { ModeToggle } from "./ModeToggle";
 
 interface MenuItem {
   title: string;
@@ -152,7 +148,6 @@ const Navbar = ({
                 )}
               </Link>
             )}
-            <ModeToggle />
 
             {!session ? (
               <>
@@ -208,7 +203,6 @@ const Navbar = ({
                 )}
               </Link>
             )}
-            <ModeToggle />
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="size-10 hover:bg-muted/50 rounded-full">
