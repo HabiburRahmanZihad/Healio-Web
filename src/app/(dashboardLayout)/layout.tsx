@@ -43,11 +43,12 @@ export default function DashboardLayout(
     };
 
     return (
-        <div className="h-screen bg-zinc-950 flex flex-col items-center overflow-hidden">
-            {/* Background Glows */}
-            <div className="fixed top-0 right-0 size-[600px] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 -z-10 animate-pulse pointer-events-none" />
-            <div className="fixed bottom-0 left-0 size-[500px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10 animate-pulse pointer-events-none" />
+        <div className="fixed inset-0 bg-zinc-950 flex flex-col items-center justify-center overflow-hidden">
+            {/* Background Glows (Moved inside fixed container to stay in viewport) */}
+            <div className="absolute top-0 right-0 size-[600px] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 -z-10 animate-pulse pointer-events-none" />
+            <div className="absolute bottom-0 left-0 size-[500px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10 animate-pulse pointer-events-none" />
 
+            {/* Dashboard Container: Using fixed viewport centering for bulletproof stability */}
             <div className="w-full max-w-[1600px] h-full flex flex-col border-x border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-zinc-900/20 backdrop-blur-3xl overflow-hidden relative">
                 <SidebarProvider>
                     <AppSidebar user={userInfo} />
