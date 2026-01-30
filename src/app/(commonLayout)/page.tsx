@@ -7,7 +7,6 @@ import Testimonials from "@/components/home/Testimonials";
 import Newsletter from "@/components/home/Newsletter";
 import EmergencyCare from "@/components/home/EmergencyCare";
 import TopBrands from "@/components/home/TopBrands";
-import FlashSale from "@/components/home/FlashSale";
 import BlogSection from "@/components/home/BlogSection";
 
 export default async function Home() {
@@ -15,7 +14,6 @@ export default async function Home() {
     <div className="overflow-x-hidden space-y-0">
       <Hero />
       <StatsSection />
-      <FlashSale />
       <FeaturedCategories />
       <EmergencyCare />
       <TopBrands />
