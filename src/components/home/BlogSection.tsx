@@ -65,9 +65,9 @@ export default function BlogSection() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="group flex flex-col h-full bg-white/[0.02] border border-white/5 rounded-[2rem] overflow-hidden hover:border-primary/20 transition-all duration-500"
+                            className="group flex flex-col h-full bg-white/2 border border-white/5 rounded-[2rem] overflow-hidden hover:border-primary/20 transition-all duration-500"
                         >
-                            <div className="relative aspect-[16/10] overflow-hidden">
+                            <div className="relative aspect-16/10 overflow-hidden">
                                 <Image
                                     src={article.image}
                                     alt={article.title}
