@@ -38,7 +38,7 @@ export default function AboutPage() {
         <div className="min-h-screen bg-background text-white overflow-hidden font-sans">
             <AnimatePresence>
                 {/* Hero Section */}
-                <section className="relative py-32 px-4 border-b border-white/5 overflow-hidden">
+                <section key="hero-section" className="relative py-32 px-4 border-b border-white/5 overflow-hidden">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 0.15, scale: 1 }}
@@ -81,7 +81,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Developer Spotlight */}
-                <section className="py-32 px-4 relative">
+                <section key="developer-spotlight" className="py-32 px-4 relative">
                     <div className="container mx-auto max-w-6xl">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                             <motion.div
@@ -172,7 +172,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Tech Stack Reveal */}
-                <section className="py-32 px-4 bg-emerald-500/[0.02]">
+                <section key="tech-stack-reveal" className="py-32 px-4 bg-emerald-500/[0.02]">
                     <div className="container mx-auto max-w-6xl">
                         <motion.div
                             initial="hidden"
@@ -215,7 +215,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Vision CTA */}
-                <section className="py-40 px-4 relative overflow-hidden text-center">
+                <section key="vision-cta" className="py-40 px-4 relative overflow-hidden text-center">
                     <motion.div
                         animate={{
                             scale: [1, 1.2, 1],
