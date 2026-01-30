@@ -65,7 +65,7 @@ const Navbar = ({
   menu = [
     { title: "Home", url: "/" },
     { title: "Medicines", url: "/medicines" },
-    { title: "Pharmacies", url: "/pharmacies" },
+    { title: "Wellness Plans", url: "/wellness-plans" },
     { title: "Health Tips", url: "/health-tips" },
     { title: "About Us", url: "/about" },
   ],
