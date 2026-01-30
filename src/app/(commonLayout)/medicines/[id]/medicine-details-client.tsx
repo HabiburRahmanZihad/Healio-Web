@@ -33,7 +33,8 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
     const { addToCart } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
 
-    const isSeller = (session?.user as any)?.role === "SELLER";
+    const userRole = (session?.user as any)?.role;
+    const isManagement = userRole === "SELLER" || userRole === "ADMIN";
     const isGuest = !session?.user;
     const { id, name, description, price, stock, image, manufacturer, category, requiresPrescription } = medicine;
     const isOutOfStock = stock === 0;
@@ -222,7 +223,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
 
                         {/* Interactive Action Interface */}
                         <div className="flex flex-col sm:flex-row gap-4">
-                            {!isSeller ? (
+                            {!isManagement ? (
                                 <motion.button
                                     whileHover={{ scale: 1.01 }}
                                     whileTap={{ scale: 0.99 }}
@@ -253,7 +254,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                 <div className="flex items-center gap-3 p-4 rounded-xl bg-primary/10 border border-primary/20 text-primary">
                                     <Info className="size-4 shrink-0" />
                                     <p className="text-[9px] font-bold uppercase tracking-widest leading-relaxed">
-                                        Supplier Restricted: Inventory management only available for designated customers.
+                                        Management Restricted: Inventory and system oversight protocols only. Purchasing disabled for {userRole} accounts.
                                     </p>
                                 </div>
                             )}

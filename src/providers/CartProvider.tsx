@@ -83,8 +83,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return;
         }
 
-        if ((session?.user as any)?.role === "SELLER") {
-            toast.error("Sellers cannot add items to cart");
+        const userRole = (session?.user as any)?.role;
+        if (userRole === "SELLER" || userRole === "ADMIN") {
+            toast.error("Management roles cannot add items to cart", {
+                description: "System administrators and sellers are restricted to management protocols only."
+            });
             return;
         }
 
