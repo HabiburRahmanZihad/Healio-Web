@@ -4,10 +4,7 @@ import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-import {
-  Accordion,
 
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -65,12 +62,6 @@ import { LogOut, ShoppingCart } from "lucide-react";
 import { useCart } from "@/providers/CartProvider";
 
 const Navbar = ({
-  logo = {
-    url: "https://www.shadcnblocks.com",
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg",
-    alt: "logo",
-    title: "Shadcnblocks.com",
-  },
   menu = [
     { title: "Home", url: "/" },
     { title: "Medicines", url: "/medicines" },
@@ -130,22 +121,17 @@ const Navbar = ({
 
   return (
     <section className={cn("sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md transition-all duration-200", className)}>
-      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+      <div className="px-2 md:px-4">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex h-20">
           {/* Left: Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-105">
-              <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
-                <img
-                  src={logo.src}
-                  className="size-7 invert"
-                  alt={logo.alt}
-                />
-              </div>
-              <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                Healio
-              </span>
+            <Link href="/" className="">
+              <img
+                src="/Healio_text_png.png"
+                alt="Healio"
+                className="h-14"
+              />
             </Link>
           </div>
 
@@ -176,7 +162,7 @@ const Navbar = ({
             {!session ? (
               <>
                 <div className="h-8 w-[1px] bg-border mx-2" />
-                <Button asChild variant="ghost" className="font-semibold text-muted-foreground hover:text-primary">
+                <Button asChild variant="ghost" className="font-semibold text-muted-foreground hover:text-accent hover:bg-accent/10 transition-colors">
                   <Link href={auth.login.url}>{auth.login.title}</Link>
                 </Button>
                 <Button asChild className="bg-primary hover:bg-primary/90 font-semibold shadow-md px-6 rounded-full">
@@ -209,14 +195,11 @@ const Navbar = ({
         <div className="flex items-center justify-between lg:hidden h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="bg-primary p-1.5 rounded-lg">
-              <img
-                src={logo.src}
-                className="size-6 invert"
-                alt={logo.alt}
-              />
-            </div>
-            <span className="text-xl font-bold tracking-tight">Healio</span>
+            <img
+              src="/Healio_text_png.png"
+              alt="Healio"
+              className="h-14"
+            />
           </Link>
           <div className="flex items-center gap-3">
             {/* Mobile Cart: Only for customers */}
@@ -241,14 +224,11 @@ const Navbar = ({
                 <SheetHeader className="text-left border-b pb-4">
                   <SheetTitle>
                     <Link href="/" className="flex items-center gap-2">
-                      <div className="bg-primary p-1.5 rounded-lg">
-                        <img
-                          src={logo.src}
-                          className="size-6 invert"
-                          alt={logo.alt}
-                        />
-                      </div>
-                      <span className="text-xl font-bold">Healio</span>
+                      <img
+                        src="/Healio_text_png.png"
+                        alt="Healio"
+                        className="h-14"
+                      />
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
@@ -260,10 +240,17 @@ const Navbar = ({
                   <div className="flex flex-col gap-4 pt-6 border-t font-sans">
                     {!session ? (
                       <>
-                        <Button asChild variant="outline" className="w-full h-11 text-base">
+                        <Button
+                          asChild
+                          variant="ghost"
+                          className="font-semibold text-muted-foreground hover:text-accent hover:bg-accent/10"
+                        >
                           <Link href={auth.login.url}>{auth.login.title}</Link>
                         </Button>
-                        <Button asChild className="w-full h-11 text-base bg-primary hover:bg-primary/90">
+                        <Button
+                          asChild
+                          className="bg-primary hover:bg-primary/90 text-white font-semibold px-6 rounded-full"
+                        >
                           <Link href={auth.signup.url}>{auth.signup.title}</Link>
                         </Button>
                       </>
@@ -303,9 +290,12 @@ const renderMenuItem = (item: MenuItem) => {
   return (
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
-        href={item.url}
         asChild
-        className="group inline-flex h-10 w-max items-center justify-center rounded-full bg-background/50 px-5 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+        className="inline-flex h-10 items-center justify-center rounded-full 
+        px-5 text-sm font-medium transition-colors
+        text-muted-foreground
+        hover:text-primary hover:bg-primary/10
+        focus:text-primary focus:bg-primary/10"
       >
         <Link href={item.url}>{item.title}</Link>
       </NavigationMenuLink>
@@ -318,7 +308,10 @@ const renderMobileMenuItem = (item: MenuItem) => {
     <Link
       key={item.title}
       href={item.url}
-      className="text-lg font-medium py-2 px-4 rounded-lg transition-colors hover:bg-muted hover:text-primary active:bg-muted/80"
+      className="text-lg font-medium py-2 px-4 rounded-lg 
+      text-muted-foreground
+      transition-colors
+      hover:text-primary hover:bg-primary/10"
     >
       {item.title}
     </Link>
