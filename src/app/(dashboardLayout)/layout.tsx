@@ -25,7 +25,7 @@ export default function DashboardLayout(
     }
 
     if (!session) {
-        return null; // Next.js middleware will handle the redirect
+        return null; // Next.js proxy will handle the redirect
     }
 
     const userInfo = {

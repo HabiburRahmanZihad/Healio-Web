@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Roles } from "@/constants/roles";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
 
     // Get session cookie from request
@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
     }
 
-    // Since we can't easily call our own API with full cookie support in middleware 
+    // Since we can't easily call our own API with full cookie support in proxy 
     // without potentially hitting double-proxy issues on some platforms,
     // we let the layout/page handle role-specific data fetching,
     // but we protect the routes here as a first layer.
