@@ -1,4 +1,4 @@
-import { Users, Pill, ShoppingCart, BarChart3, Settings, ShieldCheck } from "lucide-react";
+import { Users, Pill, ShoppingCart, BarChart3, Settings, ShieldCheck, User } from "lucide-react";
 
 export const adminRoutes = [
     {
@@ -37,15 +37,15 @@ export const adminRoutes = [
         ],
     },
     {
-        title: "System",
+        title: "Account",
         items: [
             {
-                title: "Permissions",
-                url: "/admin-dashboard/permissions",
-                icon: ShieldCheck
+                title: "Profile Settings",
+                url: "/admin-dashboard/profile",
+                icon: User
             },
             {
-                title: "Settings",
+                title: "System Settings",
                 url: "/admin-dashboard/settings",
                 icon: Settings
             },

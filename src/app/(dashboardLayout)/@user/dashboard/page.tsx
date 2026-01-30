@@ -49,28 +49,39 @@ export default function UserDashboard() {
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold text-white tracking-tight">
-                    Welcome back, <span className="text-primary">{session?.user.name}</span>!
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                    <div className="size-2 bg-primary rounded-full animate-pulse" />
+                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Operational Status: Active</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+                    Welcome, <span className="text-primary italic">{session?.user.name}</span>
                 </h1>
-                <p className="text-muted-foreground">Here's what's happening with your account today.</p>
+                <p className="text-sm text-muted-foreground font-medium max-w-2xl">
+                    Your pharmaceutical procurement interface is synchronized. Monitor your orders, points, and medical inventory from this central node.
+                </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, i) => {
                     const CardWrapper = stat.title === "Wishlist" ? ({ children }: { children: React.ReactNode }) => <Link href="/dashboard/wishlist">{children}</Link> : React.Fragment;
                     return (
                         <CardWrapper key={i}>
-                            <Card className="bg-white/5 border-white/10 overflow-hidden group hover:border-primary/50 transition-all cursor-pointer">
+                            <Card className="bg-white/[0.03] border-white/10 overflow-hidden group hover:border-primary/40 transition-all duration-500 cursor-pointer backdrop-blur-md relative">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                                    <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-widest">{stat.title}</CardTitle>
-                                    <div className={`${stat.bg} ${stat.color} p-2 rounded-lg group-hover:scale-110 transition-transform`}>
+                                    <CardTitle className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">{stat.title}</CardTitle>
+                                    <div className={`${stat.bg} ${stat.color} p-2 rounded-xl group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 border border-white/5 shadow-lg shadow-black/20`}>
                                         <stat.icon className="size-4" />
                                     </div>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold text-white">{stat.value}</div>
+                                    <div className="text-3xl font-black text-white tracking-tight">{stat.value}</div>
+                                    <div className="mt-2 flex items-center gap-1.5 grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all">
+                                        <div className="size-1 rounded-full bg-primary" />
+                                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none">Real-time Sync</span>
+                                    </div>
                                 </CardContent>
                             </Card>
                         </CardWrapper>
@@ -78,16 +89,20 @@ export default function UserDashboard() {
                 })}
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8">
-                <Card className="lg:col-span-2 bg-white/5 border-white/10 rounded-3xl overflow-hidden">
-                    <CardHeader className="p-8 border-b border-white/5 bg-white/[0.02] flex flex-row items-center justify-between">
-                        <div>
-                            <CardTitle className="text-xl text-white">Recent Orders</CardTitle>
-                            <p className="text-sm text-muted-foreground mt-1">Your last {recentOrders.length} purchases.</p>
+            <div className="grid xl:grid-cols-3 gap-8">
+                <Card className="xl:col-span-2 bg-white/[0.03] border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-md shadow-2xl">
+                    <CardHeader className="p-8 pb-4 border-b border-white/5 bg-white/[0.01] flex flex-row items-center justify-between">
+                        <div className="space-y-1">
+                            <CardTitle className="text-xl font-black text-white uppercase tracking-tight">Deployment History</CardTitle>
+                            <p className="text-[10px] font-medium text-gray-500 uppercase tracking-widest">Your last {recentOrders.length} acquisition cycles.</p>
                         </div>
-                        <Button variant="ghost" asChild className="text-primary hover:text-primary hover:bg-primary/10">
-                            <Link href="/dashboard/orders" className="flex items-center gap-2">
-                                View All <ArrowRight className="size-4" />
+                        <Button
+                            variant="ghost"
+                            asChild
+                            className="bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary rounded-xl border border-primary/20 transition-all active:scale-95"
+                        >
+                            <Link href="/dashboard/orders" className="flex items-center gap-2 font-black uppercase tracking-tighter text-xs">
+                                Access All <ArrowRight className="size-3.5" />
                             </Link>
                         </Button>
                     </CardHeader>
@@ -95,65 +110,76 @@ export default function UserDashboard() {
                         <div className="divide-y divide-white/5">
                             {recentOrders.length > 0 ? (
                                 recentOrders.map((order) => (
-                                    <div key={order.id} className="p-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors group">
-                                        <div className="flex items-center gap-4">
-                                            <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
-                                                <Package className="size-6" />
+                                    <div key={order.id} className="p-6 md:px-8 flex flex-wrap md:flex-nowrap items-center justify-between hover:bg-white/[0.04] transition-all duration-300 group">
+                                        <div className="flex items-center gap-6">
+                                            <div className="size-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl shadow-black/40">
+                                                <Package className="size-7" />
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-white">Order #{order.id.slice(-8).toUpperCase()}</p>
-                                                <p className="text-xs text-muted-foreground">
-                                                    {new Date(order.createdAt).toLocaleDateString()} • {order.items.length} item{order.items.length !== 1 ? 's' : ''}
-                                                </p>
+                                                <p className="font-black text-white uppercase tracking-tight text-lg">Order #{order.id.slice(-8).toUpperCase()}</p>
+                                                <div className="flex items-center gap-3 mt-1">
+                                                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{new Date(order.createdAt).toLocaleDateString()}</span>
+                                                    <div className="size-1 bg-white/10 rounded-full" />
+                                                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest">{order.items.length} units</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="text-right flex flex-col items-end gap-2">
-                                            <p className="font-bold text-white">৳{order.totalPrice.toLocaleString()}</p>
-                                            <span className={cn(
-                                                "text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border",
-                                                order.status === "DELIVERED" ? "bg-green-500/10 text-green-500 border-green-500/20" :
-                                                    order.status === "CANCELLED" ? "bg-red-500/10 text-red-500 border-red-500/20" :
-                                                        "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                                        <div className="w-full md:w-auto mt-4 md:mt-0 flex items-center justify-between md:flex-col md:items-end gap-3 px-4 md:px-0">
+                                            <p className="font-black text-2xl text-white tracking-tighter leading-none">৳{order.totalPrice.toLocaleString()}</p>
+                                            <div className={cn(
+                                                "text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border shadow-lg transition-colors",
+                                                order.status === "DELIVERED" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-emerald-500/5" :
+                                                    order.status === "CANCELLED" ? "bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-rose-500/5" :
+                                                        "bg-sky-500/10 text-sky-400 border-sky-500/20 shadow-sky-500/5"
                                             )}>
                                                 {order.status}
-                                            </span>
+                                            </div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="p-12 text-center text-muted-foreground">
-                                    No orders found.
+                                <div className="p-20 text-center space-y-4">
+                                    <div className="size-16 bg-white/[0.02] border border-white/5 rounded-full flex items-center justify-center mx-auto text-gray-700">
+                                        <ShoppingBag className="size-8" />
+                                    </div>
+                                    <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">No active acquisition logs found.</p>
                                 </div>
                             )}
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-primary/20 to-pink-600/10 border-primary/20 rounded-3xl overflow-hidden relative group">
-                    <div className="absolute -top-12 -right-12 size-48 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-all duration-500" />
-                    <CardHeader className="p-8">
-                        <CardTitle className="text-2xl text-white font-bold mb-4">Healio Premium</CardTitle>
-                        <p className="text-muted-foreground leading-relaxed">
-                            Get exclusive discounts, free shipping, and early access to new medicines with our premium membership.
+                <Card className="bg-gradient-to-br from-primary/30 to-blue-900/20 border-primary/20 rounded-[2.5rem] overflow-hidden relative group shadow-2xl backdrop-blur-xl border flex flex-col">
+                    <div className="absolute -top-12 -right-12 size-48 bg-primary/20 rounded-full blur-[80px] group-hover:bg-primary/40 transition-all duration-700" />
+                    <div className="absolute -bottom-12 -left-12 size-48 bg-blue-600/20 rounded-full blur-[80px] group-hover:bg-blue-600/40 transition-all duration-700" />
+
+                    <CardHeader className="p-10 pb-6 relative">
+                        <div className="size-14 bg-white/10 rounded-2xl flex items-center justify-center text-primary border border-white/10 mb-6 shadow-xl shadow-black/20 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                            <Star className="size-7" />
+                        </div>
+                        <CardTitle className="text-3xl text-white font-black uppercase tracking-tighter leading-tight">Healio <br /><span className="text-primary italic">Premium</span></CardTitle>
+                        <p className="text-sm text-gray-400 font-medium leading-relaxed mt-4">
+                            Unlock advanced logistics protocols: zero-cost delivery, prioritized consultation, and exclusive price indexing.
                         </p>
                     </CardHeader>
-                    <CardContent className="p-8 pt-0">
-                        <ul className="space-y-4 mb-8">
-                            <li className="flex items-center gap-3 text-sm text-white/80">
-                                <CheckCircle2 className="size-5 text-primary" />
-                                10% Off on All Medicines
-                            </li>
-                            <li className="flex items-center gap-3 text-sm text-white/80">
-                                <CheckCircle2 className="size-5 text-primary" />
-                                Unlimited Free Shipping
-                            </li>
-                            <li className="flex items-center gap-3 text-sm text-white/80">
-                                <CheckCircle2 className="size-5 text-primary" />
-                                24/7 Digital Consultation
-                            </li>
-                        </ul>
-                        <Button className="w-full h-14 bg-white text-primary hover:bg-gray-100 font-bold text-lg rounded-2xl shadow-xl transition-all active:scale-95">
-                            Upgrade Now
+                    <CardContent className="p-10 pt-0 relative flex-1 flex flex-col">
+                        <div className="space-y-5 mb-10 flex-1">
+                            {[
+                                "10% Deflated Asset Costs",
+                                "Zero-Cost Logistics (Free Shipping)",
+                                "24/7 Neural Consultation Link"
+                            ].map((feature, i) => (
+                                <div key={i} className="flex items-center gap-4 text-xs font-bold text-white/70 group/item">
+                                    <div className="size-5 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/30 group-hover/item:scale-110 transition-transform">
+                                        <CheckCircle2 className="size-3" />
+                                    </div>
+                                    <span className="uppercase tracking-widest">{feature}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <Button className="w-full h-16 bg-white text-zinc-950 hover:bg-primary hover:text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-2xl transition-all active:scale-95 group/btn overflow-hidden relative border-none">
+                            <div className="absolute inset-0 bg-primary translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
+                            <span className="relative z-10">Initiate Upgrade Protocol</span>
                         </Button>
                     </CardContent>
                 </Card>

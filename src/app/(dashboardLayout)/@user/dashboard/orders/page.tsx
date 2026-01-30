@@ -1,7 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { orderService, Order } from "@/services/order.service";
+import { medicineService } from "@/services/medicine.service";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -9,11 +11,13 @@ import { Loader2, Package, Truck, CheckCircle, XCircle, Clock, ChevronRight } fr
 import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Medicine } from "@/types/medicine.type";
 
 export default function OrdersPage() {
     const router = useRouter();
     const { data: session, isPending: sessionPending } = authClient.useSession();
     const [orders, setOrders] = useState<Order[]>([]);
+    const [medicines, setMedicines] = useState<Record<string, Medicine>>({});
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -29,8 +33,34 @@ export default function OrdersPage() {
             const { data, error } = await orderService.getMyOrders();
             if (error) {
                 toast.error(error);
-            } else {
-                setOrders(data || []);
+            } else if (data) {
+                setOrders(data);
+
+                // Extract unique medicine IDs that need enrichment
+                const missingIds = new Set<string>();
+                data.forEach(order => {
+                    order.items.forEach(item => {
+                        if (!item.medicine || !item.medicine.name) {
+                            missingIds.add(item.medicineId);
+                        }
+                    });
+                });
+
+                if (missingIds.size > 0) {
+                    const fetched: Record<string, Medicine> = {};
+                    await Promise.all(Array.from(missingIds).map(async (mid) => {
+                        const { data: mData } = await medicineService.getMedicineById(mid);
+                        if (mData) {
+                            fetched[mid] = {
+                                ...mData,
+                                id: mData.id || (mData as any).medicine_id,
+                                name: mData.name,
+                                image: mData.image
+                            } as Medicine;
+                        }
+                    }));
+                    setMedicines(prev => ({ ...prev, ...fetched }));
+                }
             }
             setIsLoading(false);
         };
@@ -70,58 +100,98 @@ export default function OrdersPage() {
 
     if (orders.length === 0) {
         return (
-            <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-6">
-                <div className="p-6 bg-white/5 rounded-full border border-white/10">
-                    <Package className="size-16 text-gray-400" />
+            <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-8 animate-in fade-in duration-700">
+                <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 blur-[50px] rounded-full animate-pulse" />
+                    <div className="relative p-8 bg-zinc-900/50 backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-2xl">
+                        <Package className="size-20 text-gray-500" />
+                    </div>
                 </div>
-                <div className="text-center space-y-2">
-                    <h1 className="text-2xl font-bold text-white">No orders yet</h1>
-                    <p className="text-gray-400 max-w-xs">
-                        You haven't placed any orders yet. Start shopping to see your orders here.
+                <div className="text-center space-y-3">
+                    <h1 className="text-3xl font-black text-white uppercase tracking-tighter">No Acquisition Logs</h1>
+                    <p className="text-sm text-gray-500 max-w-sm font-medium leading-relaxed">
+                        Your pharmaceutical acquisition history is currently empty. Initialize a procurement protocol to see logs here.
                     </p>
                 </div>
-                <Button asChild className="bg-primary hover:bg-primary/90 rounded-xl px-8">
-                    <Link href="/medicines">Explore Medicines</Link>
+                <Button asChild className="h-14 bg-primary hover:bg-primary/90 rounded-2xl px-10 text-xs font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition-all active:scale-95">
+                    <Link href="/medicines">Initialize Procurement</Link>
                 </Button>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold text-white">My Orders</h1>
-                <p className="text-muted-foreground">Track and manage your recent purchases.</p>
-            </div>
+        <div className="space-y-12 py-6 max-w-6xl mx-auto">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex flex-col md:flex-row md:items-end justify-between gap-8"
+            >
+                <div className="space-y-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[10px] font-black uppercase tracking-[0.2em]">
+                        <Activity className="size-3" />
+                        <span>Transaction Ledger Alpha</span>
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+                        My <span className="text-primary italic">Orders</span>
+                    </h1>
+                    <p className="text-sm text-muted-foreground font-medium max-w-xl">
+                        A centralized log of all pharmaceutical procurement protocols initiated under your authorization signature.
+                    </p>
+                </div>
 
-            <div className="space-y-4">
-                {orders.map((order) => (
-                    <div
+                <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-md flex items-center gap-6">
+                    <div className="text-right">
+                        <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest leading-none mb-1">Total Protocols</p>
+                        <p className="text-xl font-black text-white leading-none">{orders.length}</p>
+                    </div>
+                    <div className="w-px h-8 bg-white/10" />
+                    <div className="text-right">
+                        <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest leading-none mb-1">Active Status</p>
+                        <p className="text-xl font-black text-emerald-500 leading-none">Healthy</p>
+                    </div>
+                </div>
+            </motion.div>
+
+            <div className="space-y-6">
+                {orders.map((order, index) => (
+                    <motion.div
                         key={order.id}
-                        className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 transition-all duration-300 hover:border-primary/30 group"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="p-8 rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 transition-all duration-500 hover:border-primary/40 group overflow-hidden relative"
                     >
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="space-y-1">
-                                <div className="flex items-center gap-3">
-                                    <span className="text-sm text-gray-400 font-mono">#{order.id.slice(-8).toUpperCase()}</span>
+                        <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/5 to-transparent skew-x-12 translate-x-1/2 -z-10 group-hover:from-primary/10 transition-colors" />
+
+                        <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-8">
+                            <div className="space-y-4">
+                                <div className="flex flex-wrap items-center gap-4">
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-xl border border-white/10 shadow-inner">
+                                        <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Protocol ID</span>
+                                        <span className="text-xs font-black text-white font-mono tracking-tight uppercase">#{order.id.slice(-8)}</span>
+                                    </div>
                                     <div className={cn(
-                                        "flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border",
+                                        "flex items-center gap-2 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-xl transition-all",
                                         getStatusColor(order.status)
                                     )}>
                                         {getStatusIcon(order.status)}
                                         {order.status}
                                     </div>
                                 </div>
-                                <p className="text-xs text-gray-500">Ordered on {new Date(order.createdAt).toLocaleDateString()}</p>
+                                <div className="flex items-center gap-3">
+                                    <Calendar className="size-3.5 text-gray-600" />
+                                    <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest leading-none uppercase">Initialized: {new Date(order.createdAt).toLocaleDateString()}</span>
+                                </div>
                             </div>
 
-                            <div className="flex items-center justify-between md:justify-end gap-12">
+                            <div className="flex items-center gap-12 w-full md:w-auto justify-between md:justify-end">
                                 <div className="text-right">
-                                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Total Price</p>
-                                    <p className="text-xl font-bold text-white">৳{order.totalPrice.toFixed(2)}</p>
+                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-2 leading-none">Index Valuation</p>
+                                    <p className="text-3xl font-black text-white tracking-tighter leading-none">৳{order.totalPrice.toFixed(2)}</p>
                                 </div>
-                                <Button asChild variant="ghost" className="rounded-xl group/btn hover:bg-primary/10 hover:text-primary transition-all">
-                                    <Link href={`/dashboard/orders/${order.id}`} className="flex items-center gap-2">
+                                <Button asChild variant="ghost" className="h-14 rounded-2xl bg-white/5 hover:bg-primary/10 hover:text-primary transition-all duration-300 border border-white/5 hover:border-primary/20 group/btn px-6">
+                                    <Link href={`/dashboard/orders/${order.id}`} className="flex items-center gap-3 font-black uppercase tracking-tighter text-xs">
                                         View Details
                                         <ChevronRight className="size-4 group-hover/btn:translate-x-1 transition-transform" />
                                     </Link>
@@ -130,21 +200,45 @@ export default function OrdersPage() {
                         </div>
 
                         {/* Quick View Items */}
-                        <div className="mt-6 flex gap-3 overflow-x-auto pb-2 scrollbar-none border-t border-white/5 pt-4">
-                            {order.items.map((item, idx) => (
-                                <div key={idx} className="relative size-14 rounded-xl overflow-hidden flex-shrink-0 bg-white/5 border border-white/10" title={item.medicine?.name || "Medicine Removed"}>
-                                    <img src={item.medicine?.image || "/placeholder-medicine.png"} alt={item.medicine?.name || "Medicine"} className="object-cover size-full group-hover:scale-110 transition-transform duration-500" />
-                                    {item.quantity > 1 && (
-                                        <span className="absolute bottom-0 right-0 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-tl-lg border-t border-l border-background">
+                        <div className="mt-8 flex flex-wrap gap-4 scrollbar-none pt-6 border-t border-white/10">
+                            {order.items.map((item, idx) => {
+                                const mData = item.medicine || medicines[item.medicineId];
+                                return (
+                                    <div
+                                        key={idx}
+                                        className="group/item relative h-16 px-4 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center gap-3 hover:bg-white/[0.08] hover:border-primary/30 transition-all duration-300"
+                                    >
+                                        <div className="size-10 rounded-xl overflow-hidden bg-black/20 border border-white/5 flex-shrink-0 shadow-lg group-hover/item:scale-110 transition-transform">
+                                            <img
+                                                src={mData?.image || "/placeholder-medicine.png"}
+                                                alt={mData?.name || "Medicine"}
+                                                className="object-cover size-full"
+                                            />
+                                        </div>
+                                        <div className="min-w-0 pr-2">
+                                            <p className="text-[10px] font-black text-white uppercase tracking-tight truncate max-w-[120px]">
+                                                {mData?.name || "REMOVED"}
+                                            </p>
+                                            <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">Quantity: {item.quantity}</p>
+                                        </div>
+                                        <div className="absolute -top-1.5 -right-1.5 size-5 bg-primary text-white text-[9px] font-black flex items-center justify-center rounded-lg shadow-lg border border-white/10 opacity-0 group-hover/item:opacity-100 transition-opacity">
                                             x{item.quantity}
-                                        </span>
-                                    )}
-                                </div>
-                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
         </div>
     );
 }
+
+const Activity = ({ className }: { className: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+)
+
+const Calendar = ({ className }: { className: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2" /><line x1="16" x2="16" y1="2" y2="6" /><line x1="8" x2="8" y1="2" y2="6" /><line x1="3" x2="21" y1="10" y2="10" /></svg>
+)
