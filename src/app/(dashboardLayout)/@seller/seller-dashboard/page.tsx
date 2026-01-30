@@ -69,10 +69,10 @@ export default function SellerDashboard() {
                         <Activity className="size-3 animate-pulse" />
                         <span>Store Status: Synchronized</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
                         Merchant <span className="text-primary italic">Overview</span>
                     </h1>
-                    <p className="text-sm text-muted-foreground font-medium max-w-xl">
+                    <p className="text-xs md:text-sm text-muted-foreground font-medium max-w-xl">
                         Manage your pharmaceutical inventory and track acquisition cycles for <span className="text-white font-bold">{session?.user.name}</span>.
                     </p>
                 </div>
@@ -108,9 +108,9 @@ export default function SellerDashboard() {
 
             <div className="grid xl:grid-cols-3 gap-10">
                 <Card className="xl:col-span-2 bg-white/[0.03] border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-md shadow-2xl">
-                    <CardHeader className="p-10 pb-4 border-b border-white/5 bg-white/[0.01] flex flex-row items-center justify-between">
+                    <CardHeader className="p-6 md:p-10 pb-4 border-b border-white/5 bg-white/[0.01] flex flex-row items-center justify-between">
                         <div className="space-y-1">
-                            <CardTitle className="text-2xl font-black text-white uppercase tracking-tight">Active Transmissions</CardTitle>
+                            <CardTitle className="text-xl md:text-2xl font-black text-white uppercase tracking-tight">Active Transmissions</CardTitle>
                             <p className="text-[10px] font-medium text-gray-500 uppercase tracking-widest">Incoming orders requiring processing.</p>
                         </div>
                         <Button variant="ghost" asChild className="bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary rounded-xl border border-primary/20 transition-all">
@@ -123,7 +123,7 @@ export default function SellerDashboard() {
                         <div className="divide-y divide-white/5">
                             {recentOrders.length > 0 ? (
                                 recentOrders.map((order) => (
-                                    <div key={order.id} className="p-6 px-10 flex flex-wrap md:flex-nowrap items-center justify-between hover:bg-white/[0.05] transition-all duration-300 group">
+                                    <div key={order.id} className="p-6 md:px-10 flex flex-wrap md:flex-nowrap items-center justify-between hover:bg-white/[0.05] transition-all duration-300 group">
                                         <div className="flex items-center gap-6">
                                             <div className="size-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-orange-400 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl shadow-black/40">
                                                 <Package className="size-7" />
@@ -163,7 +163,7 @@ export default function SellerDashboard() {
                 </Card>
 
                 <Card className="bg-white/[0.03] border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-md shadow-2xl">
-                    <CardHeader className="p-10 pb-4 border-b border-white/5 bg-white/[0.01]">
+                    <CardHeader className="p-6 md:p-10 pb-4 border-b border-white/5 bg-white/[0.01]">
                         <CardTitle className="text-xl font-black text-white uppercase tracking-tight">Stock Warnings</CardTitle>
                         <p className="text-[10px] font-medium text-gray-500 uppercase tracking-widest">Inventory depletion alerts.</p>
                     </CardHeader>

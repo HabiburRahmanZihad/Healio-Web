@@ -132,10 +132,10 @@ export default function OrdersPage() {
                         <Activity className="size-3" />
                         <span>Transaction Ledger Alpha</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
                         My <span className="text-primary italic">Orders</span>
                     </h1>
-                    <p className="text-sm text-muted-foreground font-medium max-w-xl">
+                    <p className="text-xs md:text-sm text-muted-foreground font-medium max-w-xl">
                         A centralized log of all pharmaceutical procurement protocols initiated under your authorization signature.
                     </p>
                 </div>
@@ -160,7 +160,7 @@ export default function OrdersPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className="p-8 rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 transition-all duration-500 hover:border-primary/40 group overflow-hidden relative"
+                        className="p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 transition-all duration-500 hover:border-primary/40 group overflow-hidden relative"
                     >
                         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/5 to-transparent skew-x-12 translate-x-1/2 -z-10 group-hover:from-primary/10 transition-colors" />
 

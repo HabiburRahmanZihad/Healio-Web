@@ -85,7 +85,7 @@ export default function ProfilePage() {
                 initial={{ opacity: 0, scale: 0.98, y: -20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="relative p-10 rounded-[3rem] bg-zinc-950/40 border border-white/5 backdrop-blur-3xl overflow-hidden group"
+                className="relative p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] bg-zinc-950/40 border border-white/5 backdrop-blur-3xl overflow-hidden group"
             >
                 {/* Background Tech Mesh */}
                 <div className="absolute inset-0 opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-1000">
@@ -105,10 +105,10 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="space-y-3">
-                            <h1 className="text-5xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-[0.85]">
+                            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black text-white tracking-tighter uppercase leading-[0.85]">
                                 Identity <span className="text-primary italic">Nexus</span>
                             </h1>
-                            <p className="text-sm md:text-base text-gray-400 font-medium max-w-xl leading-relaxed">
+                            <p className="text-xs md:text-sm md:text-base text-gray-400 font-medium max-w-xl leading-relaxed">
                                 Managed synchronization of your core parameters within the Healio Decentralized Protocol. Ensure all identification markers are verified.
                             </p>
                         </div>
@@ -146,11 +146,11 @@ export default function ProfilePage() {
             <div className="grid lg:grid-cols-12 gap-10">
                 {/* Main Configuration Core */}
                 <div className="lg:col-span-8 space-y-10">
-                    <div className="relative rounded-[3rem] bg-zinc-950/40 border border-white/5 overflow-hidden">
+                    <div className="relative rounded-[2rem] md:rounded-[3rem] bg-zinc-950/40 border border-white/5 overflow-hidden">
                         {/* Section Header */}
-                        <div className="p-10 border-b border-white/5 flex items-center justify-between">
+                        <div className="p-6 md:p-10 border-b border-white/5 flex items-center justify-between">
                             <div className="space-y-1">
-                                <h3 className="text-2xl font-black text-white uppercase tracking-tight">Core Configuration</h3>
+                                <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tight">Core Configuration</h3>
                                 <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Identification & Communication Matrix</p>
                             </div>
                             <div className="size-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-gray-500">
@@ -158,7 +158,7 @@ export default function ProfilePage() {
                             </div>
                         </div>
 
-                        <div className="p-10">
+                        <div className="p-6 md:p-10">
                             <form onSubmit={handleSave} className="space-y-10">
                                 <div className="grid md:grid-cols-2 gap-10">
                                     {/* Moniker Input */}
@@ -268,7 +268,7 @@ export default function ProfilePage() {
                 <div className="lg:col-span-4 space-y-10">
                     <motion.div
                         whileHover={{ y: -5 }}
-                        className="p-10 rounded-[3rem] bg-gradient-to-br from-primary/20 to-blue-600/10 border border-primary/20 shadow-2xl space-y-6 relative overflow-hidden group"
+                        className="p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] bg-gradient-to-br from-primary/20 to-blue-600/10 border border-primary/20 shadow-2xl space-y-6 relative overflow-hidden group"
                     >
                         <div className="absolute top-0 right-0 p-6 opacity-10 rotate-12 transition-transform group-hover:rotate-0 duration-700">
                             <Shield className="size-24 text-white" />
@@ -289,7 +289,7 @@ export default function ProfilePage() {
                         </div>
                     </motion.div>
 
-                    <div className="p-10 rounded-[3rem] border border-white/5 bg-zinc-950/40 space-y-8">
+                    <div className="p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/5 bg-zinc-950/40 space-y-8">
                         <div>
                             <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">Metadata Manifest</p>
                             <div className="space-y-6">

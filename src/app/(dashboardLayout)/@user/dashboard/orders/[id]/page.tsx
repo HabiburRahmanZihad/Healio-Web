@@ -138,14 +138,14 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                         Return to Ledger
                     </Link>
                     <div className="space-y-2">
-                        <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
                             Order <span className="text-primary italic">Protocol</span>
                         </h1>
-                        <p className="text-sm text-muted-foreground font-mono tracking-widest uppercase">Signature Reference: #{order.id}</p>
+                        <p className="text-[10px] md:text-sm text-muted-foreground font-mono tracking-widest uppercase">Signature Reference: #{order.id}</p>
                     </div>
                 </div>
                 <div className={cn(
-                    "flex items-center gap-3 px-8 py-3 rounded-2xl border text-xs font-black uppercase tracking-widest shadow-2xl backdrop-blur-md transition-all",
+                    "flex-shrink-0 flex items-center gap-3 px-6 md:px-8 py-3 rounded-2xl border text-[10px] md:text-xs font-black uppercase tracking-widest shadow-2xl backdrop-blur-md transition-all",
                     getStatusColor(order.status)
                 )}>
                     {getStatusIcon(order.status)}
@@ -155,9 +155,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
 
             {/* Protocol Stepper */}
             {!isCancelled && (
-                <div className="p-10 rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 relative overflow-hidden group">
+                <div className="p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px] -z-10" />
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative z-10">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-8 relative z-10">
                         {steps.map((step, idx) => {
                             const isCompleted = currentStep >= idx;
                             const isCurrent = currentStep === idx;
@@ -214,9 +214,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
             <div className="grid lg:grid-cols-3 gap-10 items-start">
                 {/* Left Column: Line Items */}
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="p-10 rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 overflow-hidden relative">
+                    <div className="p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 overflow-hidden relative">
                         <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
+                            <h2 className="text-lg md:text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
                                 <Package className="size-5 text-primary" />
                                 Acquisition Manifest
                             </h2>
@@ -307,7 +307,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
 
                 {/* Right Column: Information Nodes */}
                 <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-700 delay-300">
-                    <div className="p-10 rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 space-y-10 group">
+                    <div className="p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-xl border border-white/10 space-y-8 md:space-y-10 group">
                         <div className="space-y-8 relative z-10">
                             <div className="flex gap-5">
                                 <div className="size-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-lg shadow-primary/10">

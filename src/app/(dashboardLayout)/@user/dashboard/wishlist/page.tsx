@@ -45,11 +45,11 @@ export default function WishlistPage() {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-6 p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 backdrop-blur-md">
+                <div className="flex items-center gap-6 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/[0.02] border border-white/5 backdrop-blur-md">
                     <div className="flex flex-col">
                         <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Total Assets</span>
                         <div className="flex items-baseline gap-2">
-                            <span className="text-3xl font-black text-white">{wishlist.length}</span>
+                            <span className="text-2xl md:text-3xl font-black text-white">{wishlist.length}</span>
                             <span className="text-[10px] font-bold text-primary uppercase">Nodes</span>
                         </div>
                     </div>
@@ -119,7 +119,7 @@ export default function WishlistPage() {
                                     </div>
 
                                     {/* Content Mesh */}
-                                    <div className="p-8 flex flex-col flex-1 gap-6">
+                                    <div className="p-6 md:p-8 flex flex-col flex-1 gap-6">
                                         <div className="space-y-3">
                                             <div className="flex items-center gap-2 text-[9px] font-black text-gray-500 uppercase tracking-widest">
                                                 <Activity className="size-3 text-primary" />
@@ -165,7 +165,7 @@ export default function WishlistPage() {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="p-32 rounded-[3.5rem] bg-zinc-900/40 backdrop-blur-xl border-4 border-dashed border-white/5 flex flex-col items-center text-center gap-10"
+                    className="p-12 md:p-32 rounded-[2rem] md:rounded-[3.5rem] bg-zinc-900/40 backdrop-blur-xl border-4 border-dashed border-white/5 flex flex-col items-center text-center gap-10"
                 >
                     <div className="relative">
                         <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
