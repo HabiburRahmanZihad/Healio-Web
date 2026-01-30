@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { orderService, Order } from "@/services/order.service";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Package, Truck, CheckCircle, Clock, ShoppingBag, Loader2, AlertCircle, ChevronDown, User, MapPin, X } from "lucide-react";
+import {
+    Package, Truck, CheckCircle, Clock, ShoppingBag, Loader2,
+    AlertCircle, ChevronDown, User, MapPin, X, Terminal,
+    Activity, ShieldCheck, Box, Zap, ExternalLink
+} from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -13,6 +17,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function SellerOrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -32,181 +37,317 @@ export default function SellerOrdersPage() {
     }, []);
 
     const handleStatusUpdate = async (orderId: string, newStatus: string) => {
-        const toastId = toast.loading(`Updating order status to ${newStatus}...`);
+        const toastId = toast.loading(`Initiating ${getTechnicalStatus(newStatus)} protocol...`);
         const res = await orderService.updateOrderStatus(orderId, newStatus);
 
         if (!res.error) {
-            toast.success("Order status updated", { id: toastId });
+            toast.success("Protocol updated successfully", { id: toastId });
             setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus as any } : o));
         } else {
-            toast.error(res.error || "Failed to update status", { id: toastId });
+            toast.error(res.error || "Protocol sync failed", { id: toastId });
         }
     };
 
-    if (isLoading) {
-        return (
-            <div className="min-h-[60vh] flex items-center justify-center">
-                <Loader2 className="size-8 animate-spin text-primary" />
-            </div>
-        );
-    }
+    const getTechnicalStatus = (status: string) => {
+        switch (status) {
+            case "PLACED": return "AWAITING_UPLINK";
+            case "SHIPPED": return "LOGISTICS_DISPATCHED";
+            case "DELIVERED": return "PROTOCOL_COMPLETE";
+            case "CANCELLED": return "VOID_TERMINATED";
+            default: return "UNKNOWN_STATUS";
+        }
+    };
 
     const getStatusIcon = (status: string) => {
         switch (status) {
-            case "PLACED": return <Clock className="size-4" />;
-            case "SHIPPED": return <Truck className="size-4" />;
-            case "DELIVERED": return <CheckCircle className="size-4" />;
-            case "CANCELLED": return <AlertCircle className="size-4" />;
-            default: return <Clock className="size-4" />;
+            case "PLACED": return <Clock className="size-3.5" />;
+            case "SHIPPED": return <Truck className="size-3.5" />;
+            case "DELIVERED": return <CheckCircle className="size-3.5" />;
+            case "CANCELLED": return <X className="size-3.5" />;
+            default: return <Clock className="size-3.5" />;
         }
     };
 
-    const getStatusClass = (status: string) => {
+    const getStatusColor = (status: string) => {
         switch (status) {
-            case "PLACED": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-            case "SHIPPED": return "bg-orange-500/10 text-orange-500 border-orange-500/20";
-            case "DELIVERED": return "bg-green-500/10 text-green-500 border-green-500/20";
-            case "CANCELLED": return "bg-red-500/10 text-red-500 border-red-500/20";
-            default: return "bg-zinc-500/10 text-zinc-500 border-zinc-500/20";
+            case "PLACED": return "text-blue-400 border-blue-500/30 bg-blue-500/10 shadow-[0_0_15px_rgba(59,130,246,0.2)]";
+            case "SHIPPED": return "text-amber-400 border-amber-500/30 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.2)]";
+            case "DELIVERED": return "text-emerald-400 border-emerald-500/30 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.2)]";
+            case "CANCELLED": return "text-rose-400 border-rose-500/30 bg-rose-500/10 shadow-[0_0_15px_rgba(244,63,94,0.2)]";
+            default: return "text-zinc-400 border-zinc-500/30 bg-zinc-500/10";
         }
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col gap-1">
-                <h1 className="text-3xl font-bold text-white tracking-tight">Incoming Orders</h1>
-                <p className="text-muted-foreground">Manage and process orders from your customers.</p>
+        <div className="max-w-6xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 pb-20 px-4 md:px-0">
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div className="space-y-4">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[9px] font-black uppercase tracking-[0.2em]"
+                    >
+                        <Terminal className="size-3" />
+                        <span>Fulfillment Node: active</span>
+                    </motion.div>
+                    <motion.h1
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase"
+                    >
+                        Incoming <span className="text-primary italic">Orders</span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-sm text-muted-foreground font-medium"
+                    >
+                        Process and manage the <span className="text-white font-bold">Fulfillment Protocol Registry</span> for incoming shipments.
+                    </motion.p>
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="flex items-center gap-4 bg-zinc-950/40 px-6 py-3 rounded-2xl border border-white/5 backdrop-blur-md"
+                >
+                    <Activity className="size-4 text-primary animate-pulse" />
+                    <div className="flex flex-col">
+                        <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Active Links</span>
+                        <span className="text-xs font-bold text-white">{orders.length} Protocols</span>
+                    </div>
+                </motion.div>
             </div>
 
-            <div className="grid gap-6">
-                {orders.length > 0 ? (
-                    orders.map((order) => (
-                        <Card key={order.id} className="bg-white/5 border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm group hover:border-primary/30 transition-all shadow-lg">
-                            <CardHeader className="p-6 border-b border-white/5 bg-white/[0.02] flex flex-row items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
-                                        <ShoppingBag className="size-6" />
-                                    </div>
-                                    <div>
-                                        <div className="flex items-center gap-2">
-                                            <CardTitle className="text-lg text-white">Order #{order.id.slice(-8).toUpperCase()}</CardTitle>
-                                            <span className={cn(
-                                                "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
-                                                getStatusClass(order.status)
-                                            )}>
-                                                {getStatusIcon(order.status)}
-                                                {order.status}
-                                            </span>
-                                        </div>
-                                        <CardDescription className="flex items-center gap-2 mt-1">
-                                            <Clock className="size-3" />
-                                            {new Date(order.createdAt).toLocaleString()}
-                                        </CardDescription>
-                                    </div>
+            <div className="grid gap-8">
+                <AnimatePresence mode="popLayout">
+                    {isLoading ? (
+                        <div className="min-h-[40vh] flex flex-col items-center justify-center gap-4">
+                            <div className="relative">
+                                <div className="size-16 rounded-full border-t-2 border-primary animate-spin" />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <Box className="size-6 text-primary/50" />
                                 </div>
-                                <div className="text-right">
-                                    <div className="text-2xl font-bold text-white">৳{order.totalPrice.toFixed(2)}</div>
-                                    <p className="text-xs text-muted-foreground">{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</p>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="p-6">
-                                <div className="grid md:grid-cols-2 gap-8">
-                                    <div className="space-y-4">
-                                        <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Order Items</h4>
-                                        <div className="space-y-3">
-                                            {order.items.map((item, idx) => (
-                                                <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5">
-                                                    <div className="size-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                                                        <img src={item.medicine?.image || "/placeholder-medicine.png"} alt={item.medicine?.name || "Medicine"} className="object-cover size-full" />
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-bold text-white truncate">{item.medicine?.name || "Unknown Medicine"}</p>
-                                                        <p className="text-xs text-muted-foreground">Quantity: {item.quantity}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="space-y-6">
-                                        <div className="space-y-4">
-                                            <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Shipping Details</h4>
-                                            <div className="space-y-3 text-sm">
-                                                <div className="flex items-start gap-2 text-white">
-                                                    <MapPin className="size-4 text-primary shrink-0 mt-0.5" />
-                                                    <span className="leading-relaxed">{order.address}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="pt-6 border-t border-white/5">
-                                            <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Update Status</h4>
-                                            <div className="flex items-center gap-3">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="outline" className="bg-white/5 border-white/10 h-11 rounded-xl flex-1 justify-between hover:bg-white/10 group">
-                                                            <span className="flex items-center gap-2">
-                                                                {getStatusIcon(order.status)}
-                                                                Change Status
-                                                            </span>
-                                                            <ChevronDown className="size-4 opacity-50 group-data-[state=open]:rotate-180 transition-transform" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="w-[200px] rounded-xl">
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleStatusUpdate(order.id, "PLACED")}
-                                                            className="flex items-center gap-2 py-2.5 rounded-lg"
-                                                            disabled={order.status === "PLACED"}
-                                                        >
-                                                            <Clock className="size-4 text-blue-500" />
-                                                            <span>Placed</span>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleStatusUpdate(order.id, "SHIPPED")}
-                                                            className="flex items-center gap-2 py-2.5 rounded-lg"
-                                                            disabled={order.status === "SHIPPED"}
-                                                        >
-                                                            <Truck className="size-4 text-orange-500" />
-                                                            <span>Shipped</span>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleStatusUpdate(order.id, "DELIVERED")}
-                                                            className="flex items-center gap-2 py-2.5 rounded-lg"
-                                                            disabled={order.status === "DELIVERED"}
-                                                        >
-                                                            <CheckCircle className="size-4 text-green-500" />
-                                                            <span>Delivered</span>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            onClick={() => handleStatusUpdate(order.id, "CANCELLED")}
-                                                            className="flex items-center gap-2 py-2.5 rounded-lg text-red-500 focus:text-red-500"
-                                                            disabled={order.status === "CANCELLED"}
-                                                        >
-                                                            <X className="size-4" />
-                                                            <span>Cancelled</span>
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))
-                ) : (
-                    <Card className="bg-white/5 border-white/10 border-dashed rounded-3xl p-20 text-center">
-                        <div className="flex flex-col items-center gap-4">
-                            <div className="size-20 rounded-full bg-white/5 flex items-center justify-center text-muted-foreground mb-2">
-                                <ShoppingBag className="size-10 opacity-20" />
                             </div>
-                            <h3 className="text-xl font-bold text-white">No orders yet</h3>
-                            <p className="text-muted-foreground max-w-sm mx-auto">
-                                When customers purchase your medicines, they will appear here for you to fulfill.
-                            </p>
+                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em] animate-pulse">Syncing Ledger...</span>
                         </div>
-                    </Card>
-                )}
+                    ) : orders.length > 0 ? (
+                        orders.map((order, idx) => (
+                            <motion.div
+                                key={order.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                            >
+                                <Card className="bg-white/[0.02] border-white/5 rounded-[2rem] overflow-hidden backdrop-blur-md hover:border-primary/20 transition-all duration-500 shadow-2xl group relative">
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-primary/20 group-hover:bg-primary transition-colors" />
+
+                                    <CardHeader className="p-8 md:p-10 border-b border-white/[0.03] bg-white/[0.01]">
+                                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                                            <div className="flex items-center gap-6">
+                                                <div className="relative size-16 rounded-2xl bg-zinc-950/50 border border-white/5 flex items-center justify-center text-primary group-hover:border-primary/30 transition-all">
+                                                    <Box className="size-7 group-hover:scale-110 transition-transform" />
+                                                    <div className="absolute -top-1 -right-1 size-3 bg-primary animate-ping rounded-full opacity-20" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <div className="flex flex-wrap items-center gap-3">
+                                                        <CardTitle className="text-xl font-black text-white tracking-tight uppercase">
+                                                            Order <span className="text-primary/70">#{order.id.slice(-8).toUpperCase()}</span>
+                                                        </CardTitle>
+                                                        <div className={cn(
+                                                            "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-2 transition-all",
+                                                            getStatusColor(order.status)
+                                                        )}>
+                                                            <div className="size-1.5 rounded-full bg-current animate-pulse" />
+                                                            {getStatusIcon(order.status)}
+                                                            {getTechnicalStatus(order.status)}
+                                                        </div>
+                                                    </div>
+                                                    <CardDescription className="flex items-center gap-2 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                                                        <Clock className="size-3" />
+                                                        Timestamp: {new Date(order.createdAt).toLocaleString().toUpperCase()}
+                                                    </CardDescription>
+                                                </div>
+                                            </div>
+                                            <div className="text-left md:text-right bg-zinc-950/50 px-6 py-4 rounded-2xl border border-white/5 min-w-[140px]">
+                                                <div className="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-1">Valuation</div>
+                                                <div className="text-2xl font-black text-white">৳{order.totalPrice.toLocaleString()}</div>
+                                                <p className="text-[9px] font-bold text-primary uppercase tracking-widest mt-1">
+                                                    {order.items.length} {order.items.length === 1 ? 'Asset' : 'Assets'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </CardHeader>
+
+                                    <CardContent className="p-8 md:p-10">
+                                        <div className="grid md:grid-cols-2 gap-12">
+                                            {/* Left Column: Line Items */}
+                                            <div className="space-y-6">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
+                                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Ledger Assets</h4>
+                                                </div>
+                                                <div className="space-y-4">
+                                                    {order.items.map((item, i) => (
+                                                        <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-zinc-950/30 border border-white/5 group/item hover:border-primary/10 transition-colors">
+                                                            <div className="size-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+                                                                <img src={item.medicine?.image || "/placeholder-medicine.png"} alt={item.medicine?.name || "Asset"} className="object-cover size-full group-hover/item:scale-110 transition-transform duration-500" />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-sm font-black text-white uppercase tracking-tight truncate">{item.medicine?.name || "Redacted Asset"}</p>
+                                                                <div className="flex items-center gap-3 mt-1">
+                                                                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Units: {item.quantity}</span>
+                                                                    <div className="size-1 rounded-full bg-gray-800" />
+                                                                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Asset Allocated</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Right Column: Logistics & Actions */}
+                                            <div className="space-y-8">
+                                                <div className="space-y-6">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="h-0.5 w-6 bg-amber-400/40 rounded-full" />
+                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Logistics Target</h4>
+                                                    </div>
+                                                    <div className="p-6 rounded-2xl bg-zinc-950/30 border border-white/5 space-y-4">
+                                                        <div className="flex items-start gap-4">
+                                                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                                                                <MapPin className="size-4" />
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest">Delivery Coordinates</span>
+                                                                <p className="text-xs font-medium text-gray-300 leading-relaxed uppercase">{order.address}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-start gap-4">
+                                                            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500">
+                                                                <User className="size-4" />
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest">Consignee</span>
+                                                                <p className="text-xs font-medium text-gray-300 uppercase">Micah Rowe // Registered Customer</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-4 pt-4 border-t border-white/5">
+                                                    <div className="flex items-center gap-3">
+                                                        <Zap className="size-3 text-primary" />
+                                                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Execute Protocol</h4>
+                                                    </div>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="outline" className="w-full bg-zinc-950 border-white/10 h-14 rounded-2xl flex justify-between items-center hover:bg-white/5 hover:border-primary/30 transition-all px-6 group/btn">
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="size-2 rounded-full bg-primary animate-pulse" />
+                                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 group-hover/btn:text-white transition-colors">Adjust Order Status</span>
+                                                                </div>
+                                                                <ChevronDown className="size-4 text-gray-600 group-data-[state=open]:rotate-180 transition-transform" />
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end" className="w-[280px] bg-zinc-950/95 border-white/10 rounded-2xl backdrop-blur-xl p-2 shadow-2xl">
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusUpdate(order.id, "PLACED")}
+                                                                className="flex items-center gap-3 py-4 rounded-xl focus:bg-primary/10 group/item transition-colors"
+                                                                disabled={order.status === "PLACED"}
+                                                            >
+                                                                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500">
+                                                                    <Clock className="size-4" />
+                                                                </div>
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest text-white">Awaiting Uplink</span>
+                                                                    <span className="text-[8px] font-bold text-gray-600 uppercase">Status: PLACED</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusUpdate(order.id, "SHIPPED")}
+                                                                className="flex items-center gap-3 py-4 rounded-xl focus:bg-amber-500/10 group/item transition-colors"
+                                                                disabled={order.status === "SHIPPED"}
+                                                            >
+                                                                <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500">
+                                                                    <Truck className="size-4" />
+                                                                </div>
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest text-white">Logistics Dispatched</span>
+                                                                    <span className="text-[8px] font-bold text-gray-600 uppercase">Status: SHIPPED</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusUpdate(order.id, "DELIVERED")}
+                                                                className="flex items-center gap-3 py-4 rounded-xl focus:bg-emerald-500/10 group/item transition-colors"
+                                                                disabled={order.status === "DELIVERED"}
+                                                            >
+                                                                <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500">
+                                                                    <CheckCircle className="size-4" />
+                                                                </div>
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest text-white">Protocol Complete</span>
+                                                                    <span className="text-[8px] font-bold text-gray-600 uppercase">Status: DELIVERED</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            <div className="h-px bg-white/5 my-2" />
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusUpdate(order.id, "CANCELLED")}
+                                                                className="flex items-center gap-3 py-4 rounded-xl focus:bg-rose-500/10 text-rose-500 group/item transition-colors"
+                                                                disabled={order.status === "CANCELLED"}
+                                                            >
+                                                                <div className="p-2 rounded-lg bg-rose-500/10 text-rose-500">
+                                                                    <X className="size-4" />
+                                                                </div>
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest">Void Terminated</span>
+                                                                    <span className="text-[8px] font-bold text-gray-600 uppercase">Status: CANCELLED</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </motion.div>
+                        ))
+                    ) : (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+                            <Card className="bg-white/[0.02] border-white/5 border-dashed rounded-[3rem] p-24 text-center backdrop-blur-md">
+                                <div className="flex flex-col items-center gap-6">
+                                    <div className="relative size-24 rounded-full bg-zinc-950/50 flex items-center justify-center text-muted-foreground border border-white/5">
+                                        <ShoppingBag className="size-10 opacity-10" />
+                                        <div className="absolute inset-0 bg-white/5 animate-pulse rounded-full" />
+                                    </div>
+                                    <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Registry Empty</h3>
+                                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest max-w-sm mx-auto leading-relaxed">
+                                        No active fulfillment protocols detected. Protocols will initialize upon customer acquisition.
+                                    </p>
+                                </div>
+                            </Card>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
+
+            {/* Support Message */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+                className="text-center"
+            >
+                <div className="inline-flex items-center gap-2 text-[9px] font-bold text-gray-700 uppercase tracking-[0.4em]">
+                    <ShieldCheck className="size-3" />
+                    Distributed Fulfillment Network // Secure Protocol
+                </div>
+            </motion.div>
         </div>
     );
 }
