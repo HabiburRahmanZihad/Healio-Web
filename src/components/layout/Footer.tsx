@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Heart } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -38,16 +39,19 @@ const Footer = () => {
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
                 >
                     {/* Brand Section */}
-                    <motion.div variants={itemVariants} className="space-y-6">
+                    <motion.div variants={itemVariants} className="space-y-2">
                         <Link href="/" className="inline-flex items-center gap-2 group">
-                            <div className="bg-gradient-to-br from-primary to-blue-400 p-2 rounded-xl shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all">
-                                <img
-                                    src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/logos/shadcnblockscom-icon.svg"
-                                    className="size-5 invert"
-                                    alt="Healio Logo"
-                                />
+                            <div className=" p-2 rounded-xl transition-all">
+                                <Link href="/" className="inline-block mb-4">
+                                    <Image
+                                        src="/Healio_logo_png.png"
+                                        alt="Healio Logo"
+                                        width={120}
+                                        height={120}
+                                        className="mx-auto"
+                                    />
+                                </Link>
                             </div>
-                            <span className="text-2xl font-black text-white uppercase tracking-tight">Healio</span>
                         </Link>
 
                         <p className="text-sm text-gray-400 leading-relaxed font-medium">
@@ -55,7 +59,7 @@ const Footer = () => {
                         </p>
 
                         {/* Social Media Icons */}
-                        <div className="flex gap-3">
+                        <div className="flex gap-2">
                             {[
                                 { icon: Facebook, href: "#" },
                                 { icon: Twitter, href: "#" },
@@ -177,9 +181,9 @@ const Footer = () => {
                             className="flex flex-wrap justify-center gap-6 text-sm"
                         >
                             {[
-                                { label: "Privacy Policy", href: "#" },
-                                { label: "Terms of Service", href: "#" },
-                                { label: "Refund Policy", href: "#" }
+                                { label: "Privacy Policy", href: "/privacy-policy" },
+                                { label: "Terms of Service", href: "/terms-of-service" },
+                                { label: "Refund Policy", href: "/refund-policy" }
                             ].map((link, idx) => (
                                 <Link
                                     key={idx}
