@@ -43,7 +43,24 @@ async function apiFetch<T>(
 
         const url = endpoint.startsWith("http") ? endpoint : `${API_URL}${endpoint}`;
         const res = await fetch(url, config);
-        const json = await res.json();
+
+        // Check if response is JSON before parsing
+        const contentType = res.headers.get("content-type");
+        const isJson = contentType?.includes("application/json");
+
+        let json;
+        try {
+            if (isJson) {
+                json = await res.json();
+            } else {
+                // If not JSON, get text (likely an error message)
+                const text = await res.text();
+                json = { success: false, message: text || `Request failed (${res.status})` };
+            }
+        } catch (parseError) {
+            console.error(`JSON Parse Error (${endpoint}):`, parseError);
+            return { data: null, error: "Failed to parse server response" };
+        }
 
         if (!res.ok || (json && json.success === false)) {
             console.error(`API Request Failed (${endpoint}) [Status: ${res.status}]:`, json);
