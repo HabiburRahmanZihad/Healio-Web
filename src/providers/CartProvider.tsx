@@ -71,6 +71,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [cart, isInitialized, session]);
 
     const addToCart = (medicine: Medicine) => {
+        // Check if user is logged in
+        if (!session?.user) {
+            toast.error("Please login to add items to cart", {
+                description: "You need to be logged in to add items to your cart",
+                action: {
+                    label: "Login",
+                    onClick: () => window.location.href = "/login"
+                }
+            });
+            return;
+        }
+
         if ((session?.user as any)?.role === "SELLER") {
             toast.error("Sellers cannot add items to cart");
             return;

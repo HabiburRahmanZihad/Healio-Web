@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
-import { ShoppingCart, Eye, ArrowRight, Package, ShieldCheck } from "lucide-react";
+import { ShoppingCart, Eye, ArrowRight, Package, ShieldCheck, LogIn } from "lucide-react";
 import { Medicine } from "@/types/medicine.type";
 import { useCart } from "@/providers/CartProvider";
+import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 interface MedicineCardProps {
     medicine: Medicine;
@@ -24,12 +26,21 @@ const cardVariants: Variants = {
 
 export function MedicineCard({ medicine }: MedicineCardProps) {
     const { addToCart } = useCart();
+    const { data: session } = authClient.useSession();
+    const router = useRouter();
     const { id, name, price, image, manufacturer, stock, category } = medicine;
     const isOutOfStock = stock === 0;
+    const isGuest = !session?.user;
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (isGuest) {
+            router.push("/login");
+            return;
+        }
+
         addToCart(medicine);
         toast.success(`${name} added to cart`, {
             className: "bg-zinc-900 border-primary/50 text-white",
@@ -73,9 +84,13 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
                                 <button
                                     onClick={handleAddToCart}
                                     className="p-3 bg-primary text-white rounded-xl shadow-lg hover:bg-primary/90 transition-all hover:scale-105 active:scale-95"
-                                    title="Quick Add"
+                                    title={isGuest ? "Login to Add" : "Quick Add"}
                                 >
-                                    <ShoppingCart className="size-5" />
+                                    {isGuest ? (
+                                        <LogIn className="size-5" />
+                                    ) : (
+                                        <ShoppingCart className="size-5" />
+                                    )}
                                 </button>
                             )}
                             <div className="p-3 bg-white/20 backdrop-blur-md text-white rounded-xl shadow-lg border border-white/20 hover:bg-white/30 transition-all hover:scale-105">

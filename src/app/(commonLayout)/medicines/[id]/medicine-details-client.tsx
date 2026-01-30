@@ -19,7 +19,8 @@ import {
     FileText,
     Truck,
     RotateCcw,
-    BadgeCheck
+    BadgeCheck,
+    LogIn
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -33,10 +34,16 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
     const { toggleWishlist, isInWishlist } = useWishlist();
 
     const isSeller = (session?.user as any)?.role === "SELLER";
+    const isGuest = !session?.user;
     const { id, name, description, price, stock, image, manufacturer, category, requiresPrescription } = medicine;
     const isOutOfStock = stock === 0;
 
     const handleAddToCart = () => {
+        if (isGuest) {
+            window.location.href = "/login";
+            return;
+        }
+
         addToCart(medicine);
         toast.success(`${name} added to archive`, {
             className: "bg-zinc-900 border-primary/50 text-white",
@@ -230,6 +237,11 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                 >
                                     {isOutOfStock ? (
                                         "Protocol Halted - No Stock"
+                                    ) : isGuest ? (
+                                        <>
+                                            <LogIn className="size-4" />
+                                            <span>Login to Add</span>
+                                        </>
                                     ) : (
                                         <>
                                             <ShoppingCart className="size-4" />
