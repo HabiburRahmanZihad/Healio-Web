@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BookOpen, ArrowRight, Clock, User, Heart, Sparkles } from "lucide-react";
+import { ArrowRight, User, Heart, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ const articles = [
         tag: "Technology",
         author: "Dr. Sarah J.",
         date: "Jan 12, 2026",
-        image: "https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?q=80&w=2069&auto=format&fit=crop"
+        image: "https://res.cloudinary.com/dzokxtodh/image/upload/v1769775992/ChatGPT_Image_Jan_30_2026_06_06_27_PM_azq3gz.png"
     },
     {
         title: "Navigating Immunity in the Urban Age",
@@ -101,7 +101,10 @@ export default function BlogSection() {
                                             <p className="text-[9px] text-gray-500 uppercase tracking-widest font-black leading-none">{article.date}</p>
                                         </div>
                                     </div>
-                                    <button className="text-gray-600 hover:text-primary transition-colors">
+                                    <button
+                                        className="text-gray-600 hover:text-primary transition-colors"
+                                        title="Like this article"
+                                        aria-label="Like this article">
                                         <Heart className="size-4 group-hover:fill-primary" />
                                     </button>
                                 </div>
