@@ -32,7 +32,7 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
         e.stopPropagation();
         addToCart(medicine);
         toast.success(`${name} added to cart`, {
-            className: "bg-zinc-900 border-emerald-500/50 text-white",
+            className: "bg-zinc-900 border-primary/50 text-white",
         });
     };
 
@@ -56,7 +56,7 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
                         {/* Status Badges */}
                         <div className="absolute top-4 left-4 flex flex-col gap-2">
                             {category && (
-                                <span className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-emerald-500/80 text-white rounded-full backdrop-blur-md">
+                                <span className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-primary/80 text-white rounded-full backdrop-blur-md">
                                     {category.name}
                                 </span>
                             )}
@@ -110,7 +110,7 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
 
                             <div className="flex flex-col items-center gap-1">
                                 <ArrowRight className="size-5 text-gray-600 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300" />
-                                <span className={`text-[10px] font-black uppercase tracking-tighter ${isOutOfStock ? "text-red-500" : "text-emerald-500"
+                                <span className={`text-[10px] font-black uppercase tracking-tighter ${isOutOfStock ? "text-red-500" : "text-primary"
                                     }`}>
                                     {isOutOfStock ? "Empty" : `${stock} Units`}
                                 </span>

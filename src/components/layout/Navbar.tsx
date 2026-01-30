@@ -164,12 +164,11 @@ const Navbar = ({
                 <div className="h-8 w-[1px] bg-border mx-2" />
                 <Button
                   variant="ghost"
-                  size="sm"
                   onClick={handleLogout}
-                  className="font-semibold text-muted-foreground hover:text-destructive gap-2"
+                  className="group relative flex items-center justify-center size-10 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-primary hover:bg-primary/10 transition-all active:scale-90"
+                  title="Logout"
                 >
-                  <LogOut className="size-4" />
-                  Logout
+                  <LogOut className="size-5 group-hover:-rotate-12 transition-transform" />
                 </Button>
                 <Link href={getProfileUrl()} className="flex items-center gap-2 pl-2 group">
                   <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">
@@ -255,12 +254,12 @@ const Navbar = ({
                           </div>
                         </Link>
                         <Button
-                          variant="destructive"
-                          className="w-full h-11 text-base gap-2"
+                          variant="ghost"
+                          className="w-full h-12 text-sm font-black uppercase tracking-widest gap-3 rounded-2xl bg-white/5 border border-white/10 text-gray-400 hover:text-primary hover:bg-primary/10 active:scale-95 transition-all"
                           onClick={handleLogout}
                         >
                           <LogOut className="size-4" />
-                          Logout
+                          Terminate Session
                         </Button>
                       </>
                     )}

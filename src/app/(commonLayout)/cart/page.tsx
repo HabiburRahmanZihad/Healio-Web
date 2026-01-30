@@ -34,7 +34,7 @@ export default function CartPage() {
             <div className="min-h-screen bg-background relative overflow-hidden flex items-center justify-center pt-20">
                 {/* Background Atmosphere */}
                 <div className="absolute top-0 right-0 size-[600px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 -z-10" />
-                <div className="absolute bottom-0 left-0 size-[500px] bg-emerald-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10" />
+                <div className="absolute bottom-0 left-0 size-[500px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10" />
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -66,7 +66,7 @@ export default function CartPage() {
         <div className="min-h-screen bg-background relative overflow-hidden py-32">
             {/* Background Atmosphere */}
             <div className="absolute top-0 right-0 size-[600px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 -z-10" />
-            <div className="absolute bottom-0 left-0 size-[500px] bg-emerald-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10" />
+            <div className="absolute bottom-0 left-0 size-[500px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10" />
 
             <div className="container mx-auto px-4 relative z-10">
                 {/* Header */}
@@ -80,7 +80,7 @@ export default function CartPage() {
                         <span>Supply Chain Management</span>
                     </motion.div>
                     <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tighter uppercase">
-                        YOUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">INVENTORY</span>
+                        YOUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">INVENTORY</span>
                     </h1>
                 </div>
 
@@ -194,7 +194,7 @@ export default function CartPage() {
                                     </div>
                                     <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-gray-400">
                                         <span>Logistics</span>
-                                        <span className="text-emerald-500 font-black">Gratis</span>
+                                        <span className="text-primary font-black">Gratis</span>
                                     </div>
                                 </div>
 
@@ -217,7 +217,7 @@ export default function CartPage() {
                                 </Button>
 
                                 <div className="flex items-center justify-center gap-4 py-2 opacity-40 grayscale group-hover:grayscale-0 transition-all">
-                                    <ShieldCheck className="size-4 text-emerald-500" />
+                                    <ShieldCheck className="size-4 text-primary" />
                                     <CreditCard className="size-4 text-blue-500" />
                                     <Truck className="size-4 text-primary" />
                                 </div>

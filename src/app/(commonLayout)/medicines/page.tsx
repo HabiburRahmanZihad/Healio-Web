@@ -45,7 +45,7 @@ export default function MedicinesPage() {
         <div className="min-h-screen bg-background py-20 relative overflow-hidden">
             {/* Background elements */}
             <div className="absolute top-0 right-0 size-[600px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 -z-10" />
-            <div className="absolute bottom-0 left-0 size-[500px] bg-emerald-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10" />
+            <div className="absolute bottom-0 left-0 size-[500px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2 -z-10" />
 
             <div className="container mx-auto px-4 relative z-10">
                 {/* Header */}
@@ -64,7 +64,7 @@ export default function MedicinesPage() {
                         transition={{ delay: 0.1 }}
                         className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tighter uppercase"
                     >
-                        BROWSE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">MEDICINES</span>
+                        BROWSE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">MEDICINES</span>
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}

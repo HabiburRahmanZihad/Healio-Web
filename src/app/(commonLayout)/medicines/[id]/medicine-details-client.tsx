@@ -58,7 +58,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
         <div className="min-h-screen bg-background relative overflow-hidden pb-20">
             {/* Background Atmosphere */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/10 blur-[120px] -z-10" />
-            <div className="absolute bottom-0 right-0 size-[600px] bg-emerald-500/5 rounded-full blur-[100px] translate-y-1/2 translate-x-1/2 -z-10" />
+            <div className="absolute bottom-0 right-0 size-[600px] bg-blue-500/5 rounded-full blur-[100px] translate-y-1/2 translate-x-1/2 -z-10" />
 
             <div className="container mx-auto px-4 pt-32 relative z-10">
                 {/* Top Actions */}
@@ -117,7 +117,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                             <div className="absolute bottom-8 right-8">
                                 <div className={cn(
                                     "px-6 py-3 rounded-2xl backdrop-blur-md border border-white/10 flex flex-col items-center",
-                                    isOutOfStock ? "bg-red-500/20 text-red-500" : "bg-emerald-500/20 text-emerald-500"
+                                    isOutOfStock ? "bg-red-500/20 text-red-500" : "bg-primary/20 text-primary"
                                 )}>
                                     <span className="text-[10px] font-black uppercase tracking-widest mb-1">Status</span>
                                     <span className="text-sm font-black whitespace-nowrap">
@@ -157,7 +157,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                             </div>
                             <h1 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase break-words">
                                 {name.split(" ").map((word, i) => (
-                                    <span key={i} className={cn(i % 2 !== 0 && "text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400")}>
+                                    <span key={i} className={cn(i % 2 !== 0 && "text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400")}>
                                         {word}{" "}
                                     </span>
                                 ))}
@@ -188,7 +188,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                     <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Stock Level</p>
                                     <p className={cn(
                                         "text-xl font-bold",
-                                        isOutOfStock ? "text-red-500" : "text-emerald-500"
+                                        isOutOfStock ? "text-red-500" : "text-primary"
                                     )}>
                                         {stock} Units
                                     </p>
@@ -206,7 +206,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                     <p className="text-xs font-bold text-white truncate">{category?.name || "General"}</p>
                                 </div>
                                 <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-                                    <ShieldCheck className="size-4 text-emerald-500 mb-2" />
+                                    <ShieldCheck className="size-4 text-primary mb-2" />
                                     <p className="text-[8px] text-gray-500 uppercase font-bold tracking-widest">Authenticity</p>
                                     <p className="text-xs font-bold text-white truncate">100% Certified</p>
                                 </div>
