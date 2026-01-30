@@ -57,10 +57,10 @@ const Footer = () => {
                     <div className="space-y-4">
                         <h4 className="text-lg font-semibold">Categories</h4>
                         <ul className="space-y-2">
-                            <li><Link href="/shop?category=otc" className="text-muted-foreground hover:text-primary transition-colors">OTC Medicines</Link></li>
-                            <li><Link href="/shop?category=vitamins" className="text-muted-foreground hover:text-primary transition-colors">Vitamins & Supplements</Link></li>
-                            <li><Link href="/shop?category=personal-care" className="text-muted-foreground hover:text-primary transition-colors">Personal Care</Link></li>
-                            <li><Link href="/shop?category=baby-care" className="text-muted-foreground hover:text-primary transition-colors">Baby Care</Link></li>
+                            <li><Link href="/medicines?category=otc" className="text-muted-foreground hover:text-primary transition-colors">OTC Medicines</Link></li>
+                            <li><Link href="/medicines?category=vitamins" className="text-muted-foreground hover:text-primary transition-colors">Vitamins & Supplements</Link></li>
+                            <li><Link href="/medicines?category=personal-care" className="text-muted-foreground hover:text-primary transition-colors">Personal Care</Link></li>
+                            <li><Link href="/medicines?category=baby-care" className="text-muted-foreground hover:text-primary transition-colors">Baby Care</Link></li>
                         </ul>
                     </div>
 

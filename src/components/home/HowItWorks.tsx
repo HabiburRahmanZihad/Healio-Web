@@ -36,55 +36,55 @@ const steps = [
 
 const HowItWorks = () => {
     return (
-        <section className="py-24 bg-white/[0.02]">
+        <section className="py-16 md:py-20 relative overflow-hidden bg-white/[0.01]">
             <div className="container px-4 mx-auto">
-                <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <div className="text-center mx-auto mb-12 space-y-4">
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 15 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-black text-white tracking-tight"
+                        className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white"
                     >
-                        How <span className="text-primary">Healio</span> Works
+                        THE HEALIO <span className="text-primary">PROTOCOL</span>
                     </motion.h2>
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 15 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-muted-foreground text-lg"
+                        className="text-[11px] text-gray-500 font-bold uppercase tracking-widest leading-relaxed"
                     >
-                        Getting your healthcare needs delivered is simpler than ever. Follow these 4 easy steps.
+                        A synchronized 4-step framework for rapid pharmaceutical access.
                     </motion.p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 relative">
-                    {/* Connecting Lines for Large Screens */}
-                    <div className="hidden lg:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-y-24 z-0" />
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+                    {/* Connecting Line for Large Screens */}
+                    <div className="hidden lg:block absolute top-[40px] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent z-0" />
 
                     {steps.map((step, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
-                            transition={{ delay: index * 0.2 }}
+                            transition={{ delay: index * 0.1 }}
                             className="relative z-10 flex flex-col items-center text-center group"
                         >
-                            <div className="relative mb-8">
-                                <div className="absolute -inset-4 bg-primary/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className={`${step.bg} ${step.color} size-20 rounded-3xl flex items-center justify-center border border-white/5 relative z-10 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 shadow-2xl shadow-black/50`}>
-                                    <step.icon className="size-10" />
-                                    <div className="absolute -top-3 -right-3 size-8 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center text-xs font-black text-white ring-4 ring-black">
-                                        {index + 1}
+                            <div className="relative mb-6">
+                                <div className="absolute -inset-4 bg-primary/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className={`${step.bg} ${step.color} size-16 rounded-[1.5rem] flex items-center justify-center border border-white/5 relative z-10 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500`}>
+                                    <step.icon className="size-6" />
+                                    <div className="absolute -top-2 -right-2 size-6 rounded-full bg-background border border-white/10 flex items-center justify-center text-[9px] font-black text-white ring-2 ring-background">
+                                        0{index + 1}
                                     </div>
                                 </div>
                             </div>
 
-                            <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors uppercase tracking-tight">
+                            <h3 className="text-xs font-black text-white mb-2 group-hover:text-primary transition-colors uppercase tracking-tight">
                                 {step.title}
                             </h3>
-                            <p className="text-sm text-muted-foreground leading-relaxed px-4">
+                            <p className="text-[10px] text-gray-500 font-medium leading-relaxed px-4">
                                 {step.description}
                             </p>
                         </motion.div>
