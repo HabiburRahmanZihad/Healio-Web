@@ -25,6 +25,10 @@ export interface Order {
             image: string;
         };
     }[];
+    user?: {
+        name: string;
+        email: string;
+    };
     createdAt: string;
 }
 

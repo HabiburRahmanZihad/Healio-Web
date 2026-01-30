@@ -3,10 +3,19 @@
 import { useEffect, useState } from "react";
 import { categoryService } from "@/services/category.service";
 import { Category } from "@/types/medicine.type";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, Trash2, Tag, Search, AlertCircle, X } from "lucide-react";
-import { toast } from "sonner";
+import {
+    Tag,
+    Plus,
+    Search,
+    Loader2,
+    ExternalLink,
+    Database,
+    Activity,
+    Trash2,
+    AlertCircle
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
     Sheet,
@@ -16,6 +25,25 @@ import {
     SheetFooter,
     SheetClose,
 } from "@/components/ui/sheet";
+import { motion } from "framer-motion";
+import { toast } from "sonner";
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: { duration: 0.5 }
+    }
+};
 
 export default function CategoryManagementPage() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -40,74 +68,91 @@ export default function CategoryManagementPage() {
 
     const handleAddCategory = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!newCategoryName.trim()) {
-            toast.error("Category name is required");
-            return;
-        }
+        if (!newCategoryName.trim()) return toast.error("Classification label required");
 
         setIsSubmitting(true);
         const res = await categoryService.createCategory(newCategoryName);
         setIsSubmitting(false);
 
-        if (!res.error && res.data) {
-            toast.success("Category created successfully");
-            setCategories(prev => [...prev, res.data!]);
+        if (!res.error) {
+            toast.success("New classification node initialized");
             setNewCategoryName("");
+            fetchCategories();
             setIsAddModalOpen(false);
         } else {
-            toast.error(res.error || "Failed to create category");
+            toast.error(res.error || "Failed to initialize classification");
         }
     };
 
     const handleDeleteCategory = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this category? All medicines in this category will be affected.")) return;
+        if (!confirm("Are you sure you want to terminate this classification node?")) return;
 
-        const toastId = toast.loading("Deleting category...");
+        const toastId = toast.loading("Terminating node...");
         const res = await categoryService.deleteCategory(id);
 
         if (!res.error) {
-            toast.success("Category deleted successfully", { id: toastId });
+            toast.success("Classification node terminated", { id: toastId });
             setCategories(prev => prev.filter(c => c.id !== id));
         } else {
-            toast.error(res.error || "Failed to delete category", { id: toastId });
+            toast.error(res.error || "Termination failed", { id: toastId });
         }
     };
 
-    const filteredCategories = categories.filter(category =>
-        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCategories = categories.filter(cat =>
+        cat.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (isLoading) {
         return (
-            <div className="min-h-[60vh] flex items-center justify-center">
-                <Loader2 className="size-8 animate-spin text-primary" />
+            <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+                <div className="relative">
+                    <div className="size-16 rounded-full border-t-2 border-primary animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <Database className="size-6 text-primary/50" />
+                    </div>
+                </div>
+                <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em] animate-pulse">Initializing Matrix Core...</span>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-3xl font-bold text-white tracking-tight">Category management</h1>
-                    <p className="text-muted-foreground">Define and manage product categories for the entire system.</p>
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="space-y-10 pb-12"
+        >
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
+                <div className="absolute -bottom-[1px] left-0 w-48 h-[1px] bg-primary" />
+                <div className="space-y-4">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[9px] font-black uppercase tracking-[0.2em]">
+                        <Tag className="size-3 animate-pulse" />
+                        <span>Matrix Update: Latency Optimal</span>
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none">
+                        Asset <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 italic">Classification</span>
+                    </h1>
+                    <p className="text-[11px] text-gray-500 font-bold uppercase tracking-[0.1em] max-w-xl">
+                        Management of all pharmaceutical taxonomic hierarchies within the <span className="text-white">Healio Network</span>.
+                    </p>
                 </div>
-                <div className="flex items-center gap-4">
-                    <div className="relative group flex-1 md:w-64">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                <div className="flex items-center gap-4 w-full md:w-auto">
+                    <div className="relative group flex-1 md:w-80">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <Input
-                            placeholder="Filter categories..."
-                            className="pl-10 bg-white/5 border-white/10 text-white rounded-xl focus:ring-primary focus:border-primary transition-all w-full"
+                            placeholder="Find Classification..."
+                            className="h-12 pl-12 bg-white/[0.02] border-white/5 text-white rounded-2xl focus:ring-primary/20 focus:border-primary/40 transition-all font-bold text-xs backdrop-blur-md"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
                     <Button
                         onClick={() => setIsAddModalOpen(true)}
-                        className="bg-primary hover:bg-primary/90 rounded-xl shadow-lg shadow-primary/20 flex items-center gap-2"
+                        className="h-12 bg-primary hover:bg-primary/90 text-zinc-950 font-black uppercase tracking-widest text-[9px] px-8 rounded-2xl transition-all shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)] active:scale-95"
                     >
-                        <Plus className="size-4" />
-                        Add Category
+                        <Plus className="size-4 mr-2" />
+                        New Schema
                     </Button>
                 </div>
             </div>
@@ -115,83 +160,94 @@ export default function CategoryManagementPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredCategories.length > 0 ? (
                     filteredCategories.map((category) => (
-                        <Card key={category.id} className="bg-white/5 border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm group hover:border-primary/40 transition-all hover:shadow-xl hover:shadow-primary/5">
-                            <CardContent className="p-6">
-                                <div className="flex items-start justify-between gap-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                                            <Tag className="size-6" />
+                        <motion.div
+                            key={category.id}
+                            variants={itemVariants}
+                        >
+                            <Card className="group bg-white/[0.02] border-white/5 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl relative border-l border-t border-white/10 hover:border-primary/30 transition-all duration-500 hover:bg-white/[0.04]">
+                                <CardContent className="p-8 space-y-6">
+                                    <div className="flex items-start justify-between">
+                                        <div className="size-16 rounded-[1.5rem] bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-all duration-500 border border-primary/20 shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]">
+                                            <Tag className="size-7" />
                                         </div>
-                                        <div>
-                                            <h3 className="font-bold text-white text-lg group-hover:text-primary transition-colors">{category.name}</h3>
-                                            <p className="text-xs text-muted-foreground uppercase tracking-widest mt-0.5">#{category.id.slice(-6).toUpperCase()}</p>
+                                        <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/5 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-lg border border-emerald-500/20">
+                                            <div className="size-1 rounded-full bg-emerald-400 animate-pulse" />
+                                            ACTIVE_CORE
                                         </div>
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() => handleDeleteCategory(category.id)}
-                                        className="text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-colors"
-                                    >
-                                        <Trash2 className="size-4" />
-                                    </Button>
-                                </div>
-                            </CardContent>
-                        </Card>
+                                    <div className="space-y-1">
+                                        <h3 className="text-lg font-black text-white group-hover:text-primary transition-colors tracking-tight uppercase leading-none">{category.name}</h3>
+                                        <p className="text-[9px] font-bold text-gray-600 uppercase tracking-widest leading-loose">Matrix Node ID: {category.id.slice(-8).toUpperCase()}</p>
+                                    </div>
+                                    <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => handleDeleteCategory(category.id)}
+                                            className="size-12 bg-white/[0.03] text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-2xl transition-all border border-transparent hover:border-red-500/20"
+                                        >
+                                            <Trash2 className="size-5" />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" className="size-12 bg-white/[0.03] text-gray-500 hover:text-primary hover:bg-primary/10 rounded-2xl transition-all border border-transparent hover:border-primary/20">
+                                            <ExternalLink className="size-5" />
+                                        </Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
                     ))
                 ) : (
-                    <div className="col-span-full py-20 text-center bg-white/5 border-white/10 border-dashed border-2 rounded-3xl">
-                        <Tag className="size-12 text-muted-foreground/30 mx-auto mb-4" />
-                        <p className="text-muted-foreground italic">No categories found matching your search.</p>
+                    <div className="col-span-full p-32 text-center border-2 border-dashed border-white/5 rounded-[3rem]">
+                        <div className="flex flex-col items-center gap-6 opacity-20">
+                            <Tag className="size-16 text-gray-500" />
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Zero matching classifications detected in matrix.</p>
+                        </div>
                     </div>
                 )}
             </div>
 
             <Sheet open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-                <SheetContent side="right" className="bg-zinc-950 border-white/10 text-white w-full sm:max-w-md p-8">
-                    <SheetHeader className="p-0 mb-8 items-start">
-                        <SheetTitle className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                            <Plus className="size-6 text-primary" />
-                            New Category
-                        </SheetTitle>
-                        <p className="text-muted-foreground">Create a new category for medicines and products.</p>
+                <SheetContent side="right" className="bg-zinc-950 border-white/10 text-white w-full sm:max-w-md p-10 backdrop-blur-3xl shadow-2xl">
+                    <SheetHeader className="mb-10 text-left">
+                        <SheetTitle className="text-3xl font-black uppercase tracking-tighter">New Classification</SheetTitle>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2">Initialize new taxonomic node in the matrix.</p>
                     </SheetHeader>
 
-                    <form onSubmit={handleAddCategory} className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-semibold text-muted-foreground uppercase tracking-wider pl-1">Category Name</label>
+                    <form onSubmit={handleAddCategory} className="space-y-8">
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-2">Classification Label</label>
                             <Input
                                 value={newCategoryName}
                                 onChange={(e) => setNewCategoryName(e.target.value)}
-                                placeholder="e.g. Antibiotics, Pain Relief..."
-                                className="bg-white/5 border-white/10 text-white rounded-xl h-12 focus:ring-primary transition-all"
+                                placeholder="e.g. Antibiotics, Vaccines..."
+                                className="bg-white/[0.03] border-white/10 text-white rounded-2xl h-14 font-bold px-6 focus:border-primary/50 transition-all"
                                 autoFocus
                             />
                         </div>
 
-                        <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/5 border border-primary/10 text-xs leading-relaxed text-muted-foreground">
-                            <AlertCircle className="size-4 text-primary shrink-0" />
-                            <span>Adding a new category will make it immediately available for sellers to select when adding new medicines.</span>
+                        <div className="flex items-start gap-4 p-5 rounded-2xl bg-primary/5 border border-primary/10 text-[10px] leading-relaxed text-gray-400 font-bold uppercase tracking-wide">
+                            <AlertCircle className="size-5 text-primary shrink-0" />
+                            <span>This classification will be immediately indexed and available for global asset assignment.</span>
                         </div>
 
-                        <SheetFooter className="p-0 gap-3 pt-4 sm:flex-col items-stretch">
+                        <SheetFooter className="mt-10 flex flex-col gap-4">
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12 font-bold shadow-lg shadow-primary/20"
+                                className="w-full bg-primary hover:bg-primary/90 text-zinc-950 rounded-2xl h-14 font-black uppercase tracking-widest text-[10px] shadow-[0_0_30px_rgba(var(--primary-rgb),0.2)] active:scale-95 transition-all"
                             >
-                                {isSubmitting ? <Loader2 className="size-4 animate-spin mr-2" /> : <Plus className="size-4 mr-2" />}
-                                Create Category
+                                {isSubmitting ? <Activity className="size-4 animate-spin mr-2" /> : <Plus className="size-4 mr-2" />}
+                                Initialize Node
                             </Button>
                             <SheetClose asChild>
-                                <Button variant="outline" className="border-white/10 bg-white/5 text-white rounded-xl h-12 hover:bg-white/10">
-                                    Cancel
+                                <Button variant="ghost" className="w-full h-14 rounded-2xl text-gray-500 font-black uppercase tracking-widest text-[10px] hover:text-white transition-all">
+                                    Abort Operation
                                 </Button>
                             </SheetClose>
                         </SheetFooter>
                     </form>
                 </SheetContent>
             </Sheet>
-        </div>
+        </motion.div>
     );
 }

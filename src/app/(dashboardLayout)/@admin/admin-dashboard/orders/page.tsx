@@ -2,18 +2,46 @@
 
 import { useEffect, useState } from "react";
 import { orderService, Order } from "@/services/order.service";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, ShoppingBag, Clock, Truck, CheckCircle, AlertCircle, User, MapPin, DollarSign, Search, ChevronDown } from "lucide-react";
+import {
+    Clock,
+    Truck,
+    CheckCircle,
+    AlertCircle,
+    Search,
+    Activity,
+    Package,
+    Hash,
+    ChevronDown
+} from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5 }
+    }
+};
 
 export default function AdminOrderManagement() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -22,7 +50,6 @@ export default function AdminOrderManagement() {
 
     const fetchOrders = async () => {
         setIsLoading(true);
-        // Using getSellerOrders because on backend admin role correctly selects all orders via the same endpoint
         const res = await orderService.getSellerOrders();
         if (!res.error && res.data) {
             setOrders(res.data);
@@ -35,157 +62,165 @@ export default function AdminOrderManagement() {
     }, []);
 
     const handleStatusUpdate = async (orderId: string, newStatus: string) => {
-        const toastId = toast.loading(`Updating order status to ${newStatus}...`);
+        const toastId = toast.loading(`Updating protocol status to ${newStatus}...`);
         const res = await orderService.updateOrderStatus(orderId, newStatus);
 
         if (!res.error) {
-            toast.success("Order status updated", { id: toastId });
+            toast.success("Protocol status synchronized", { id: toastId });
             setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus as any } : o));
         } else {
-            toast.error(res.error || "Failed to update status", { id: toastId });
-        }
-    };
-
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case "PLACED": return <Clock className="size-4" />;
-            case "SHIPPED": return <Truck className="size-4" />;
-            case "DELIVERED": return <CheckCircle className="size-4" />;
-            case "CANCELLED": return <AlertCircle className="size-4" />;
-            default: return <Clock className="size-4" />;
-        }
-    };
-
-    const getStatusClass = (status: string) => {
-        switch (status) {
-            case "PLACED": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-            case "SHIPPED": return "bg-orange-500/10 text-orange-500 border-orange-500/20";
-            case "DELIVERED": return "bg-green-500/10 text-green-500 border-green-500/20";
-            case "CANCELLED": return "bg-red-500/10 text-red-500 border-red-500/20";
-            default: return "bg-zinc-500/10 text-zinc-500 border-zinc-500/20";
+            toast.error(res.error || "Protocol violation: Update failed", { id: toastId });
         }
     };
 
     const filteredOrders = orders.filter(order =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.address.toLowerCase().includes(searchTerm.toLowerCase())
+        order.user?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.user?.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const totalRevenue = orders.reduce((acc, curr) => acc + curr.totalPrice, 0);
 
     if (isLoading) {
         return (
-            <div className="min-h-[60vh] flex items-center justify-center">
-                <Loader2 className="size-8 animate-spin text-primary" />
+            <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+                <div className="relative">
+                    <div className="size-16 rounded-full border-t-2 border-primary animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <Activity className="size-6 text-primary/50" />
+                    </div>
+                </div>
+                <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em] animate-pulse">Retrieving Transaction Ledger...</span>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-3xl font-bold text-white tracking-tight">Order Monitoring</h1>
-                    <p className="text-muted-foreground">Manage and track all customer orders across the entire platform.</p>
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="space-y-10 pb-12"
+        >
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-white/5 pb-8 relative">
+                <div className="absolute -bottom-[1px] left-0 w-48 h-[1px] bg-primary" />
+                <div className="space-y-4">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-[9px] font-black uppercase tracking-[0.2em]">
+                        <Package className="size-3 animate-pulse" />
+                        <span>Transmission Protocol: Syncing</span>
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none">
+                        Nexus Order <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 italic">Ledger</span>
+                    </h1>
+                    <p className="text-[11px] text-gray-500 font-bold uppercase tracking-[0.1em] max-w-xl">
+                        Universal monitoring of all pharmaceutical transmissions across the <span className="text-white">Healio Network</span>.
+                    </p>
                 </div>
-                <div className="relative group w-full md:w-80">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                    <Input
-                        placeholder="Search by Order ID or Address..."
-                        className="pl-10 bg-white/5 border-white/10 text-white rounded-xl focus:ring-primary focus:border-primary transition-all w-full"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                <div className="flex flex-col items-end gap-3">
+                    <div className="text-right">
+                        <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Total Nexus Value</p>
+                        <p className="text-2xl font-black text-white tracking-tighter">৳{totalRevenue.toLocaleString()}</p>
+                    </div>
+                    <div className="relative group w-full md:w-80">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                        <Input
+                            placeholder="Trace Transmission by ID..."
+                            className="h-12 pl-12 bg-white/[0.02] border-white/5 text-white rounded-2xl focus:ring-primary/20 focus:border-primary/40 transition-all font-bold text-xs backdrop-blur-md"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                 </div>
             </div>
 
-            <Card className="bg-white/5 border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm shadow-xl">
-                <div className="overflow-x-auto">
+            <Card className="bg-white/[0.02] border-white/5 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl relative border-l border-t border-white/10">
+                <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="border-b border-white/5 bg-white/[0.02]">
-                                <th className="p-6 text-xs font-bold uppercase tracking-widest text-muted-foreground">Order ID</th>
-                                <th className="p-6 text-xs font-bold uppercase tracking-widest text-muted-foreground">Customer Info</th>
-                                <th className="p-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-center">Status</th>
-                                <th className="p-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-center">Items</th>
-                                <th className="p-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right">Total</th>
-                                <th className="p-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right">Actions</th>
+                            <tr className="border-b border-white/5 bg-white/[0.01]">
+                                <th className="p-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Transmission ID</th>
+                                <th className="p-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Node Destination</th>
+                                <th className="p-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 text-center">Protocol Status</th>
+                                <th className="p-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 text-right">Credit Value</th>
+                                <th className="p-8 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 text-right">Control</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
                             {filteredOrders.length > 0 ? (
-                                filteredOrders.map((order) => (
-                                    <tr key={order.id} className="hover:bg-white/[0.02] transition-colors group">
-                                        <td className="p-6">
-                                            <div className="flex items-center gap-3">
-                                                <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform border border-primary/20">
-                                                    <ShoppingBag className="size-5" />
+                                filteredOrders.map((order, i) => (
+                                    <motion.tr
+                                        key={order.id}
+                                        variants={itemVariants}
+                                        className="hover:bg-white/[0.03] transition-all duration-500 group relative"
+                                    >
+                                        <td className="p-8">
+                                            <div className="flex items-center gap-4">
+                                                <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:scale-110 transition-all duration-500 shadow-lg">
+                                                    <Hash className="size-4" />
                                                 </div>
-                                                <span className="font-bold text-white group-hover:text-primary transition-colors uppercase tracking-tighter">
-                                                    #{order.id.slice(-8)}
-                                                </span>
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-black text-white uppercase tracking-tight group-hover:text-primary transition-colors italic">#{order.id.slice(-8).toUpperCase()}</span>
+                                                    <span className="text-[9px] font-bold text-gray-600 uppercase tracking-widest mt-1">{new Date(order.createdAt).toLocaleDateString()}</span>
+                                                </div>
                                             </div>
                                         </td>
-                                        <td className="p-6">
-                                            <div className="flex flex-col gap-1.5 min-w-[200px]">
-                                                <div className="flex items-center gap-2 text-white text-sm font-medium">
-                                                    <MapPin className="size-3 text-muted-foreground" />
-                                                    <span className="truncate max-w-[250px]">{order.address}</span>
-                                                </div>
-                                                <span className="text-[10px] text-muted-foreground uppercase tracking-wider pl-5">{new Date(order.createdAt).toLocaleDateString()}</span>
+                                        <td className="p-8">
+                                            <div className="flex flex-col gap-1">
+                                                <div className="text-xs text-white font-black uppercase tracking-tight">{order.user?.name || "Anonymous Node"}</div>
+                                                <div className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">{order.user?.email || "Unknown CID"}</div>
                                             </div>
                                         </td>
-                                        <td className="p-6">
+                                        <td className="p-8">
                                             <div className="flex justify-center">
-                                                <span className={cn(
-                                                    "flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border shadow-sm",
-                                                    getStatusClass(order.status)
+                                                <div className={cn(
+                                                    "px-4 py-1.5 rounded-xl border text-[9px] font-black tracking-[0.15em] flex items-center gap-2 shadow-lg",
+                                                    order.status === "DELIVERED" ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/20 shadow-emerald-500/5" :
+                                                        order.status === "PLACED" ? "bg-orange-500/5 text-orange-400 border-orange-500/20 shadow-orange-500/5" :
+                                                            "bg-blue-500/5 text-blue-400 border-blue-500/20 shadow-blue-500/5"
                                                 )}>
-                                                    {getStatusIcon(order.status)}
-                                                    {order.status}
-                                                </span>
+                                                    <div className={cn(
+                                                        "size-1.5 rounded-full animate-pulse",
+                                                        order.status === "DELIVERED" ? "bg-emerald-400" : order.status === "PLACED" ? "bg-orange-400" : "bg-blue-400"
+                                                    )} />
+                                                    ORD_{order.status.toUpperCase()}
+                                                </div>
                                             </div>
                                         </td>
-                                        <td className="p-6 text-center">
-                                            <span className="text-white font-bold bg-white/5 px-2.5 py-1 rounded-lg border border-white/5 text-xs">
-                                                {order.items.length} Units
-                                            </span>
-                                        </td>
-                                        <td className="p-6 text-right font-bold text-emerald-500">
-                                            <div className="flex items-center justify-end gap-1">
-                                                <span className="text-xs">৳</span>
+                                        <td className="p-8 text-right">
+                                            <div className="flex items-center justify-end gap-1.5 font-black text-base text-white tracking-tighter">
+                                                <span className="text-[10px] text-primary">৳</span>
                                                 <span>{order.totalPrice.toFixed(2)}</span>
                                             </div>
                                         </td>
-                                        <td className="p-6 text-right">
+                                        <td className="p-8 text-right">
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="sm" className="bg-white/5 text-white rounded-xl hover:bg-white/10 hover:text-primary transition-all border border-white/5 flex items-center gap-2">
-                                                        Update Status
-                                                        <ChevronDown className="size-4" />
+                                                    <Button variant="ghost" size="icon" className="size-12 bg-white/[0.03] text-gray-500 hover:text-primary hover:bg-primary/10 rounded-2xl transition-all border border-transparent hover:border-primary/20">
+                                                        <ChevronDown className="size-5" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end" className="bg-zinc-950 border-white/10 rounded-xl p-2 w-48 shadow-2xl">
+                                                <DropdownMenuContent align="end" className="bg-zinc-950 border-white/10 rounded-xl p-2 w-48 shadow-2xl backdrop-blur-xl">
                                                     {["PLACED", "SHIPPED", "DELIVERED", "CANCELLED"].map((status) => (
                                                         <DropdownMenuItem
                                                             key={status}
                                                             onClick={() => handleStatusUpdate(order.id, status)}
-                                                            className={cn(
-                                                                "flex items-center gap-2 py-2.5 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-primary",
-                                                                order.status === status ? "text-primary font-bold bg-white/5" : "text-slate-300"
-                                                            )}
+                                                            className="rounded-lg text-[10px] font-black uppercase tracking-widest text-gray-400 focus:bg-primary/10 focus:text-primary transition-all cursor-pointer py-3"
                                                         >
-                                                            {getStatusIcon(status)}
-                                                            <span className="text-xs font-bold uppercase tracking-wider">{status}</span>
+                                                            SYNC_{status}
                                                         </DropdownMenuItem>
                                                     ))}
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </td>
-                                    </tr>
+                                    </motion.tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={6} className="p-12 text-center text-muted-foreground italic">
-                                        No matching orders were found.
+                                    <td colSpan={5} className="p-24 text-center">
+                                        <div className="flex flex-col items-center gap-4 opacity-20">
+                                            <Hash className="size-16 text-gray-500" />
+                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Zero matching transmissions found in sector.</p>
+                                        </div>
                                     </td>
                                 </tr>
                             )}
@@ -193,6 +228,6 @@ export default function AdminOrderManagement() {
                     </table>
                 </div>
             </Card>
-        </div>
+        </motion.div>
     );
 }
