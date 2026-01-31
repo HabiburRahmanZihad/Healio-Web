@@ -4,6 +4,7 @@ import { motion, Variants } from "framer-motion";
 import { Check, Sparkles, Shield, Zap, Heart, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const plans = [
     {
@@ -159,7 +160,13 @@ export default function WellnessPlans() {
                                         </ul>
                                     </CardContent>
                                     <CardFooter className="p-8 pt-0">
-                                        <Button className={`w-full h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${plan.popular ? 'bg-primary hover:bg-emerald-500 shadow-lg shadow-primary/20' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}>
+                                        <Button
+                                            onClick={() => toast.info(`The ${plan.name} plan is coming soon!`, {
+                                                description: "We're putting the finishing touches on our premium wellness features.",
+                                                icon: <Sparkles className="size-4 text-primary" />,
+                                            })}
+                                            className={`w-full h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${plan.popular ? 'bg-primary hover:bg-emerald-500 shadow-lg shadow-primary/20' : 'bg-white/5 hover:bg-white/10 border border-white/10'}`}
+                                        >
                                             Choose {plan.name}
                                         </Button>
                                     </CardFooter>
