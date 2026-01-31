@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Shield, ShieldCheck, ShieldAlert, UserCheck, Lock, Eye, Edit3, Trash2 } from "lucide-react";
+import { Shield, ShieldCheck, ShieldAlert, UserCheck, Eye, Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

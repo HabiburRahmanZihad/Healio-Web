@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { userService } from "@/services/user.service";
 import { User } from "@/types";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Mail, Shield, Ban, CheckCircle, Search, AlertCircle, User as UserIcon, Activity } from "lucide-react";
 import { toast } from "sonner";

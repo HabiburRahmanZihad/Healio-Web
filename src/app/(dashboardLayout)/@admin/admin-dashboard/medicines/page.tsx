@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { medicineService } from "@/services/medicine.service";
 import { Medicine } from "@/types/medicine.type";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pill, Search, Tag, ExternalLink, Filter, Activity, Package } from "lucide-react";
+import {  Search, Tag, ExternalLink, Filter, Activity, Package } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
