@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Send, Bell, ShieldCheck, Mail } from "lucide-react";
+import { Bell, ShieldCheck, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";

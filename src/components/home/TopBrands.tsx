@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ShieldCheck, Target, Award, Globe } from "lucide-react";
 
 const brands = [
