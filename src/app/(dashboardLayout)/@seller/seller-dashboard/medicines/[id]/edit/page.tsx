@@ -6,16 +6,16 @@ import { useForm } from "@tanstack/react-form";
 import * as z from "zod";
 import { medicineService } from "@/services/medicine.service";
 import { categoryService } from "@/services/category.service";
-import { Category, Medicine } from "@/types/medicine.type";
+import { Category } from "@/types/medicine.type";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Save, X, Pill, DollarSign, Package, Factory, List } from "lucide-react";
+import { ArrowLeft, Loader2, Save, Pill, DollarSign, Package, Factory, List } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+
 
 const medicineSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),

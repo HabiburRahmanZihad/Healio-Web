@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { authClient } from "@/lib/auth-client";
 import { medicineService } from "@/services/medicine.service";
 import { orderService, Order } from "@/services/order.service";
 import { Medicine } from "@/types/medicine.type";
@@ -9,14 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import {
     BarChart3,
     TrendingUp,
-    TrendingDown,
     DollarSign,
     Package,
     Activity,
     Loader2,
     ArrowUpRight,
     ArrowDownRight,
-    Users,
     ShoppingCart,
     Clock,
     CheckCircle2,
@@ -26,7 +23,6 @@ import {
 import { cn } from "@/lib/utils";
 
 export default function SellerAnalyticsPage() {
-    const { data: session } = authClient.useSession();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);

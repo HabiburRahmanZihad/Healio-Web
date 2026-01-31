@@ -5,7 +5,7 @@ import { orderService, Order } from "@/services/order.service";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-    Package, Truck, CheckCircle, Clock, ShoppingBag,
+    Truck, CheckCircle, Clock, ShoppingBag,
     ChevronDown, User, MapPin, X, Terminal,
     Activity, ShieldCheck, Box, Zap
 } from "lucide-react";
