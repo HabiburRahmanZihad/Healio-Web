@@ -81,7 +81,7 @@ export function AppSidebar({
 
   return (
     <Sidebar variant="sidebar" className="border-r border-white/5 bg-zinc-950/50 backdrop-blur-3xl" {...props}>
-      <SidebarHeader className="h-24 flex items-center px-6 border-b border-white/5 bg-white/[0.02]">
+      <SidebarHeader className="h-24 flex items-center px-6 border-b border-white/5 bg-white/2">
         <Link href="/" className="flex items-center group">
           <img
             src="/Healio_logo_png.png"
@@ -140,7 +140,7 @@ export function AppSidebar({
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-white/5 bg-white/[0.01]">
+      <SidebarFooter className="p-4 border-t border-white/5 bg-white/1">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
