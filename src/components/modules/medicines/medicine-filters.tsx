@@ -1,6 +1,6 @@
 "use client";
 
-import { Category, MedicineFilters } from "@/types/medicine.type";
+import { MedicineFilters } from "@/types/medicine.type";
 
 interface MedicineFiltersProps {
     filters: MedicineFilters;

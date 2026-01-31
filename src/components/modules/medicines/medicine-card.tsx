@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
-import { ShoppingCart, Eye, ArrowRight, Package, ShieldCheck, LogIn } from "lucide-react";
+import { ArrowRight, Package, ShieldCheck } from "lucide-react";
 import { Medicine } from "@/types/medicine.type";
 import { useCart } from "@/providers/CartProvider";
 import { authClient } from "@/lib/auth-client";
@@ -72,8 +72,6 @@ export function MedicineCard({ medicine }: MedicineCardProps) {
                                 </span>
                             )}
                         </div>
-
-
                     </div>
 
                     {/* Content Section */}
