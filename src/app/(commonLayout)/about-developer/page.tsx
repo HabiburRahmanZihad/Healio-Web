@@ -1,16 +1,19 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { Github, Linkedin, Globe, Code2, Rocket, Database, Layout, Lock, Cpu, Sparkles } from "lucide-react";
+import { Github, Linkedin, Globe, Code2, Rocket, Database, Layout, Lock, Cpu, Sparkles, Server, HardDrive, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const techStack = [
     { name: "Next.js 16", icon: Rocket, desc: "Modern App Router & SSR" },
     { name: "TypeScript", icon: Code2, desc: "Type-safe development" },
     { name: "Tailwind 4", icon: Layout, desc: "Next-gen CSS utility framework" },
+    { name: "Express.js", icon: Terminal, desc: "Fast & minimalist web framework" },
+    { name: "Prisma ORM", icon: HardDrive, desc: "Next-generation TypeScript ORM" },
+    { name: "PostgreSQL", icon: Database, desc: "Advanced relational database" },
     { name: "Better Auth", icon: Lock, desc: "Secure authentication & session" },
-    { name: "Framer Motion", icon: Cpu, desc: "Smooth, premium animations" },
-    { name: "MongoDB", icon: Database, desc: "Scalable data management" }
+    { name: "Node.js", icon: Server, desc: "Cross-platform runtime environment" },
+    { name: "Framer Motion", icon: Cpu, desc: "Smooth, premium animations" }
 ];
 
 const containerVariants: Variants = {
