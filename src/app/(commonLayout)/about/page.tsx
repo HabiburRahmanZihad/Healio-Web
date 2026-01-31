@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Rocket, Heart, Lock, Sparkles, History, Target, Users, ShieldCheck, Zap, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const values = [
     { title: "Patient Centricity", desc: "Every decision we make starts with the patient's well-being and ease of access.", icon: Heart, color: "text-pink-500" },
@@ -256,9 +257,11 @@ export default function AboutPage() {
                         <p className="text-base md:text-lg text-white/50 mb-10 font-medium italic tracking-wide leading-relaxed">
                             "Healthcare is a human right, and technology is the <span className="text-primary font-bold">vessel</span> that delivers it to every doorstep."
                         </p>
-                        <Button size="lg" className="h-12 px-8 rounded-full bg-primary hover:bg-emerald-500 text-white font-black text-xs tracking-widest uppercase transition-all shadow-lg hover:shadow-primary/20">
-                            Explore Medicines
-                        </Button>
+                        <Link href="/medicines">
+                            <Button size="lg" className="h-12 px-8 rounded-full bg-primary hover:bg-emerald-500 text-white font-black text-xs tracking-widest uppercase transition-all shadow-lg hover:shadow-primary/20">
+                                Explore Medicines
+                            </Button>
+                        </Link>
                     </motion.div>
                 </div>
             </section>
