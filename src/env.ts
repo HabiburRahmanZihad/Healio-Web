@@ -23,4 +23,6 @@ export const env = createEnv({
         NEXT_PUBLIC_TEST: process.env.NEXT_PUBLIC_TEST,
         NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     },
+    skipValidation: !!process.env.SKIP_ENV_VALIDATION,
+    emptyStringAsUndefined: true,
 });
