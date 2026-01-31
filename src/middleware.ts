@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
 
-    // Get session cookie from request
-    const sessionCookie = request.cookies.get("better-auth.session_token") ||
-        request.cookies.get("__secure-better-auth.session_token");
+    // Higher security environments (HTTPS) use the __Secure- prefix
+    const sessionCookie =
+        request.cookies.get("better-auth.session_token") ||
+        request.cookies.get("__Secure-better-auth.session_token");
 
     if (!sessionCookie) {
         // Not authenticated, redirect to login
