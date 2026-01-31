@@ -12,7 +12,10 @@ const Newsletter = () => {
     const handleSubscribe = (e: React.FormEvent) => {
         e.preventDefault();
         if (!email) return;
-        toast.success("Synchronized with our pharmaceutical updates.");
+        toast.success("Subscription Successful!", {
+            description: "You've been synchronized with our pharmaceutical updates and elite health network.",
+            icon: <ShieldCheck className="size-4 text-primary" />,
+        });
         setEmail("");
     };
 

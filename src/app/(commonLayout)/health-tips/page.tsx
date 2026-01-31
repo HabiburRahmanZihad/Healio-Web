@@ -4,6 +4,8 @@ import { motion, Variants } from "framer-motion";
 import { Heart, Shield, Apple, Pill, BookOpen, ChevronRight, Activity, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const healthTips = [
     {
@@ -88,6 +90,21 @@ const itemVariants: Variants = {
 };
 
 export default function HealthTipsPage() {
+    const [email, setEmail] = useState("");
+
+    const handleJoinList = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+        toast.success("Welcome to the list!", {
+            description: "You'll now receive our weekly medical briefings and wellness inspiration.",
+            icon: <Sparkles className="size-4 text-emerald-500" />,
+        });
+        setEmail("");
+    };
+
     return (
         <div className="min-h-screen bg-background py-16 px-4 overflow-hidden relative">
             {/* Ambient Background Elements */}
@@ -195,16 +212,19 @@ export default function HealthTipsPage() {
                             Join over 50,000+ people receiving our weekly medical briefings and wellness inspiration.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-lg mx-auto relative z-10">
+                        <form onSubmit={handleJoinList} className="flex flex-col sm:flex-row gap-4 w-full max-w-lg mx-auto relative z-10">
                             <input
                                 type="email"
                                 placeholder="name@email.com"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="h-14 px-6 rounded-2xl bg-white/5 border border-white/10 text-white text-sm font-bold focus:outline-none focus:border-emerald-500/50 focus:bg-white/10 transition-all flex-[2]"
                             />
-                            <Button className="w-full sm:flex-1 h-14 rounded-2xl bg-emerald-500 hover:bg-primary text-white font-black text-xs tracking-widest uppercase shadow-lg shadow-emerald-500/20 transition-all">
+                            <Button type="submit" className="w-full sm:flex-1 h-14 rounded-2xl bg-emerald-500 hover:bg-primary text-white font-black text-xs tracking-widest uppercase shadow-lg shadow-emerald-500/20 transition-all">
                                 JOIN LIST
                             </Button>
-                        </div>
+                        </form>
                     </div>
                 </motion.div>
             </div>
