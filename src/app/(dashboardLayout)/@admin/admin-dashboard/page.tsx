@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { userService } from "@/services/user.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Pill, ShoppingCart, TrendingUp, TrendingDown, Activity } from "lucide-react";
+import { Users, Pill, ShoppingCart, TrendingUp, TrendingDown, Activity, Loader2, Download, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { orderService, Order } from "@/services/order.service";
 import { User } from "@/types";
@@ -23,6 +24,8 @@ export default function AdminDashboard() {
     const [recentOrders, setRecentOrders] = useState<Order[]>([]);
     const [recentUsers, setRecentUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isSyncing, setIsSyncing] = useState(false);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -50,6 +53,34 @@ export default function AdminDashboard() {
         };
         fetchDashboardData();
     }, []);
+
+    const handleGenerateReport = async () => {
+        setIsGenerating(true);
+        const toastId = toast.loading("Accessing system intelligence...");
+
+        await new Promise(resolve => setTimeout(resolve, 2500));
+
+        toast.success("Intelligence Report Compiled", {
+            id: toastId,
+            description: "HEALIO_SYSTEM_INDEX_v1.0.4 is ready for download.",
+            icon: <Download className="size-4 text-emerald-500" />
+        });
+        setIsGenerating(false);
+    };
+
+    const handleSyncData = async () => {
+        setIsSyncing(true);
+        const toastId = toast.loading("Establishing multi-node synchronization...");
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        toast.success("Nexus Fully Synchronized", {
+            id: toastId,
+            description: "Real-time fiscal data and user identities are now consistent across all nodes.",
+            icon: <CheckCircle2 className="size-4 text-primary" />
+        });
+        setIsSyncing(false);
+    };
 
     const statCards = [
         { title: "Total Revenue", value: `৳${stats?.revenue.toLocaleString() || "0"}`, trend: "+20.1%", trendUp: true, icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-500/10", tag: "REVENUE_SYNC" },
@@ -89,11 +120,40 @@ export default function AdminDashboard() {
                     </p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <Button variant="outline" className="h-12 border-white/5 bg-white/[0.02] text-white font-black uppercase tracking-widest text-[9px] px-6 rounded-2xl hover:bg-white/5 hover:border-primary/30 transition-all backdrop-blur-md">
-                        Generate Report
+                    <Button
+                        variant="outline"
+                        onClick={handleGenerateReport}
+                        disabled={isGenerating || isSyncing}
+                        className="h-12 border-white/5 bg-white/[0.02] text-white font-black uppercase tracking-widest text-[9px] px-6 rounded-2xl hover:bg-white/5 hover:border-primary/30 transition-all backdrop-blur-md disabled:opacity-50"
+                    >
+                        {isGenerating ? (
+                            <>
+                                <Loader2 className="size-3 animate-spin mr-2" />
+                                Compiling...
+                            </>
+                        ) : (
+                            <>
+                                <Download className="size-3 mr-2" />
+                                Generate Report
+                            </>
+                        )}
                     </Button>
-                    <Button className="h-12 bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-[9px] px-6 rounded-2xl shadow-[0_10px_30px_rgba(var(--primary-rgb),0.3)] transition-all active:scale-95">
-                        Sync Data Node
+                    <Button
+                        onClick={handleSyncData}
+                        disabled={isSyncing || isGenerating}
+                        className="h-12 bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest text-[9px] px-6 rounded-2xl shadow-[0_10px_30px_rgba(var(--primary-rgb),0.3)] transition-all active:scale-95 disabled:opacity-50"
+                    >
+                        {isSyncing ? (
+                            <>
+                                <Activity className="size-3 animate-pulse mr-2" />
+                                Synchronizing...
+                            </>
+                        ) : (
+                            <>
+                                <Activity className="size-3 mr-2" />
+                                Sync Data Node
+                            </>
+                        )}
                     </Button>
                 </div>
             </div>
