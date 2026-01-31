@@ -22,7 +22,7 @@ import {
     BadgeCheck,
     LogIn
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface MedicineDetailsClientProps {
     medicine: Medicine;

@@ -8,7 +8,6 @@ import { useCart } from "@/providers/CartProvider";
 import { orderService } from "@/services/order.service";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -24,7 +23,6 @@ import {
     Wallet
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
 
 export default function CheckoutPage() {
     const router = useRouter();
