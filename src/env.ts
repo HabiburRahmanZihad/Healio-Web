@@ -10,7 +10,7 @@ export const env = createEnv({
 
 
     client: {
-        NEXT_PUBLIC_TEST: z.string(),
+        NEXT_PUBLIC_TEST: z.string().optional(),
         NEXT_PUBLIC_AUTH_URL: z.string().url(),
         NEXT_PUBLIC_API_URL: z.string().url(),
     },
