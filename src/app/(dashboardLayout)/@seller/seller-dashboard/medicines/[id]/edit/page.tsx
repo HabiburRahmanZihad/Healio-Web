@@ -76,17 +76,18 @@ export default function EditMedicinePage() {
             if (!catRes.error && catRes.data) setCategories(catRes.data);
 
             if (!medRes.error && medRes.data) {
-                form.reset({
-                    name: medRes.data.name,
-                    description: medRes.data.description,
-                    price: medRes.data.price,
-                    stock: medRes.data.stock,
-                    image: medRes.data.image,
-                    manufacturer: medRes.data.manufacturer,
-                    categoryId: medRes.data.categoryId,
-                    requiresPrescription: medRes.data.requiresPrescription,
-                });
+                console.log(">>> [EDIT_PAGE] Medicine data loaded:", medRes.data);
+                // Explicitly set each field value to ensure TanStack Form state is updated
+                form.setFieldValue("name", medRes.data.name);
+                form.setFieldValue("description", medRes.data.description);
+                form.setFieldValue("price", medRes.data.price);
+                form.setFieldValue("stock", medRes.data.stock);
+                form.setFieldValue("image", medRes.data.image);
+                form.setFieldValue("manufacturer", medRes.data.manufacturer);
+                form.setFieldValue("categoryId", medRes.data.categoryId);
+                form.setFieldValue("requiresPrescription", medRes.data.requiresPrescription);
             } else {
+                console.error(">>> [EDIT_PAGE] Failed to load medicine:", medRes.error);
                 toast.error("Failed to load medicine data");
                 router.push("/seller-dashboard/medicines");
             }
