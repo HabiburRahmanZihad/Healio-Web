@@ -31,7 +31,10 @@ export default function CategoryManagementPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState("");
+    const [editCategoryName, setEditCategoryName] = useState("");
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const fetchCategories = async () => {
@@ -62,6 +65,25 @@ export default function CategoryManagementPage() {
             setIsAddModalOpen(false);
         } else {
             toast.error(res.error || "Failed to initialize classification");
+        }
+    };
+
+    const handleUpdateCategory = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingCategory || !editCategoryName.trim()) return;
+
+        setIsSubmitting(true);
+        const res = await categoryService.updateCategory(editingCategory.id, editCategoryName);
+        setIsSubmitting(false);
+
+        if (!res.error) {
+            toast.success("Classification node modified");
+            setEditCategoryName("");
+            setEditingCategory(null);
+            fetchCategories();
+            setIsEditModalOpen(false);
+        } else {
+            toast.error(res.error || "Modification failed");
         }
     };
 
@@ -161,7 +183,16 @@ export default function CategoryManagementPage() {
                                         >
                                             <Trash2 className="size-5" />
                                         </Button>
-                                        <Button variant="ghost" size="icon" className="size-12 bg-white/[0.03] text-gray-500 hover:text-primary hover:bg-primary/10 rounded-2xl transition-all border border-transparent hover:border-primary/20">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => {
+                                                setEditingCategory(category);
+                                                setEditCategoryName(category.name);
+                                                setIsEditModalOpen(true);
+                                            }}
+                                            className="size-12 bg-white/[0.03] text-gray-500 hover:text-primary hover:bg-primary/10 rounded-2xl transition-all border border-transparent hover:border-primary/20"
+                                        >
                                             <ExternalLink className="size-5" />
                                         </Button>
                                     </div>
@@ -215,6 +246,49 @@ export default function CategoryManagementPage() {
                             <SheetClose asChild>
                                 <Button variant="ghost" className="w-full h-14 rounded-2xl text-gray-500 font-black uppercase tracking-widest text-[10px] hover:text-white transition-all">
                                     Abort Operation
+                                </Button>
+                            </SheetClose>
+                        </SheetFooter>
+                    </form>
+                </SheetContent>
+            </Sheet>
+
+            <Sheet open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+                <SheetContent side="right" className="bg-zinc-950 border-white/10 text-white w-full sm:max-w-md p-10 backdrop-blur-3xl shadow-2xl">
+                    <SheetHeader className="mb-10 text-left">
+                        <SheetTitle className="text-3xl font-black uppercase tracking-tighter">Modify Classification</SheetTitle>
+                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2">Adjust existing taxonomic node parameters.</p>
+                    </SheetHeader>
+
+                    <form onSubmit={handleUpdateCategory} className="space-y-8">
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-2">Classification Label</label>
+                            <Input
+                                value={editCategoryName}
+                                onChange={(e) => setEditCategoryName(e.target.value)}
+                                placeholder="Adjustment label..."
+                                className="bg-white/[0.03] border-white/10 text-white rounded-2xl h-14 font-bold px-6 focus:border-primary/50 transition-all"
+                                autoFocus
+                            />
+                        </div>
+
+                        <div className="flex items-start gap-4 p-5 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-[10px] leading-relaxed text-gray-400 font-bold uppercase tracking-wide">
+                            <AlertCircle className="size-5 text-blue-500 shrink-0" />
+                            <span>Modification will affect all assets currently indexed under this classification node.</span>
+                        </div>
+
+                        <SheetFooter className="mt-10 flex flex-col gap-4">
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full bg-primary hover:bg-primary/90 text-zinc-950 rounded-2xl h-14 font-black uppercase tracking-widest text-[10px] shadow-[0_0_30px_rgba(var(--primary-rgb),0.2)] active:scale-95 transition-all"
+                            >
+                                {isSubmitting ? <Activity className="size-4 animate-spin mr-2" /> : <Database className="size-4 mr-2" />}
+                                Commit Changes
+                            </Button>
+                            <SheetClose asChild>
+                                <Button variant="ghost" className="w-full h-14 rounded-2xl text-gray-500 font-black uppercase tracking-widest text-[10px] hover:text-white transition-all">
+                                    Cancel Operation
                                 </Button>
                             </SheetClose>
                         </SheetFooter>

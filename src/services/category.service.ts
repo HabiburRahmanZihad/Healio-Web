@@ -24,4 +24,13 @@ export const categoryService = {
             method: "DELETE",
         });
     },
+
+    // Admin: Update a category
+    updateCategory: async (id: string, name: string, options?: FetchOptions) => {
+        return apiFetch<Category>(`/api/categories/${id}`, {
+            ...options,
+            method: "PATCH",
+            body: { name },
+        });
+    },
 };
