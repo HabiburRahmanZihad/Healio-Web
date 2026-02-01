@@ -1,4 +1,5 @@
 import { LoginForm } from "@/components/modules/authentication/login-form"
+import { Suspense } from "react"
 
 export default function Page() {
   return (
@@ -10,7 +11,13 @@ export default function Page() {
       </div>
 
       <div className="relative z-10 w-full max-w-sm">
-        <LoginForm />
+        <Suspense fallback={
+          <div className="flex items-center justify-center p-8 bg-zinc-900/50 backdrop-blur-xl rounded-[2.5rem] border border-white/10 shadow-2xl">
+            <div className="size-10 rounded-full border-t-2 border-primary animate-spin" />
+          </div>
+        }>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   )

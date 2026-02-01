@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
@@ -43,6 +43,8 @@ const itemVariants = {
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackURL = searchParams.get("callbackURL");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -72,10 +74,23 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 });
                 return;
               }
+
               toast.success("Authentication successful", {
                 description: `Welcome back to Healio.`,
               });
-              router.push("/");
+
+              if (callbackURL) {
+                router.push(callbackURL);
+              } else {
+                const role = (user as any).role;
+                if (role === "ADMIN") {
+                  router.push("/admin-dashboard");
+                } else if (role === "SELLER") {
+                  router.push("/seller-dashboard");
+                } else {
+                  router.push("/dashboard");
+                }
+              }
             },
             onError: (ctx) => {
               toast.error("Authentication failed", {
