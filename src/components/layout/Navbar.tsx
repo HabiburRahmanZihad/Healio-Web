@@ -52,7 +52,7 @@ interface Navbar1Props {
 
 import { authClient } from "@/lib/auth-client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { LogOut, ShoppingCart } from "lucide-react";
 import { useCart } from "@/providers/CartProvider";
@@ -74,6 +74,7 @@ const Navbar = ({
   const { data: session } = authClient.useSession();
   const { itemCount } = useCart();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     await authClient.signOut({
@@ -130,7 +131,7 @@ const Navbar = ({
           <div className="flex-1 flex justify-center">
             <NavigationMenu>
               <NavigationMenuList className="gap-1">
-                {navigationMenu.map((item) => renderMenuItem(item))}
+                {navigationMenu.map((item) => renderMenuItem(item, pathname))}
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -222,7 +223,7 @@ const Navbar = ({
                 </SheetHeader>
                 <div className="flex flex-col gap-8 mt-8">
                   <nav className="flex flex-col gap-2">
-                    {navigationMenu.map((item) => renderMobileMenuItem(item))}
+                    {navigationMenu.map((item) => renderMobileMenuItem(item, pathname))}
                   </nav>
 
                   <div className="flex flex-col gap-4 pt-6 border-t font-sans">
@@ -274,16 +275,19 @@ const Navbar = ({
   );
 };
 
-const renderMenuItem = (item: MenuItem) => {
+const renderMenuItem = (item: MenuItem, pathname: string) => {
+  const isActive = pathname === item.url || (item.url !== "/" && pathname.startsWith(item.url));
+
   return (
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         asChild
-        className="inline-flex h-10 items-center justify-center rounded-full 
-        px-5 text-sm font-medium transition-colors
-        text-muted-foreground
-        hover:text-primary hover:bg-primary/10
-        focus:text-primary focus:bg-primary/10"
+        className={cn(
+          "inline-flex h-10 items-center justify-center rounded-full px-5 text-sm font-medium transition-colors",
+          isActive
+            ? "text-primary bg-primary/10 font-black tracking-tight"
+            : "text-muted-foreground hover:text-primary hover:bg-primary/10 focus:text-primary focus:bg-primary/10"
+        )}
       >
         <Link href={item.url}>{item.title}</Link>
       </NavigationMenuLink>
@@ -291,15 +295,19 @@ const renderMenuItem = (item: MenuItem) => {
   );
 };
 
-const renderMobileMenuItem = (item: MenuItem) => {
+const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
+  const isActive = pathname === item.url || (item.url !== "/" && pathname.startsWith(item.url));
+
   return (
     <Link
       key={item.title}
       href={item.url}
-      className="text-lg font-medium py-2 px-4 rounded-lg 
-      text-muted-foreground
-      transition-colors
-      hover:text-primary hover:bg-primary/10"
+      className={cn(
+        "text-lg font-medium py-2 px-4 rounded-lg transition-colors",
+        isActive
+          ? "text-primary bg-primary/10 font-bold"
+          : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+      )}
     >
       {item.title}
     </Link>
