@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { orderService, Order } from "@/services/order.service";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,8 @@ import {
     Activity,
     Package,
     Hash,
-    ChevronDown
+    ChevronDown,
+    Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -20,24 +21,55 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Pagination } from "@/components/ui/pagination";
 
 export default function AdminOrderManagement() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filters, setFilters] = useState({
+        page: 1,
+        limit: 10,
+        search: "",
+    });
+    const [meta, setMeta] = useState<{
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    } | null>(null);
 
-    const fetchOrders = async () => {
+    const fetchOrders = useCallback(async () => {
         setIsLoading(true);
-        const res = await orderService.getMyOrders(); // Admin uses getMyOrders to trigger getAdminOrders in backend
+        const res = await orderService.getMyOrders({
+            page: filters.page,
+            limit: filters.limit,
+            search: filters.search || undefined,
+        });
         if (!res.error && res.data) {
             setOrders(res.data);
+            if (res.meta) setMeta(res.meta);
         }
         setIsLoading(false);
-    };
+    }, [filters]);
 
     useEffect(() => {
         fetchOrders();
-    }, []);
+    }, [fetchOrders]);
+
+    // Debounce search term
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchTerm !== filters.search) {
+                setFilters(prev => ({ ...prev, search: searchTerm, page: 1 }));
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchTerm, filters.search]);
+
+    const handlePageChange = (page: number) => {
+        setFilters(prev => ({ ...prev, page }));
+    };
 
     const handleStatusUpdate = async (orderId: string, newStatus: string) => {
         const toastId = toast.loading(`Updating protocol status to ${newStatus}...`);
@@ -51,15 +83,9 @@ export default function AdminOrderManagement() {
         }
     };
 
-    const filteredOrders = orders.filter(order =>
-        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (order.customer?.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (order.customer?.email || "").toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     const totalRevenue = orders.reduce((acc, curr) => acc + curr.totalPrice, 0);
 
-    if (isLoading) {
+    if (isLoading && orders.length === 0) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
                 <div className="relative">
@@ -91,13 +117,13 @@ export default function AdminOrderManagement() {
                 </div>
                 <div className="flex flex-col items-end gap-3">
                     <div className="text-right">
-                        <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Total Nexus Value</p>
+                        <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Total Nexus Value (Page)</p>
                         <p className="text-2xl font-black text-white tracking-tighter">৳{totalRevenue.toLocaleString()}</p>
                     </div>
                     <div className="relative group w-full md:w-80">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <Input
-                            placeholder="Trace Transmission by ID..."
+                            placeholder="Trace Transmission by ID, Name or Email..."
                             className="h-12 pl-12 bg-white/[0.02] border-white/5 text-white rounded-2xl focus:ring-primary/20 focus:border-primary/40 transition-all font-bold text-xs backdrop-blur-md"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -119,8 +145,14 @@ export default function AdminOrderManagement() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {filteredOrders.length > 0 ? (
-                                filteredOrders.map((order) => (
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={5} className="py-20 text-center">
+                                        <Loader2 className="size-8 animate-spin text-primary mx-auto" />
+                                    </td>
+                                </tr>
+                            ) : orders.length > 0 ? (
+                                orders.map((order) => (
                                     <tr
                                         key={order.id}
                                         className="hover:bg-white/[0.03] transition-all duration-500 group relative"
@@ -161,7 +193,7 @@ export default function AdminOrderManagement() {
                                         <td className="p-8 text-right">
                                             <div className="flex items-center justify-end gap-1.5 font-black text-base text-white tracking-tighter">
                                                 <span className="text-[10px] text-primary">৳</span>
-                                                <span>{order.totalPrice.toFixed(2)}</span>
+                                                <span>{order.totalPrice.toLocaleString()}</span>
                                             </div>
                                         </td>
                                         <td className="p-8 text-right">
@@ -199,6 +231,18 @@ export default function AdminOrderManagement() {
                         </tbody>
                     </table>
                 </div>
+                {meta && meta.totalPages > 1 && (
+                    <div className="p-8 border-t border-white/5 flex flex-col items-center gap-4">
+                        <Pagination
+                            currentPage={meta.page}
+                            totalPages={meta.totalPages}
+                            onPageChange={handlePageChange}
+                        />
+                        <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest">
+                            Ledger Synchronized // Page {meta.page} of {meta.totalPages}
+                        </p>
+                    </div>
+                )}
             </Card>
         </div>
     );

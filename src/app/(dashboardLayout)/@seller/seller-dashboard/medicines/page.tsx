@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { medicineService } from "@/services/medicine.service";
-import { Medicine } from "@/types/medicine.type";
+import { Medicine, MedicineFilters } from "@/types/medicine.type";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { PlusCircle, Pencil, Trash2, Search, Package, Loader2, AlertCircle, Activity, Box, Layers, ArrowRight } from "lucide-react";
@@ -11,24 +11,50 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Pagination } from "@/components/ui/pagination";
 
 export default function SellerMedicinesPage() {
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filters, setFilters] = useState<MedicineFilters>({
+        page: 1,
+        limit: 10,
+    });
+    const [meta, setMeta] = useState<{
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    } | null>(null);
 
-    const fetchMedicines = async () => {
+    const fetchMedicines = useCallback(async () => {
         setIsLoading(true);
-        const res = await medicineService.getSellerMedicines();
+        const res = await medicineService.getSellerMedicines(filters);
         if (!res.error && res.data) {
             setMedicines(res.data);
+            if (res.meta) setMeta(res.meta);
         }
         setIsLoading(false);
-    };
+    }, [filters]);
 
     useEffect(() => {
         fetchMedicines();
-    }, []);
+    }, [fetchMedicines]);
+
+    // Debounce search term
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchTerm !== (filters.search || "")) {
+                setFilters(prev => ({ ...prev, search: searchTerm || undefined, page: 1 }));
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchTerm, filters.search]);
+
+    const handlePageChange = (page: number) => {
+        setFilters(prev => ({ ...prev, page }));
+    };
 
     const handleDelete = async (id: string, name: string) => {
         if (!confirm(`Initialize DELETION protocol for asset: ${name}?`)) return;
@@ -38,18 +64,13 @@ export default function SellerMedicinesPage() {
 
         if (!res.error) {
             toast.success("Asset purged successfully", { id: toastId });
-            setMedicines(prev => prev.filter(m => m.id !== id));
+            fetchMedicines(); // Re-fetch to update pagination state
         } else {
             toast.error(res.error || "Deletions protocol failed", { id: toastId });
         }
     };
 
-    const filteredMedicines = medicines.filter(m =>
-        m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        m.manufacturer.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    if (isLoading) {
+    if (isLoading && medicines.length === 0) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center">
                 <Loader2 className="size-10 animate-spin text-primary mb-4" />
@@ -96,8 +117,8 @@ export default function SellerMedicinesPage() {
                             <Input
                                 placeholder="Scan ledger for asset name or signature..."
                                 className="pl-12 bg-zinc-950/50 border-white/5 h-14 rounded-xl focus:border-primary/50 focus:ring-primary/20 transition-all font-medium placeholder:text-gray-600"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
                     </div>
@@ -105,7 +126,7 @@ export default function SellerMedicinesPage() {
                     <div className="flex items-center gap-4 bg-white/5 px-6 py-3 rounded-2xl border border-white/10 backdrop-blur-xl">
                         <div className="flex flex-col text-right">
                             <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-0.5">Active Nodes</span>
-                            <span className="text-xl font-black text-white leading-none">{filteredMedicines.length} <span className="text-gray-600 text-[10px]">/ {medicines.length}</span></span>
+                            <span className="text-xl font-black text-white leading-none">{meta?.total || 0} Assets Identifed</span>
                         </div>
                         <div className="w-px h-8 bg-white/10" />
                         <Package className="size-5 text-primary" />
@@ -125,8 +146,14 @@ export default function SellerMedicinesPage() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {filteredMedicines.length > 0 ? (
-                                    filteredMedicines.map((medicine) => (
+                                {isLoading ? (
+                                    <tr>
+                                        <td colSpan={5} className="py-20 text-center">
+                                            <Loader2 className="size-8 animate-spin text-primary mx-auto" />
+                                        </td>
+                                    </tr>
+                                ) : medicines.length > 0 ? (
+                                    medicines.map((medicine) => (
                                         <tr
                                             key={medicine.id}
                                             className="hover:bg-white/[0.03] transition-all duration-300 group"
@@ -223,9 +250,9 @@ export default function SellerMedicinesPage() {
                                                 </div>
                                                 <div className="space-y-2">
                                                     <p className="text-xl font-black text-white uppercase tracking-tighter">No Matching Asset Logs</p>
-                                                    <p className="text-sm text-gray-500 font-medium max-w-sm mx-auto uppercase tracking-widest">ledger search for query "<span className="text-primary">{searchQuery}</span>" returned null results.</p>
+                                                    <p className="text-sm text-gray-500 font-medium max-w-sm mx-auto uppercase tracking-widest">ledger search for query "<span className="text-primary">{searchTerm}</span>" returned null results.</p>
                                                 </div>
-                                                <Button variant="link" onClick={() => setSearchQuery("")} className="text-primary font-black uppercase tracking-widest text-[10px] hover:text-primary/70">Reset Search Protocol</Button>
+                                                <Button variant="link" onClick={() => setSearchTerm("")} className="text-primary font-black uppercase tracking-widest text-[10px] hover:text-primary/70">Reset Search Protocol</Button>
                                             </div>
                                         </td>
                                     </tr>
@@ -233,6 +260,18 @@ export default function SellerMedicinesPage() {
                             </tbody>
                         </table>
                     </div>
+                    {meta && meta.totalPages > 1 && (
+                        <div className="p-8 border-t border-white/5 flex flex-col items-center gap-4">
+                            <Pagination
+                                currentPage={meta.page}
+                                totalPages={meta.totalPages}
+                                onPageChange={handlePageChange}
+                            />
+                            <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest">
+                                Protocol Synchronized // Page {meta.page} of {meta.totalPages}
+                            </p>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 

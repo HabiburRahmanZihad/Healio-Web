@@ -1,4 +1,4 @@
-import { apiFetch, FetchOptions } from "@/lib/api-client";
+import { apiFetch, buildQueryString, FetchOptions } from "@/lib/api-client";
 
 export interface OrderItem {
     medicineId: string;
@@ -47,8 +47,9 @@ export const orderService = {
     },
 
     // Get my orders
-    getMyOrders: async (options?: FetchOptions) => {
-        return apiFetch<Order[]>("/api/orders", options);
+    getMyOrders: async (filters?: any, options?: FetchOptions) => {
+        const query = buildQueryString(filters || {});
+        return apiFetch<Order[]>(`/api/orders${query}`, options);
     },
 
     // Cancel order
@@ -65,8 +66,9 @@ export const orderService = {
     },
 
     // Seller: Get incoming orders
-    getSellerOrders: async (options?: FetchOptions) => {
-        return apiFetch<Order[]>("/api/orders", options);
+    getSellerOrders: async (filters?: any, options?: FetchOptions) => {
+        const query = buildQueryString(filters || {});
+        return apiFetch<Order[]>(`/api/orders${query}`, options);
     },
 
     // Seller: Update order status

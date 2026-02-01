@@ -4,31 +4,52 @@ import { useEffect, useState, useCallback } from "react";
 import { MedicineGrid, MedicineFiltersPanel } from "@/components/modules/medicines";
 import { medicineService } from "@/services/medicine.service";
 import { Medicine, MedicineFilters } from "@/types/medicine.type";
-import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Pagination } from "@/components/ui/pagination";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, LayoutGrid, List } from "lucide-react";
 
 export default function MedicinesPage() {
     const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const [filters, setFilters] = useState<MedicineFilters>({});
+    const [filters, setFilters] = useState<MedicineFilters>({
+        page: 1,
+        limit: 12,
+    });
+    const [meta, setMeta] = useState<{
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    } | null>(null);
     const [loading, setLoading] = useState(true);
 
     // Fetch medicines with current filters
     const fetchMedicines = useCallback(async () => {
         setLoading(true);
-        const { data } = await medicineService.getMedicines(filters);
+        const { data, meta: responseMeta } = await medicineService.getMedicines(filters);
         setMedicines(data || []);
+        if (responseMeta) setMeta(responseMeta);
         setLoading(false);
-    }, [filters]);
 
+        // Scroll to top on page change
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [filters]);
 
     // Fetch medicines when filters change
     useEffect(() => {
         fetchMedicines();
     }, [fetchMedicines]);
 
-    // Debounced filter change handler
     const handleFilterChange = (newFilters: MedicineFilters) => {
-        setFilters(newFilters);
+        // Reset to page 1 when any filter other than page changes
+        const pageChanged = newFilters.page !== filters.page;
+        setFilters({
+            ...newFilters,
+            page: pageChanged ? newFilters.page : 1
+        });
+    };
+
+    const handlePageChange = (page: number) => {
+        setFilters(prev => ({ ...prev, page }));
     };
 
     return (
@@ -79,22 +100,64 @@ export default function MedicinesPage() {
                     </aside>
 
                     {/* Medicine Grid */}
-                    <main className="flex-1">
+                    <main className="flex-1 space-y-8">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="mb-8 p-3 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm flex items-center justify-between"
+                            className="p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md flex items-center justify-between shadow-xl"
                         >
-                            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
-                                {loading ? "Scanning archive..." : `${medicines.length} products found`}
-                            </p>
+                            <div className="flex flex-col">
+                                <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-0.5">Inventory Status</span>
+                                <p className="text-xs font-black text-white uppercase tracking-widest">
+                                    {loading ? "Scanning Ledger..." : `${meta?.total || 0} Assets Identified`}
+                                </p>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <div className="size-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                                    <LayoutGrid className="size-4" />
+                                </div>
+                                <div className="size-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-white transition-colors cursor-not-allowed">
+                                    <List className="size-4" />
+                                </div>
+                            </div>
                         </motion.div>
 
-                        <MedicineGrid
-                            medicines={medicines}
-                            loading={loading}
-                            emptyMessage="No medicines match your exploration criteria"
-                        />
+                        <div className="min-h-[600px]">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={JSON.stringify(filters) + loading}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <MedicineGrid
+                                        medicines={medicines}
+                                        loading={loading}
+                                        emptyMessage="No medicines match your exploration criteria"
+                                    />
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Pagination Section */}
+                        {meta && meta.totalPages > 1 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="pt-12 border-t border-white/5 flex flex-col items-center gap-6"
+                            >
+                                <Pagination
+                                    currentPage={meta.page}
+                                    totalPages={meta.totalPages}
+                                    onPageChange={handlePageChange}
+                                />
+                                <p className="text-[10px] font-black text-gray-600 uppercase tracking-[0.3em]">
+                                    Transmission Synchronized // Page {meta.page} of {meta.totalPages}
+                                </p>
+                            </motion.div>
+                        )}
                     </main>
                 </div>
             </div>

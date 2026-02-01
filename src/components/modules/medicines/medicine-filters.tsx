@@ -1,20 +1,42 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { MedicineFilters } from "@/types/medicine.type";
+import { Search, Filter, Factory, CircleDollarSign, Trash2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface MedicineFiltersProps {
     filters: MedicineFilters;
     onFilterChange: (filters: MedicineFilters) => void;
 }
 
-import { Search, Filter, Factory, CircleDollarSign, Trash2, ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
-
 export function MedicineFiltersPanel({ filters, onFilterChange }: MedicineFiltersProps) {
+    const [searchTerm, setSearchTerm] = useState(filters.search || "");
+    const [manufacturerTerm, setManufacturerTerm] = useState(filters.manufacturer || "");
 
-    // DRY: Single handler for all filter updates
-    const updateFilter = (key: keyof MedicineFilters, value: string | number | undefined) => {
-        onFilterChange({ ...filters, [key]: value || undefined });
+    // Debounce search and manufacturer terms
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchTerm !== (filters.search || "") || manufacturerTerm !== (filters.manufacturer || "")) {
+                onFilterChange({
+                    ...filters,
+                    search: searchTerm || undefined,
+                    manufacturer: manufacturerTerm || undefined
+                });
+            }
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchTerm, manufacturerTerm, filters, onFilterChange]);
+
+    // Update local state when filters prop changes (e.g. from reset)
+    useEffect(() => {
+        setSearchTerm(filters.search || "");
+        setManufacturerTerm(filters.manufacturer || "");
+    }, [filters.search, filters.manufacturer]);
+
+    const updatePriceFilter = (key: "minPrice" | "maxPrice", value: number | undefined) => {
+        onFilterChange({ ...filters, [key]: value });
     };
 
     return (
@@ -39,12 +61,11 @@ export function MedicineFiltersPanel({ filters, onFilterChange }: MedicineFilter
                 <input
                     type="text"
                     placeholder="E.g. Paracetamol..."
-                    value={filters.search || ""}
-                    onChange={(e) => updateFilter("search", e.target.value)}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                 />
             </div>
-
 
             {/* Manufacturer */}
             <div className="space-y-2">
@@ -55,8 +76,8 @@ export function MedicineFiltersPanel({ filters, onFilterChange }: MedicineFilter
                 <input
                     type="text"
                     placeholder="E.g. Square Pharma..."
-                    value={filters.manufacturer || ""}
-                    onChange={(e) => updateFilter("manufacturer", e.target.value)}
+                    value={manufacturerTerm}
+                    onChange={(e) => setManufacturerTerm(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                 />
             </div>
@@ -72,15 +93,15 @@ export function MedicineFiltersPanel({ filters, onFilterChange }: MedicineFilter
                         type="number"
                         placeholder="Min"
                         value={filters.minPrice || ""}
-                        onChange={(e) => updateFilter("minPrice", e.target.value ? Number(e.target.value) : undefined)}
-                        className="w-1/2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        onChange={(e) => updatePriceFilter("minPrice", e.target.value ? Number(e.target.value) : undefined)}
+                        className="w-1/2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                     />
                     <input
                         type="number"
                         placeholder="Max"
                         value={filters.maxPrice || ""}
-                        onChange={(e) => updateFilter("maxPrice", e.target.value ? Number(e.target.value) : undefined)}
-                        className="w-1/2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        onChange={(e) => updatePriceFilter("maxPrice", e.target.value ? Number(e.target.value) : undefined)}
+                        className="w-1/2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary/50 focus:bg-white/[0.07] transition-all duration-300"
                     />
                 </div>
             </div>

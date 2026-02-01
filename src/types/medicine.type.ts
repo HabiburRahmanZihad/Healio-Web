@@ -46,10 +46,18 @@ export interface MedicineFilters {
     manufacturer?: string;
     minPrice?: number;
     maxPrice?: number;
+    page?: number;
+    limit?: number;
 }
 
 export interface ApiResponse<T> {
     success: boolean;
     message: string;
+    meta?: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    };
     data: T;
 }

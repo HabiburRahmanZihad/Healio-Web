@@ -15,8 +15,9 @@ export const medicineService = {
     },
 
     // Seller: Get all medicines for current seller
-    getSellerMedicines: async (options?: FetchOptions) => {
-        return apiFetch<Medicine[]>("/api/medicines/seller/all", options);
+    getSellerMedicines: async (filters?: MedicineFilters, options?: FetchOptions) => {
+        const query = buildQueryString(filters || {});
+        return apiFetch<Medicine[]>(`/api/medicines/seller/all${query}`, options);
     },
 
     // Seller: Create a new medicine

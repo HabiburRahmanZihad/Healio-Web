@@ -12,6 +12,12 @@ interface FetchOptions {
 
 interface ServiceResponse<T> {
     data: T | null;
+    meta?: {
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    } | null;
     error: string | null;
 }
 
@@ -67,7 +73,7 @@ async function apiFetch<T>(
             return { data: null, error: json?.message || `Request failed (${res.status})` };
         }
 
-        return { data: json.data as T, error: null };
+        return { data: json.data as T, meta: json.meta || null, error: null };
     } catch (error) {
         console.error(`API Error (${endpoint}):`, error);
         return { data: null, error: "Network error occurred" };

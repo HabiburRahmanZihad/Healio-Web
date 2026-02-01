@@ -1,41 +1,61 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { medicineService } from "@/services/medicine.service";
-import { Medicine } from "@/types/medicine.type";
+import { Medicine, MedicineFilters } from "@/types/medicine.type";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {  Search, Tag, ExternalLink, Filter, Activity, Package } from "lucide-react";
+import { Search, Tag, ExternalLink, Filter, Activity, Package, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { Pagination } from "@/components/ui/pagination";
 
 export default function AdminMedicineManagement() {
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filters, setFilters] = useState<MedicineFilters>({
+        page: 1,
+        limit: 10,
+    });
+    const [meta, setMeta] = useState<{
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    } | null>(null);
 
-    const fetchMedicines = async () => {
+    const fetchMedicines = useCallback(async () => {
         setIsLoading(true);
-        const res = await medicineService.getMedicines();
+        const res = await medicineService.getMedicines(filters);
         if (!res.error && res.data) {
             setMedicines(res.data);
+            if (res.meta) setMeta(res.meta);
         }
         setIsLoading(false);
-    };
+    }, [filters]);
 
     useEffect(() => {
         fetchMedicines();
-    }, []);
+    }, [fetchMedicines]);
 
-    const filteredMedicines = medicines.filter(med =>
-        med.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        med.manufacturer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        med.seller?.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Debounce search term
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchTerm !== (filters.search || "")) {
+                setFilters(prev => ({ ...prev, search: searchTerm || undefined, page: 1 }));
+            }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchTerm, filters.search]);
 
-    if (isLoading) {
+    const handlePageChange = (page: number) => {
+        setFilters(prev => ({ ...prev, page }));
+    };
+
+    if (isLoading && medicines.length === 0) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
                 <div className="relative">
@@ -96,8 +116,14 @@ export default function AdminMedicineManagement() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {filteredMedicines.length > 0 ? (
-                                filteredMedicines.map((med) => (
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={6} className="py-20 text-center">
+                                        <Loader2 className="size-8 animate-spin text-primary mx-auto" />
+                                    </td>
+                                </tr>
+                            ) : medicines.length > 0 ? (
+                                medicines.map((med) => (
                                     <tr
                                         key={med.id}
                                         className="hover:bg-white/[0.03] transition-all duration-500 group relative"
@@ -153,7 +179,7 @@ export default function AdminMedicineManagement() {
                                         <td className="p-8 text-right">
                                             <div className="flex items-center justify-end gap-1.5 font-black text-base text-white tracking-tighter">
                                                 <span className="text-[10px] text-primary">৳</span>
-                                                <span>{med.price.toFixed(2)}</span>
+                                                <span>{med.price.toLocaleString()}</span>
                                             </div>
                                         </td>
                                         <td className="p-8 text-right">
@@ -178,6 +204,18 @@ export default function AdminMedicineManagement() {
                         </tbody>
                     </table>
                 </div>
+                {meta && meta.totalPages > 1 && (
+                    <div className="p-8 border-t border-white/5 flex flex-col items-center gap-4">
+                        <Pagination
+                            currentPage={meta.page}
+                            totalPages={meta.totalPages}
+                            onPageChange={handlePageChange}
+                        />
+                        <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest">
+                            Matrix Synchronized // Page {meta.page} of {meta.totalPages}
+                        </p>
+                    </div>
+                )}
             </Card>
         </div>
     );
