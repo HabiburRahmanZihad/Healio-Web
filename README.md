@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/Healio_logo_png.png" alt="Healio Logo" width="180" />
+  <img src="public/Healio_logo_png.png" alt="Healio Logo" width="220" />
   <h1>🩺 HEALIO</h1>
   <p><strong>Next-Gen Healthcare Management & Digital Pharmacy Nexus</strong></p>
 
