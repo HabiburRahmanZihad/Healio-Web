@@ -77,7 +77,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 description: "You need to be logged in to add items to your cart",
                 action: {
                     label: "Login",
-                    onClick: () => window.location.href = "/login"
+                    onClick: () => {
+                        const callbackURL = encodeURIComponent(window.location.pathname);
+                        window.location.href = `/login?callbackURL=${callbackURL}`;
+                    }
                 }
             });
             return;

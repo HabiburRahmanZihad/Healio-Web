@@ -55,7 +55,8 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
 
     const handleAddToCart = () => {
         if (isGuest) {
-            window.location.href = "/login";
+            const callbackURL = encodeURIComponent(window.location.pathname);
+            window.location.href = `/login?callbackURL=${callbackURL}`;
             return;
         }
 
