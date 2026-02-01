@@ -207,7 +207,7 @@ export default function SellerOrdersPage() {
                                                         </div>
                                                         <div className="space-y-1">
                                                             <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest">Consignee</span>
-                                                            <p className="text-xs font-medium text-gray-300 uppercase">Micah Rowe // Registered Customer</p>
+                                                            <p className="text-xs font-medium text-gray-300 uppercase">{order.customer?.name || "Anonymous Operative"} // Registered Customer</p>
                                                         </div>
                                                     </div>
                                                 </div>

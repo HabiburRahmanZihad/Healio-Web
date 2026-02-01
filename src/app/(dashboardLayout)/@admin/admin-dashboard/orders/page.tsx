@@ -28,7 +28,7 @@ export default function AdminOrderManagement() {
 
     const fetchOrders = async () => {
         setIsLoading(true);
-        const res = await orderService.getSellerOrders();
+        const res = await orderService.getMyOrders(); // Admin uses getMyOrders to trigger getAdminOrders in backend
         if (!res.error && res.data) {
             setOrders(res.data);
         }
@@ -53,8 +53,8 @@ export default function AdminOrderManagement() {
 
     const filteredOrders = orders.filter(order =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.user?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.user?.email.toLowerCase().includes(searchTerm.toLowerCase())
+        (order.customer?.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (order.customer?.email || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const totalRevenue = orders.reduce((acc, curr) => acc + curr.totalPrice, 0);
@@ -138,8 +138,8 @@ export default function AdminOrderManagement() {
                                         </td>
                                         <td className="p-8">
                                             <div className="flex flex-col gap-1">
-                                                <div className="text-xs text-white font-black uppercase tracking-tight">{order.user?.name || "Anonymous Node"}</div>
-                                                <div className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">{order.user?.email || "Unknown CID"}</div>
+                                                <div className="text-xs text-white font-black uppercase tracking-tight">{order.customer?.name || "Anonymous Node"}</div>
+                                                <div className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">{order.customer?.email || "Unknown CID"}</div>
                                             </div>
                                         </td>
                                         <td className="p-8">
