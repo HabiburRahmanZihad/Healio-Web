@@ -9,6 +9,16 @@ export interface Category {
     updatedAt: string;
 }
 
+export interface Review {
+    id: string;
+    rating: number;
+    comment: string;
+    userId: string;
+    user?: User;
+    medicineId: string;
+    createdAt: string;
+}
+
 export interface Medicine {
     id: string;
     name: string;
@@ -22,6 +32,9 @@ export interface Medicine {
     category?: Category;
     sellerId: string;
     seller?: User;
+    reviews: Review[];
+    averageRating?: number;
+    totalReviews?: number;
     createdAt: string;
     updatedAt: string;
 }

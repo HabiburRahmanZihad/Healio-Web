@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Medicine } from "@/types/medicine.type";
@@ -20,24 +21,35 @@ import {
     Truck,
     RotateCcw,
     BadgeCheck,
-    LogIn
+    LogIn,
+    Star,
+    User,
+    Factory
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { ReviewList } from "@/components/modules/reviews/review-list";
+import { ReviewForm } from "@/components/modules/reviews/review-form";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 interface MedicineDetailsClientProps {
     medicine: Medicine;
 }
 
 export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) {
+    const router = useRouter();
     const { data: session } = authClient.useSession();
     const { addToCart } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
 
     const userRole = (session?.user as any)?.role;
     const isManagement = userRole === "SELLER" || userRole === "ADMIN";
+    const isCustomer = userRole === "CUSTOMER";
     const isGuest = !session?.user;
-    const { id, name, description, price, stock, image, manufacturer, category, requiresPrescription } = medicine;
+    const { id, name, description, price, stock, image, manufacturer, category, requiresPrescription, reviews, averageRating, totalReviews } = medicine;
     const isOutOfStock = stock === 0;
+
+    const [activeTab, setActiveTab] = useState<"details" | "reviews">("details");
 
     const handleAddToCart = () => {
         if (isGuest) {
@@ -181,6 +193,20 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                         <span>MD Required</span>
                                     </div>
                                 )}
+                                {totalReviews && totalReviews > 0 ? (
+                                    <button
+                                        onClick={() => {
+                                            setActiveTab("reviews");
+                                            const element = document.getElementById("reviews-section");
+                                            element?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        className="flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-lg text-xs font-bold text-primary hover:bg-primary/20 transition-colors"
+                                    >
+                                        <Star className="size-3 fill-current" />
+                                        <span>{averageRating?.toFixed(1)}</span>
+                                        <span className="text-[9px] text-primary/60">({totalReviews})</span>
+                                    </button>
+                                ) : null}
                             </div>
                         </div>
 
@@ -282,6 +308,102 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                             </p>
                         </div>
                     </motion.div>
+                </div>
+                <div id="reviews-section" className="mt-16 sm:mt-24 space-y-12">
+                    {/* Tab Navigation */}
+                    <div className="flex items-center gap-8 border-b border-white/5 pb-4">
+                        <button
+                            onClick={() => setActiveTab("details")}
+                            className={cn(
+                                "text-[10px] font-black uppercase tracking-[0.3em] transition-all relative pb-4",
+                                activeTab === "details" ? "text-primary" : "text-gray-600 hover:text-gray-400"
+                            )}
+                        >
+                            Technical Specifications
+                            {activeTab === "details" && <motion.div layoutId="tab" className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" />}
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("reviews")}
+                            className={cn(
+                                "text-[10px] font-black uppercase tracking-[0.3em] transition-all relative pb-4",
+                                activeTab === "reviews" ? "text-primary" : "text-gray-600 hover:text-gray-400"
+                            )}
+                        >
+                            User Manifests ({totalReviews})
+                            {activeTab === "reviews" && <motion.div layoutId="tab" className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" />}
+                        </button>
+                    </div>
+
+                    <div className="grid lg:grid-cols-12 gap-12 items-start">
+                        <div className="lg:col-span-8">
+                            {activeTab === "details" ? (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="space-y-8"
+                                >
+                                    <div className="prose prose-invert max-w-none">
+                                        <p className="text-sm text-gray-400 leading-relaxed font-medium">
+                                            {description}
+                                        </p>
+                                    </div>
+
+                                    <div className="grid sm:grid-cols-2 gap-4">
+                                        <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest">
+                                                <Factory className="size-3.5" /> Manufacturer Protocol
+                                            </div>
+                                            <p className="text-sm font-black text-white">{manufacturer}</p>
+                                        </div>
+                                        <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest">
+                                                <Layers className="size-3.5" /> Classification Grid
+                                            </div>
+                                            <p className="text-sm font-black text-white">{category?.name || "General Specification"}</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <ReviewList reviews={reviews || []} averageRating={averageRating} totalReviews={totalReviews} />
+                            )}
+                        </div>
+
+                        {/* Side Section: Review Form or Info */}
+                        <div className="lg:col-span-4 space-y-6">
+                            {isCustomer ? (
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-3 px-2">
+                                        <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
+                                        <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Emit Signal</h3>
+                                    </div>
+                                    <ReviewForm medicineId={id} onSuccess={() => router.refresh()} />
+                                </div>
+                            ) : isManagement ? (
+                                <div className="p-8 rounded-[2rem] bg-indigo-500/5 border border-indigo-500/10 space-y-4">
+                                    <ShieldCheck className="size-8 text-indigo-500" />
+                                    <p className="text-[10px] font-black text-white uppercase tracking-widest">Oversight Mode</p>
+                                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest leading-relaxed">
+                                        Feedback submission is locked for administrative and supply chain accounts to maintain network integrity.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 space-y-6 text-center">
+                                    <div className="size-16 rounded-3xl bg-white/5 flex items-center justify-center mx-auto text-gray-400">
+                                        <LogIn className="size-8" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <p className="text-xs font-black text-white uppercase tracking-widest">Identity Required</p>
+                                        <p className="text-[9px] text-gray-500 font-medium uppercase tracking-widest leading-relaxed">
+                                            Authenticated session required to emit operational feedback.
+                                        </p>
+                                    </div>
+                                    <Button asChild variant="outline" className="w-full rounded-xl border-white/10 hover:bg-white/5">
+                                        <Link href="/login">Initialize Authentication</Link>
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
