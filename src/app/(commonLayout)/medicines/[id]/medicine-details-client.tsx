@@ -51,6 +51,8 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
 
     const [activeTab, setActiveTab] = useState<"details" | "reviews">("details");
 
+    const hasReviewed = session?.user?.id ? (reviews || []).some(r => r.userId === session.user.id) : false;
+
     const handleAddToCart = () => {
         if (isGuest) {
             window.location.href = "/login";
@@ -376,7 +378,17 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                         <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
                                         <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Emit Signal</h3>
                                     </div>
-                                    <ReviewForm medicineId={id} onSuccess={() => router.refresh()} />
+                                    {hasReviewed ? (
+                                        <div className="p-8 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10 space-y-4">
+                                            <BadgeCheck className="size-8 text-emerald-500" />
+                                            <p className="text-[10px] font-black text-white uppercase tracking-widest">Protocol Sustained</p>
+                                            <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest leading-relaxed">
+                                                Your operational feedback has been successfully integrated into the manifest. Each operative is restricted to a single signal per asset to maintain data purity.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <ReviewForm medicineId={id} onSuccess={() => router.refresh()} />
+                                    )}
                                 </div>
                             ) : isManagement ? (
                                 <div className="p-8 rounded-[2rem] bg-indigo-500/5 border border-indigo-500/10 space-y-4">
