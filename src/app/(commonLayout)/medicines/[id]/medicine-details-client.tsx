@@ -245,7 +245,7 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                                         <p className="text-sm font-bold text-white">{manufacturer}</p>
                                     </div>
                                 </div>
-                                {totalReviews && totalReviews > 0 && (
+                                {Boolean(totalReviews && totalReviews > 0) && (
                                     <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
                                         <div className="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
                                             <Star className="size-5 text-amber-500 fill-current" />
