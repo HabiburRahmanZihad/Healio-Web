@@ -86,7 +86,7 @@ export function AppSidebar({
           <img
             src="/Healio_logo_png.png"
             alt="Healio Logo"
-            className="h-10 w-auto transition-transform duration-500 will-change-transform"
+            className="h-20 w-auto transition-transform duration-500 will-change-transform"
           />
         </Link>
       </SidebarHeader>
