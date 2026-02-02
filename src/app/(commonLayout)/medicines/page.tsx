@@ -7,6 +7,7 @@ import { Medicine, MedicineFilters } from "@/types/medicine.type";
 import { Pagination } from "@/components/ui/pagination";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, LayoutGrid, List } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function MedicinesPage() {
     const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -21,6 +22,7 @@ export default function MedicinesPage() {
         totalPages: number;
     } | null>(null);
     const [loading, setLoading] = useState(true);
+    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
     // Fetch medicines with current filters
     const fetchMedicines = useCallback(async () => {
@@ -114,19 +116,35 @@ export default function MedicinesPage() {
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <div className="size-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                                <button
+                                    onClick={() => setViewMode("grid")}
+                                    className={cn(
+                                        "size-8 rounded-lg flex items-center justify-center transition-all",
+                                        viewMode === "grid"
+                                            ? "bg-primary/20 border border-primary/40 text-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]"
+                                            : "bg-white/5 border border-white/10 text-gray-500 hover:text-white"
+                                    )}
+                                >
                                     <LayoutGrid className="size-4" />
-                                </div>
-                                <div className="size-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 hover:text-white transition-colors cursor-not-allowed">
+                                </button>
+                                <button
+                                    onClick={() => setViewMode("list")}
+                                    className={cn(
+                                        "size-8 rounded-lg flex items-center justify-center transition-all",
+                                        viewMode === "list"
+                                            ? "bg-primary/20 border border-primary/40 text-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]"
+                                            : "bg-white/5 border border-white/10 text-gray-500 hover:text-white"
+                                    )}
+                                >
                                     <List className="size-4" />
-                                </div>
+                                </button>
                             </div>
                         </motion.div>
 
                         <div className="min-h-[600px]">
                             <AnimatePresence mode="wait">
                                 <motion.div
-                                    key={JSON.stringify(filters) + loading}
+                                    key={JSON.stringify(filters) + loading + viewMode}
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
@@ -135,6 +153,7 @@ export default function MedicinesPage() {
                                     <MedicineGrid
                                         medicines={medicines}
                                         loading={loading}
+                                        viewMode={viewMode}
                                         emptyMessage="No medicines match your exploration criteria"
                                     />
                                 </motion.div>

@@ -7,13 +7,30 @@ interface MedicineGridProps {
     medicines: Medicine[];
     loading?: boolean;
     emptyMessage?: string;
+    viewMode?: "grid" | "list";
 }
 
-import { Stethoscope } from "lucide-react";
+import { Stethoscope, List as ListIcon, LayoutGrid } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Reusable skeleton loader
-function MedicineSkeleton() {
+function MedicineSkeleton({ viewMode = "grid" }: { viewMode?: "grid" | "list" }) {
+    if (viewMode === "list") {
+        return (
+            <div className="rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden p-3 flex gap-4 items-center">
+                <div className="size-16 bg-white/5 animate-pulse rounded-xl shrink-0" />
+                <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-white/5 rounded-lg w-1/3 animate-pulse" />
+                    <div className="h-2 bg-white/5 rounded-full w-1/4 animate-pulse" />
+                </div>
+                <div className="text-right space-y-2">
+                    <div className="h-5 bg-white/5 rounded-lg w-16 animate-pulse ml-auto" />
+                    <div className="h-2 bg-white/5 rounded-full w-10 animate-pulse ml-auto" />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden m-1.5">
             <div className="aspect-[4/5] bg-white/5 animate-pulse rounded-xl m-1.5" />
@@ -34,13 +51,23 @@ function MedicineSkeleton() {
     );
 }
 
-export function MedicineGrid({ medicines, loading, emptyMessage = "No medicines found" }: MedicineGridProps) {
+export function MedicineGrid({
+    medicines,
+    loading,
+    emptyMessage = "No medicines found",
+    viewMode = "grid"
+}: MedicineGridProps) {
     // Loading state
     if (loading) {
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                {Array.from({ length: 9 }).map((_, i) => (
-                    <MedicineSkeleton key={i} />
+            <div className={cn(
+                "grid gap-6",
+                viewMode === "grid"
+                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    : "grid-cols-1"
+            )}>
+                {Array.from({ length: 12 }).map((_, i) => (
+                    <MedicineSkeleton key={i} viewMode={viewMode} />
                 ))}
             </div>
         );
@@ -82,13 +109,20 @@ export function MedicineGrid({ medicines, loading, emptyMessage = "No medicines 
                     }
                 }
             }}
-            className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+            className={cn(
+                "grid gap-6",
+                viewMode === "grid"
+                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    : "grid-cols-1"
+            )}
         >
             <AnimatePresence mode="popLayout">
                 {medicines.map((medicine) => (
-                    <MedicineCard key={medicine.id} medicine={medicine} />
+                    <MedicineCard key={medicine.id} medicine={medicine} viewMode={viewMode} />
                 ))}
             </AnimatePresence>
         </motion.div>
     );
 }
+
+import { cn } from "@/lib/utils";
