@@ -80,13 +80,13 @@ export function AppSidebar({
   };
 
   return (
-    <Sidebar variant="sidebar" className="border-r border-white/5 bg-zinc-950/50 backdrop-blur-3xl" {...props}>
-      <SidebarHeader className="h-24 flex items-center px-6 border-b border-white/5 bg-white/2">
+    <Sidebar variant="sidebar" className="border-r border-white/5 bg-zinc-950/40 backdrop-blur-xl" {...props}>
+      <SidebarHeader className="h-20 flex items-center px-6 border-b border-white/5 bg-white/[0.01]">
         <Link href="/" className="flex items-center group">
           <img
             src="/Healio_logo_png.png"
             alt="Healio Logo"
-            className="h-22 w-full transition-transform duration-500"
+            className="h-10 w-auto transition-transform duration-500 will-change-transform"
           />
         </Link>
       </SidebarHeader>
@@ -94,7 +94,7 @@ export function AppSidebar({
       <SidebarContent className="py-4 custom-scrollbar">
         {routes.map((group) => (
           <SidebarGroup key={group.title} className="px-4">
-            <SidebarGroupLabel className="px-2 mb-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-500">
+            <SidebarGroupLabel className="px-2 mb-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 opacity-60">
               {group.title}
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -110,23 +110,23 @@ export function AppSidebar({
                         tooltip={item.title}
                         isActive={isActive}
                         className={cn(
-                          "h-11 px-4 rounded-xl transition-all duration-300 group",
+                          "h-10 px-4 rounded-xl transition-[background-color,border-color,color] duration-300 group",
                           isActive
-                            ? "bg-primary/15 text-primary font-bold border border-primary/20 shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]"
+                            ? "bg-primary/10 text-primary font-bold border border-primary/20 shadow-[0_4px_20px_rgba(var(--primary-rgb),0.1)]"
                             : "text-gray-400 hover:bg-white/5 hover:text-white border border-transparent"
                         )}
                       >
                         <Link href={item.url}>
                           {Icon && (
                             <Icon className={cn(
-                              "size-4.5 transition-transform duration-300",
+                              "size-4 transition-transform duration-300 will-change-transform",
                               isActive ? "text-primary scale-110" : "text-gray-500 group-hover:text-primary group-hover:scale-110"
                             )} />
                           )}
-                          <span className="tracking-tight">{item.title}</span>
+                          <span className="tracking-tight text-xs">{item.title}</span>
                           {isActive && (
                             <div
-                              className="absolute right-2 size-1.5 bg-primary rounded-full shadow-[0_0_10px_#22c55e]"
+                              className="absolute right-2 size-1 bg-primary rounded-full shadow-[0_0_8px_#22c55e]"
                             />
                           )}
                         </Link>
@@ -140,47 +140,47 @@ export function AppSidebar({
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-white/5 bg-white/1">
+      <SidebarFooter className="p-4 border-t border-white/5 bg-white/[0.01]">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="h-14 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 hover:bg-white/[0.07] transition-all group data-[state=open]:bg-white/[0.07]"
+                  className="h-12 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 hover:bg-white/[0.07] transition-[background-color,border-color] group data-[state=open]:bg-white/[0.07]"
                 >
-                  <div className="flex aspect-square size-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20 group-hover:scale-105 transition-transform">
-                    <UserIcon className="size-4.5" />
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20 group-hover:scale-105 transition-transform will-change-transform">
+                    <UserIcon className="size-4" />
                   </div>
-                  <div className="grid flex-1 text-left text-xs leading-tight ml-2">
+                  <div className="grid flex-1 text-left text-[10px] leading-tight ml-2">
                     <span className="truncate font-black text-white uppercase tracking-tight">{user.name}</span>
-                    <span className="truncate text-[9px] text-primary font-black uppercase tracking-widest mt-0.5">{user.role}</span>
+                    <span className="truncate text-[8px] text-primary font-black uppercase tracking-widest mt-0.5 opacity-80">{user.role}</span>
                   </div>
-                  <ChevronUp className="ml-auto size-4 text-gray-500 group-hover:text-white transition-colors" />
+                  <ChevronUp className="ml-auto size-3.5 text-gray-500 group-hover:text-white transition-colors" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 side="top"
                 sideOffset={12}
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-2xl p-2 bg-zinc-900/90 backdrop-blur-xl border border-white/10 shadow-2xl animate-in zoom-in-95 duration-200"
+                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-xl p-2 bg-zinc-950 border border-white/10 shadow-2xl animate-in zoom-in-95 duration-200"
                 align="end"
               >
                 <div className="px-3 py-2 border-b border-white/5 mb-2">
-                  <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Protocol Identification</p>
-                  <p className="text-xs font-bold text-white truncate mt-1">{user.email}</p>
+                  <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Protocol Identification</p>
+                  <p className="text-[10px] font-bold text-white truncate mt-1">{user.email}</p>
                 </div>
-                <DropdownMenuItem asChild className="rounded-xl cursor-pointer focus:bg-primary/10 focus:text-primary transition-all">
-                  <Link href={getProfileUrl()} className="flex items-center gap-3 py-2.5 px-3">
-                    <UserIcon className="size-4" />
-                    <span className="text-xs font-bold uppercase tracking-tight">Identity Nexus</span>
+                <DropdownMenuItem asChild className="rounded-lg cursor-pointer focus:bg-primary/10 focus:text-primary transition-[background-color,color]">
+                  <Link href={getProfileUrl()} className="flex items-center gap-3 py-2 px-3">
+                    <UserIcon className="size-3.5" />
+                    <span className="text-[10px] font-bold uppercase tracking-tight">Identity Nexus</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={handleLogout}
-                  className="rounded-xl text-red-400 focus:text-red-400 focus:bg-red-400/10 cursor-pointer flex items-center gap-3 py-2.5 px-3 transition-all"
+                  className="rounded-lg text-red-400 focus:text-red-400 focus:bg-red-400/10 cursor-pointer flex items-center gap-3 py-2 px-3 transition-all"
                 >
-                  <LogOut className="size-4" />
-                  <span className="text-xs font-bold uppercase tracking-tight">Terminate Session</span>
+                  <LogOut className="size-3.5" />
+                  <span className="text-[10px] font-bold uppercase tracking-tight">Terminate Session</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
