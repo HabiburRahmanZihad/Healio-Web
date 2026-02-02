@@ -78,291 +78,351 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
     };
 
     return (
-        <div className="min-h-screen bg-background relative overflow-hidden pb-12">
-            {/* Background Atmosphere */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-primary/10 blur-[100px] -z-10" />
-            <div className="absolute bottom-0 right-0 size-[500px] bg-blue-500/5 rounded-full blur-[80px] translate-y-1/2 translate-x-1/2 -z-10" />
+        <div className="min-h-screen bg-[#050505] relative overflow-hidden pb-24 selection:bg-primary/30 selection:text-primary">
+            {/* Nexus Background Elements */}
+            <div className="absolute top-0 inset-x-0 h-[600px] pointer-events-none">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-primary/10 via-transparent to-transparent blur-[120px]" />
+                <div className="absolute top-[-10%] left-[-10%] size-[600px] bg-blue-500/10 rounded-full blur-[100px] mix-blend-screen animate-pulse" />
+                <div className="absolute bottom-0 right-[-10%] size-[500px] bg-primary/5 rounded-full blur-[80px]" />
+            </div>
 
-            <div className="container mx-auto px-4 pt-20 relative z-10">
-                {/* Top Actions */}
-                <div className="flex items-center justify-between mb-8">
+            {/* Grid Pattern Overlay */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+
+            <div className="container mx-auto px-4 pt-24 relative z-10">
+                {/* Header Navigation */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12"
+                >
                     <Link
                         href="/medicines"
-                        className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
+                        className="group w-fit flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 text-gray-400 hover:text-white transition-all hover:shadow-[0_0_20px_rgba(var(--primary),0.1)]"
                     >
-                        <ArrowLeft className="size-3.5 group-hover:-translate-x-1 transition-transform" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Back to Archive</span>
+                        <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
+                        <span className="text-xs font-bold uppercase tracking-[0.2em]">Exit to Archive</span>
                     </Link>
 
                     <div className="flex items-center gap-4">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-500"
-                        >
-                            <ShieldCheck className="size-3.5" />
-                            <span className="text-[9px] font-black uppercase tracking-widest">Authenticated Product</span>
-                        </motion.div>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-xl text-emerald-400">
+                            <ShieldCheck className="size-4" />
+                            <span className="text-[10px] font-black uppercase tracking-widest">Protocol Authenticated</span>
+                        </div>
                     </div>
-                </div>
+                </motion.div>
 
-                <div className="grid lg:grid-cols-2 gap-10 items-start">
-                    {/* Left: Interactive Media Viewer */}
+                {/* Main Content Grid */}
+                <div className="grid lg:grid-cols-12 gap-12 items-start">
+
+                    {/* Left Column: Visual Asset (7 cols) */}
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="relative group"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="lg:col-span-12 xl:col-span-7 relative"
                     >
-                        <div className="relative aspect-[4/4.5] rounded-[2rem] overflow-hidden bg-white/[0.03] backdrop-blur-xl border border-white/10 p-3 shadow-2xl transition-all duration-700 group-hover:border-primary/20">
-                            <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden">
-                                <Image
-                                    src={image || "/placeholder-medicine.png"}
-                                    alt={name}
-                                    fill
-                                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                                    priority
-                                />
-                                {/* Glass Overlay on Image */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+                        <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-[2.5rem] overflow-hidden group">
+                            {/* Inner Glow Container */}
+                            <div className="absolute inset-0 p-[2px] rounded-[2.5rem] bg-gradient-to-br from-white/20 via-white/5 to-transparent">
+                                <div className="relative w-full h-full rounded-[2.4rem] overflow-hidden bg-zinc-900 shadow-2xl">
+                                    <Image
+                                        src={image || "/placeholder-medicine.png"}
+                                        alt={name}
+                                        fill
+                                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        priority
+                                    />
+
+                                    {/* Advanced Overlays */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(var(--primary),0.2),transparent_50%)]" />
+
+                                    {/* Dynamic Data Tags */}
+                                    <div className="absolute top-8 left-8 flex flex-wrap gap-3">
+                                        {category && (
+                                            <motion.div
+                                                initial={{ x: -20, opacity: 0 }}
+                                                animate={{ x: 0, opacity: 1 }}
+                                                transition={{ delay: 0.4 }}
+                                                className="px-5 py-2 rounded-full bg-primary/90 backdrop-blur-xl text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-primary/20"
+                                            >
+                                                {category.name}
+                                            </motion.div>
+                                        )}
+                                        {requiresPrescription && (
+                                            <motion.div
+                                                initial={{ x: -20, opacity: 0 }}
+                                                animate={{ x: 0, opacity: 1 }}
+                                                transition={{ delay: 0.5 }}
+                                                className="px-5 py-2 rounded-full bg-amber-500/90 backdrop-blur-xl text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-amber-500/20"
+                                            >
+                                                MD Authorization Required
+                                            </motion.div>
+                                        )}
+                                    </div>
+
+                                    {/* Asset Status Terminal */}
+                                    <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between">
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-3">
+                                                <div className={cn(
+                                                    "size-2 rounded-full animate-pulse",
+                                                    isOutOfStock ? "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]" : "bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                                                )} />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Asset Integrity</span>
+                                            </div>
+                                            <h2 className="text-4xl font-black text-white tracking-tighter uppercase line-clamp-1">{name}</h2>
+                                        </div>
+
+                                        <div className="hidden sm:flex flex-col items-end gap-1">
+                                            <span className="text-[9px] font-bold text-white/40 uppercase tracking-widest">System Status</span>
+                                            <span className={cn(
+                                                "px-4 py-1 rounded-lg text-[10px] font-black uppercase border backdrop-blur-md",
+                                                isOutOfStock ? "bg-red-500/10 border-red-500/30 text-red-400" : "bg-primary/10 border-primary/30 text-primary"
+                                            )}>
+                                                {isOutOfStock ? "DEPLETED" : "OPERATIONAL"}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Category Badge */}
-                            {category && (
-                                <div className="absolute top-6 left-6">
-                                    <span className="px-4 py-1.5 text-[9px] font-black uppercase tracking-widest bg-primary/80 backdrop-blur-md text-white rounded-full border border-white/10">
-                                        {category.name}
-                                    </span>
-                                </div>
-                            )}
-
-                            {/* Stock Indicator Bubble */}
-                            <div className="absolute bottom-6 right-6">
-                                <div className={cn(
-                                    "px-4 py-2 rounded-xl backdrop-blur-md border border-white/10 flex flex-col items-center",
-                                    isOutOfStock ? "bg-red-500/20 text-red-500" : "bg-primary/20 text-primary"
-                                )}>
-                                    <span className="text-[8px] font-black uppercase tracking-widest mb-0.5">Status</span>
-                                    <span className="text-xs font-black whitespace-nowrap">
-                                        {isOutOfStock ? "Stock Deficit" : "Reserve Stable"}
-                                    </span>
-                                </div>
+                            {/* Decorative Corner Accents */}
+                            <div className="absolute top-0 right-0 p-8">
+                                <div className="size-16 border-t-2 border-r-2 border-primary/30 rounded-tr-[2rem]" />
+                            </div>
+                            <div className="absolute bottom-0 left-0 p-8">
+                                <div className="size-16 border-b-2 border-l-2 border-primary/30 rounded-bl-[2rem]" />
                             </div>
                         </div>
 
-                        {/* Delivery Specs */}
-                        <div className="mt-6 grid grid-cols-3 gap-3">
+                        {/* Feature Nodes */}
+                        <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                             {[
-                                { icon: Truck, label: "Express", sub: "Delivery" },
-                                { icon: RotateCcw, label: "7 Days", sub: "Returns" },
-                                { icon: BadgeCheck, label: "Verified", sub: "Quality" }
+                                { icon: Truck, label: "Logistics", sub: "Priority Rapid" },
+                                { icon: RotateCcw, label: "Redemption", sub: "07-Cycle Window" },
+                                { icon: BadgeCheck, label: "Verification", sub: "Quantum-Node Scan" },
+                                { icon: ShieldCheck, label: "Security", sub: "Encrypted Chain" }
                             ].map((spec, i) => (
-                                <div key={i} className="flex flex-col items-center p-3 rounded-2xl bg-white/[0.02] border border-white/5">
-                                    <spec.icon className="size-4 text-primary mb-1.5" />
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-white">{spec.label}</span>
-                                    <span className="text-[7px] text-gray-500 uppercase">{spec.sub}</span>
-                                </div>
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.6 + (i * 0.1) }}
+                                    className="p-5 rounded-3xl bg-white/[0.03] border border-white/5 hover:bg-white/5 transition-colors group/node"
+                                >
+                                    <spec.icon className="size-5 text-primary mb-3 group-hover/node:scale-110 transition-transform" />
+                                    <p className="text-[9px] font-black text-white uppercase tracking-widest mb-1">{spec.label}</p>
+                                    <p className="text-[8px] text-gray-500 uppercase font-medium">{spec.sub}</p>
+                                </motion.div>
                             ))}
                         </div>
                     </motion.div>
 
-                    {/* Right: Detailed Analysis & Actions */}
+                    {/* Right Column: Execution Terminal (5 cols) */}
                     <motion.div
-                        initial={{ opacity: 0, x: 50 }}
+                        initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
-                        className="space-y-8"
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="lg:col-span-12 xl:col-span-5 space-y-8"
                     >
-                        <div className="space-y-3">
-                            <div className="flex items-center gap-2 text-primary">
-                                <span className="size-1.5 bg-primary rounded-full animate-ping" />
-                                <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Direct Pharmaceutical Supply</span>
+                        {/* Information Header */}
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className="h-[2px] w-8 bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]" />
+                                <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Product Manifest v4.2</span>
                             </div>
-                            <h1 className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight uppercase break-words">
-                                {name.split(" ").map((word, i) => (
-                                    <span key={i} className={cn(i % 2 !== 0 && "text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400")}>
-                                        {word}{" "}
-                                    </span>
-                                ))}
-                            </h1>
-                            <div className="flex items-center gap-3 pt-1">
-                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-xs font-bold text-gray-500">
-                                    <Package className="size-3" />
-                                    {manufacturer}
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
+                                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                    <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                                        <Factory className="size-5 text-primary" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[8px] font-black text-white/40 uppercase tracking-widest">Origin</p>
+                                        <p className="text-sm font-bold text-white">{manufacturer}</p>
+                                    </div>
                                 </div>
-                                {requiresPrescription && (
-                                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-xs font-bold text-yellow-600">
-                                        <FileText className="size-3" />
-                                        <span>MD Required</span>
+                                {totalReviews && totalReviews > 0 && (
+                                    <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10">
+                                        <div className="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                                            <Star className="size-5 text-amber-500 fill-current" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[8px] font-black text-white/40 uppercase tracking-widest">Network Consensus</p>
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-sm font-bold text-white">{averageRating?.toFixed(1)}</p>
+                                                <span className="text-[10px] text-white/30">({totalReviews} units feedback)</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
-                                {totalReviews && totalReviews > 0 ? (
-                                    <button
-                                        onClick={() => {
-                                            setActiveTab("reviews");
-                                            const element = document.getElementById("reviews-section");
-                                            element?.scrollIntoView({ behavior: 'smooth' });
-                                        }}
-                                        className="flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-lg text-xs font-bold text-primary hover:bg-primary/20 transition-colors"
-                                    >
-                                        <Star className="size-3 fill-current" />
-                                        <span>{averageRating?.toFixed(1)}</span>
-                                        <span className="text-[9px] text-primary/60">({totalReviews})</span>
-                                    </button>
-                                ) : null}
                             </div>
                         </div>
 
-                        <div className="p-6 rounded-[1.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-sm space-y-5">
-                            <div className="flex items-end justify-between">
-                                <div className="space-y-0.5">
-                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Acquisition Cost</p>
-                                    <p className="text-3xl font-black text-white leading-none">
-                                        ৳{price.toFixed(2)}
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-0.5">Stock Level</p>
-                                    <p className={cn(
-                                        "text-lg font-bold",
-                                        isOutOfStock ? "text-red-500" : "text-primary"
-                                    )}>
-                                        {stock} Units
-                                    </p>
-                                </div>
-                            </div>
+                        {/* Acquisition Interface */}
+                        <div className="relative p-8 rounded-[2.5rem] bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 backdrop-blur-2xl overflow-hidden group">
+                            {/* Price Hex Glow */}
+                            <div className="absolute -top-24 -right-24 size-48 bg-primary/20 rounded-full blur-[60px]" />
 
-                            <p className="text-xs text-gray-400 leading-relaxed font-medium pt-3 border-t border-white/5 line-clamp-4">
-                                {description}
-                            </p>
-
-                            <div className="grid grid-cols-2 gap-3 pt-1">
-                                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
-                                    <Layers className="size-3.5 text-primary mb-1.5" />
-                                    <p className="text-[7px] text-gray-500 uppercase font-bold tracking-widest">Classification</p>
-                                    <p className="text-[10px] font-bold text-white truncate">{category?.name || "General"}</p>
+                            <div className="relative space-y-8">
+                                <div className="flex items-end justify-between border-b border-white/5 pb-8">
+                                    <div className="space-y-2">
+                                        <span className="flex items-center gap-2 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">
+                                            Acquisition Cost
+                                        </span>
+                                        <div className="flex items-baseline gap-1">
+                                            <span className="text-xl font-bold text-primary">৳</span>
+                                            <span className="text-5xl font-black text-white tracking-tighter">
+                                                {price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="text-right space-y-1">
+                                        <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Inventory Depth</span>
+                                        <p className={cn(
+                                            "text-2xl font-black tracking-tighter",
+                                            isOutOfStock ? "text-red-500" : "text-white"
+                                        )}>
+                                            {stock} <span className="text-xs text-white/40 font-bold uppercase ml-1">Units</span>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
-                                    <ShieldCheck className="size-3.5 text-primary mb-1.5" />
-                                    <p className="text-[7px] text-gray-500 uppercase font-bold tracking-widest">Authenticity</p>
-                                    <p className="text-[10px] font-bold text-white truncate">100% Certified</p>
-                                </div>
-                            </div>
-                        </div>
 
-                        {/* Interactive Action Interface */}
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            {!isManagement ? (
-                                <motion.button
-                                    whileHover={{ scale: 1.01 }}
-                                    whileTap={{ scale: 0.99 }}
-                                    onClick={handleAddToCart}
-                                    disabled={isOutOfStock}
-                                    className={cn(
-                                        "flex-[2] h-14 px-8 rounded-xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all shadow-xl",
-                                        isOutOfStock
-                                            ? "bg-zinc-800 text-gray-600 cursor-not-allowed border border-white/5"
-                                            : "bg-primary text-white hover:bg-primary/90 shadow-primary/10"
-                                    )}
-                                >
-                                    {isOutOfStock ? (
-                                        "Protocol Halted - No Stock"
-                                    ) : isGuest ? (
-                                        <>
-                                            <LogIn className="size-4" />
-                                            <span>Login to Add</span>
-                                        </>
+                                <p className="text-sm text-gray-400 leading-relaxed font-medium line-clamp-4 italic">
+                                    " {description} "
+                                </p>
+
+                                {/* Action Matrix */}
+                                <div className="flex items-stretch gap-4">
+                                    {!isManagement ? (
+                                        <motion.button
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={handleAddToCart}
+                                            disabled={isOutOfStock}
+                                            className={cn(
+                                                "flex-[4] h-16 rounded-2xl relative overflow-hidden flex items-center justify-center gap-3 transition-all",
+                                                isOutOfStock
+                                                    ? "bg-zinc-800 text-zinc-600 border border-white/5 cursor-not-allowed"
+                                                    : "bg-primary text-white shadow-[0_20px_40px_-15px_rgba(var(--primary),0.4)]"
+                                            )}
+                                        >
+                                            {/* Button Glow Effect */}
+                                            {!isOutOfStock && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite]" />}
+
+                                            {isOutOfStock ? (
+                                                <span className="text-xs font-black uppercase tracking-widest">Protocol Halted</span>
+                                            ) : isGuest ? (
+                                                <>
+                                                    <LogIn className="size-5" />
+                                                    <span className="text-xs font-black uppercase tracking-widest">Authorize & Acquire</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <ShoppingCart className="size-5" />
+                                                    <span className="text-xs font-black uppercase tracking-widest">Initiate Acquisition</span>
+                                                </>
+                                            )}
+                                        </motion.button>
                                     ) : (
-                                        <>
-                                            <ShoppingCart className="size-4" />
-                                            <span>Add to Inventory</span>
-                                        </>
+                                        <div className="flex-[4] p-5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center gap-4">
+                                            <ShieldCheck className="size-5 shrink-0" />
+                                            <p className="text-[10px] font-bold uppercase tracking-widest leading-relaxed">
+                                                Restricted Operator Mode: Purchasing disabled for {userRole} status.
+                                            </p>
+                                        </div>
                                     )}
-                                </motion.button>
-                            ) : (
-                                <div className="flex items-center gap-3 p-4 rounded-xl bg-primary/10 border border-primary/20 text-primary">
-                                    <Info className="size-4 shrink-0" />
-                                    <p className="text-[9px] font-bold uppercase tracking-widest leading-relaxed">
-                                        Management Restricted: Inventory and system oversight protocols only. Purchasing disabled for {userRole} accounts.
-                                    </p>
-                                </div>
-                            )}
 
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleToggleWishlist}
-                                className={cn(
-                                    "h-14 w-14 rounded-xl border transition-all flex items-center justify-center",
-                                    isInWishlist(id)
-                                        ? "bg-pink-500/10 border-pink-500/30 text-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.1)]"
-                                        : "bg-white/5 border-white/10 text-white hover:bg-white/10"
-                                )}
-                            >
-                                <Heart className={cn("size-5 transition-all", isInWishlist(id) && "fill-current scale-110")} />
-                            </motion.button>
+                                    <motion.button
+                                        whileHover={{ scale: 1.1, backgroundColor: "rgba(236, 72, 153, 0.1)" }}
+                                        whileTap={{ scale: 0.9 }}
+                                        onClick={handleToggleWishlist}
+                                        className={cn(
+                                            "size-16 rounded-2xl border transition-all flex items-center justify-center shrink-0",
+                                            isInWishlist(id)
+                                                ? "bg-pink-500 border-pink-500 text-white shadow-[0_10px_25px_-5px_rgba(236,72,153,0.4)]"
+                                                : "bg-white/5 border-white/10 text-white/40 hover:text-white"
+                                        )}
+                                    >
+                                        <Heart className={cn("size-6 transition-all", isInWishlist(id) && "fill-current scale-110")} />
+                                    </motion.button>
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Professional Disclaimer */}
-                        <div className="pt-4 border-t border-white/5 flex items-start gap-2">
-                            <Info className="size-3.5 text-gray-600 mt-0.5 shrink-0" />
-                            <p className="text-[9px] text-gray-600 font-medium leading-relaxed uppercase tracking-tighter">
-                                Disclaimer: Pharmaceutical products should be used as directed by a healthcare professional. Ensure you have the required documentation for restricted formulas.
+                        {/* Security Disclaimer */}
+                        <div className="p-6 rounded-3xl bg-zinc-900 border border-white/5 flex items-start gap-4">
+                            <div className="size-8 rounded-full bg-white/5 flex items-center justify-center shrink-0">
+                                <Info className="size-4 text-gray-500" />
+                            </div>
+                            <p className="text-[10px] text-gray-500 font-medium leading-relaxed uppercase tracking-tight">
+                                <span className="text-white font-black">Operator Notice:</span> All pharmaceutical extractions require verified credentials. misuse or unauthorized distribution will trigger system lockdown. Consult primary medical node before application.
                             </p>
                         </div>
                     </motion.div>
                 </div>
-                <div id="reviews-section" className="mt-16 sm:mt-24 space-y-12">
-                    {/* Tab Navigation */}
-                    <div className="flex items-center gap-8 border-b border-white/5 pb-4">
-                        <button
-                            onClick={() => setActiveTab("details")}
-                            className={cn(
-                                "text-[10px] font-black uppercase tracking-[0.3em] transition-all relative pb-4",
-                                activeTab === "details" ? "text-primary" : "text-gray-600 hover:text-gray-400"
-                            )}
-                        >
-                            Technical Specifications
-                            {activeTab === "details" && <motion.div layoutId="tab" className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" />}
-                        </button>
-                        <button
-                            onClick={() => setActiveTab("reviews")}
-                            className={cn(
-                                "text-[10px] font-black uppercase tracking-[0.3em] transition-all relative pb-4",
-                                activeTab === "reviews" ? "text-primary" : "text-gray-600 hover:text-gray-400"
-                            )}
-                        >
-                            User Manifests ({totalReviews})
-                            {activeTab === "reviews" && <motion.div layoutId="tab" className="absolute bottom-0 left-0 w-full h-0.5 bg-primary" />}
-                        </button>
+
+                {/* Technical Node Tabs */}
+                <div id="reviews-section" className="mt-24 space-y-16">
+                    <div className="flex items-center justify-center">
+                        <div className="inline-flex p-1.5 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-xl">
+                            <button
+                                onClick={() => setActiveTab("details")}
+                                className={cn(
+                                    "px-8 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.3em] transition-all",
+                                    activeTab === "details" ? "bg-primary text-white shadow-lg" : "text-gray-500 hover:text-white"
+                                )}
+                            >
+                                Tech Specs
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("reviews")}
+                                className={cn(
+                                    "px-8 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.3em] transition-all",
+                                    activeTab === "reviews" ? "bg-primary text-white shadow-lg" : "text-gray-500 hover:text-white"
+                                )}
+                            >
+                                Network Feedback ({totalReviews})
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="grid lg:grid-cols-12 gap-12 items-start">
+                    <div className="grid lg:grid-cols-12 gap-16 items-start">
                         <div className="lg:col-span-8">
                             {activeTab === "details" ? (
                                 <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="space-y-8"
+                                    initial={{ opacity: 0, scale: 0.98 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="space-y-10"
                                 >
-                                    <div className="prose prose-invert max-w-none">
-                                        <p className="text-sm text-gray-400 leading-relaxed font-medium">
-                                            {description}
-                                        </p>
+                                    <div className="p-10 rounded-[3rem] bg-white/[0.02] border border-white/5 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-10 opacity-10">
+                                            <FileText className="size-32 text-primary" />
+                                        </div>
+                                        <div className="relative prose prose-invert max-w-none">
+                                            <p className="text-lg text-gray-300 leading-relaxed font-medium">
+                                                {description}
+                                            </p>
+                                        </div>
                                     </div>
 
-                                    <div className="grid sm:grid-cols-2 gap-4">
-                                        <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest">
-                                                <Factory className="size-3.5" /> Manufacturer Protocol
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 space-y-4">
+                                            <div className="flex items-center gap-3 text-primary">
+                                                <Factory className="size-5" />
+                                                <span className="text-[11px] font-black uppercase tracking-[0.3em]">Origin Node</span>
                                             </div>
-                                            <p className="text-sm font-black text-white">{manufacturer}</p>
+                                            <p className="text-xl font-bold text-white">{manufacturer}</p>
                                         </div>
-                                        <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
-                                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest">
-                                                <Layers className="size-3.5" /> Classification Grid
+                                        <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 space-y-4">
+                                            <div className="flex items-center gap-3 text-blue-400">
+                                                <Layers className="size-5" />
+                                                <span className="text-[11px] font-black uppercase tracking-[0.3em]">Matrix Grid</span>
                                             </div>
-                                            <p className="text-sm font-black text-white">{category?.name || "General Specification"}</p>
+                                            <p className="text-xl font-bold text-white">{category?.name || "General Node"}</p>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -371,47 +431,49 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
                             )}
                         </div>
 
-                        {/* Side Section: Review Form or Info */}
-                        <div className="lg:col-span-4 space-y-6">
+                        {/* Signaling Section */}
+                        <div className="lg:col-span-4 sticky top-24">
                             {isCustomer ? (
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-3 px-2">
-                                        <div className="h-0.5 w-6 bg-primary/40 rounded-full" />
-                                        <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Emit Signal</h3>
+                                <div className="space-y-8">
+                                    <div className="flex items-center gap-4 px-4">
+                                        <div className="size-2 rounded-full bg-primary" />
+                                        <h3 className="text-xs font-black text-white uppercase tracking-[0.4em]">Signal Emission</h3>
                                     </div>
                                     {hasReviewed ? (
-                                        <div className="p-8 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10 space-y-4">
-                                            <BadgeCheck className="size-8 text-emerald-500" />
-                                            <p className="text-[10px] font-black text-white uppercase tracking-widest">Protocol Sustained</p>
-                                            <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest leading-relaxed">
-                                                Your operational feedback has been successfully integrated into the manifest. Each operative is restricted to a single signal per asset to maintain data purity.
-                                            </p>
-                                        </div>
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="p-10 rounded-[3rem] bg-emerald-500/5 border border-emerald-500/20 text-center space-y-6"
+                                        >
+                                            <div className="size-20 rounded-[2rem] bg-emerald-500/20 flex items-center justify-center mx-auto">
+                                                <BadgeCheck className="size-10 text-emerald-500" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <p className="text-xs font-black text-white uppercase tracking-widest">Signal Transmitted</p>
+                                                <p className="text-[10px] text-emerald-500/50 font-medium uppercase tracking-widest leading-relaxed px-4">
+                                                    Your frequency has been harmonized with the manifest. Multi-signal emissions are prevented by network security.
+                                                </p>
+                                            </div>
+                                        </motion.div>
                                     ) : (
-                                        <ReviewForm medicineId={id} onSuccess={() => router.refresh()} />
+                                        <div className="p-2 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-xl">
+                                            <ReviewForm medicineId={id} onSuccess={() => router.refresh()} />
+                                        </div>
                                     )}
                                 </div>
-                            ) : isManagement ? (
-                                <div className="p-8 rounded-[2rem] bg-indigo-500/5 border border-indigo-500/10 space-y-4">
-                                    <ShieldCheck className="size-8 text-indigo-500" />
-                                    <p className="text-[10px] font-black text-white uppercase tracking-widest">Oversight Mode</p>
-                                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-widest leading-relaxed">
-                                        Feedback submission is locked for administrative and supply chain accounts to maintain network integrity.
-                                    </p>
-                                </div>
                             ) : (
-                                <div className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 space-y-6 text-center">
-                                    <div className="size-16 rounded-3xl bg-white/5 flex items-center justify-center mx-auto text-gray-400">
-                                        <LogIn className="size-8" />
+                                <div className="p-10 rounded-[3rem] bg-white/[0.03] border border-white/10 text-center space-y-8">
+                                    <div className="size-24 rounded-[2.5rem] bg-white/5 flex items-center justify-center mx-auto text-gray-600">
+                                        <User className="size-10" />
                                     </div>
-                                    <div className="space-y-2">
-                                        <p className="text-xs font-black text-white uppercase tracking-widest">Identity Required</p>
-                                        <p className="text-[9px] text-gray-500 font-medium uppercase tracking-widest leading-relaxed">
-                                            Authenticated session required to emit operational feedback.
+                                    <div className="space-y-4">
+                                        <p className="text-sm font-black text-white uppercase tracking-[0.2em]">Unknown Identity</p>
+                                        <p className="text-[10px] text-gray-500 font-medium uppercase tracking-[0.2em] leading-relaxed">
+                                            Operator authorization required to access signaling matrix and emit manifest feedback.
                                         </p>
                                     </div>
-                                    <Button asChild variant="outline" className="w-full rounded-xl border-white/10 hover:bg-white/5">
-                                        <Link href="/login">Initialize Authentication</Link>
+                                    <Button asChild className="w-full h-16 rounded-2xl bg-primary hover:shadow-[0_0_30px_rgba(var(--primary),0.3)] font-black uppercase text-xs tracking-widest">
+                                        <Link href="/login">Authorize Session</Link>
                                     </Button>
                                 </div>
                             )}
@@ -422,3 +484,5 @@ export function MedicineDetailsClient({ medicine }: MedicineDetailsClientProps) 
         </div>
     );
 }
+
+
